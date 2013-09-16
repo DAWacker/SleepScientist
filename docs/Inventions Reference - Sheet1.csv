@@ -1,0 +1,13 @@
+Invention,Jack in the Box,Egg Beater,Rocket Skateboard,Lincoln Logs,Bed,Stairs,Pits,Ladders,Doors,Rogue Inventions
+Flavor Text,“Ah…my oldest childhood toy. By throwing in some hydraulics and a reinforced spring I can use this to propel myself across pits or up some stairs. Good thing I always land on my feet!”,"“To be honest, cooking is not my thing, so when I saw this I knew
+could make a good small-scale cyclone creator. Spins me right round, like a record
+baby!”","“Radical! Some jerks thought I was just some nerd! I sure showed
+them! I’m cool using this invention to skate by at high speeds. Gnarly!”","“What a versatile box of things. I barely even changed these to make
+them useful. Except infuse each piece with a titanium skeleton and a microchip
+that lets them assemble themselves.”","“Of course my bed is a robot too, so it tends to move around,
+but…maybe I should have left that one alone.”",N/A,"Spikes, Bottomless, and Lasers, Oh My!",N/A,N/A,N/A
+Use,Get across Pit/Stairs,Turns Dr. Around (180),Move Forward 3x Faster,"turn into a bridge or ladder ,based on player choice",Completes Level,"walks down stairs if facing thier direction, otherwise will walk past, not up","Professor will fall into them, inventions cannot cross them.",Move up/down a floor,Are Doors,Harm Professor and lose level
+Activation,Activated when stepped on by the Dr.,Activated when stepped on by the Dr.,When Stepped on,Activated by player,When next to,When steps onto,When steps onto,,N/A,When steps onto
+Other Rules,Only works when placed at the edge of a pit/right at the base of the stairs,N/A,Cannot be placed under the Dr.;must be stepped on,One time use per level,,,,Inventions can go up/down them,May Have timers to close them,Do not harm inventions
+,,," Moves in the direction of the skateboard, not the Dr.",,,,,,,
+,,,"Will get off to go down stairs, climb ladders, use jack in the box",,,,,,,
