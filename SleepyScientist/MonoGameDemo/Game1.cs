@@ -17,6 +17,9 @@ namespace MonoGameDemo {
 		GraphicsDeviceManager graphics;
 		SpriteBatch spriteBatch;
 
+        // My data.
+        private Texture2D eggTexture;
+
 		public Game1()
 			: base() {
 			graphics = new GraphicsDeviceManager( this );
@@ -44,6 +47,7 @@ namespace MonoGameDemo {
 			spriteBatch = new SpriteBatch( GraphicsDevice );
 
 			// TODO: use this.Content to load your game content here
+            eggTexture = Content.Load<Texture2D>("eggs");
 		}
 
 		/// <summary>
@@ -76,6 +80,9 @@ namespace MonoGameDemo {
 			GraphicsDevice.Clear( Color.CornflowerBlue );
 
 			// TODO: Add your drawing code here
+            spriteBatch.Begin();
+            spriteBatch.Draw(eggTexture, new Vector2(0), Color.White);
+            spriteBatch.End();
 
 			base.Draw( gameTime );
 		}
