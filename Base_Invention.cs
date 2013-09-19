@@ -16,6 +16,8 @@ namespace Sleepy_Scientist_Files
         bool equipped = false;
         // Is the invention currently activated?
         bool activated = false;
+		// Sprite for the invention
+		Monogame::Sprite sprite = null;
 
         public static Base_Invention operator + (Base_Invention first, Base_Invention second)
         {
