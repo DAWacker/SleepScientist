@@ -17,8 +17,7 @@ namespace SleepyScientist {
 		GraphicsDeviceManager graphics;
 		SpriteBatch spriteBatch;
 
-		public Game1()
-			: base() {
+		public Game1() : base() {
 			graphics = new GraphicsDeviceManager( this );
 			Content.RootDirectory = "Content";
 		}
