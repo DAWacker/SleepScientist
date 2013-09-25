@@ -51,12 +51,27 @@ namespace SleepyScientist
         /// <param name="x">Starting x-coordinate</param>
         /// <param name="y">Starting y-coordinate</param>
         /// <param name="image">The image</param>
-        public Scientist(string name, int x, int y, int width, int height, Texture2D image)
-            : base(name, x, y, width, height, image)
+        public Scientist(string name, int x, int y, int width, int height)
+            : base(name, x, y, width, height)
         {
             _curState = AIState.Walking;
             _prevState = AIState.Walking;
         }
+
+        #endregion
+
+        #region Methods
+
+        /// <summary>
+        /// Draw the scientist
+        /// </summary>
+        /// <param name="batch">The sprite batch you want to draw on</param>
+        public override void Draw(SpriteBatch batch) { base.Draw(batch); }
+
+        /// <summary>
+        /// Update the scientist
+        /// </summary>
+        public override void Update() { base.Update(); }
 
         #endregion
     }

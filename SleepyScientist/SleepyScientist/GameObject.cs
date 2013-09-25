@@ -56,11 +56,17 @@ namespace SleepyScientist
         /// <param name="y">Starting y-coordinate</param>
         /// <param name="width">Width</param>
         /// <param name="height">Height</param>
-        public GameObject(int x, int y, int width, int height, Texture2D image)
-        {
-            _rectPosition = new Rectangle(x, y, width, height);
-            _image = image;
-        }
+        public GameObject(int x, int y, int width, int height) { _rectPosition = new Rectangle(x, y, width, height); }
+
+        #endregion
+
+        #region Methods
+
+        /// <summary>
+        /// Draw the game object
+        /// </summary>
+        /// <param name="batch">The sprite batch you want to draw on</param>
+        public virtual void Draw(SpriteBatch batch) { batch.Draw(this.Image, this.RectPosition, Color.White); }
 
         #endregion
     }

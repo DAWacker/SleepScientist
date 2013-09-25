@@ -50,8 +50,8 @@ namespace SleepyScientist
         /// <param name="x">Starting x-coordinate</param>
         /// <param name="y">Starting y-coordinate</param>
         /// <param name="image">The image</param>
-        public AI(string name, int x, int y, int width, int height, Texture2D image)
-            : base(x, y, width, height, image)
+        public AI(string name, int x, int y, int width, int height)
+            : base(x, y, width, height)
         {
             // Movement
             _veloX = GameConstants.DEFAULT_X_VELOCITY;
@@ -83,6 +83,21 @@ namespace SleepyScientist
         /// Prevents the AI from going off the left and right sides of the screen
         /// </summary>
         public void StayOnScreen() { if ((this.X + this.Width) > GameConstants.SCREEN_WIDTH || (this.X < 0)) { this.Reverse(); } }
+
+        /// <summary>
+        /// Draw the AI
+        /// </summary>
+        /// <param name="batch">The sprite batch you want to draw on</param>
+        public override void Draw(SpriteBatch batch) { base.Draw(batch); }
+
+        /// <summary>
+        /// Update the AI
+        /// </summary>
+        public virtual void Update()
+        {
+            this.Move();
+            this.StayOnScreen();
+        }
 
         #endregion
     }

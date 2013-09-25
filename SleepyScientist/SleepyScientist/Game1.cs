@@ -26,6 +26,8 @@ namespace SleepyScientist
         private int screenWidth;
         private int screenHeight;
 
+        private Scientist _sleepy;
+
         #endregion
 
         public Game1()
@@ -58,6 +60,8 @@ namespace SleepyScientist
             GameConstants.SCREEN_WIDTH = GraphicsDevice.Viewport.Width;
             GameConstants.SCREEN_HEIGHT = GraphicsDevice.Viewport.Height;
 
+            _sleepy = new Scientist("Sleepy", 100, 320, 50, 50);
+
             base.Initialize();
         }
 
@@ -69,8 +73,6 @@ namespace SleepyScientist
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-
-            // TODO: use this.Content to load your game content here
         }
 
         /// <summary>
@@ -79,7 +81,6 @@ namespace SleepyScientist
         /// </summary>
         protected override void UnloadContent()
         {
-            // TODO: Unload any non ContentManager content here
         }
 
         /// <summary>
@@ -92,7 +93,7 @@ namespace SleepyScientist
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            // TODO: Add your update logic here
+            _sleepy.Update();
 
             base.Update(gameTime);
         }
@@ -104,8 +105,6 @@ namespace SleepyScientist
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
-
-            // TODO: Add your drawing code here
 
             base.Draw(gameTime);
         }
