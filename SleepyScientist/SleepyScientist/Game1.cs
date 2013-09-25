@@ -13,11 +13,21 @@ namespace SleepyScientist {
 	/// <summary>
 	/// This is the main type for your game
 	/// </summary>
-	public class Game1 : Game {
-		GraphicsDeviceManager graphics;
+	public class Game1 : Game
+    {
+
+        #region Attributes
+
+        GraphicsDeviceManager graphics;
 		SpriteBatch spriteBatch;
 
-		public Game1() : base() {
+        // Screen dimensions
+        private int screenWidth;
+        private int screenHeight;
+
+        #endregion
+
+        public Game1() : base() {
 			graphics = new GraphicsDeviceManager( this );
 			Content.RootDirectory = "Content";
 		}
@@ -29,7 +39,20 @@ namespace SleepyScientist {
 		/// and initialize them as well.
 		/// </summary>
 		protected override void Initialize() {
-			// TODO: Add your initialization logic here
+
+            // Turns off full screen and sets the background to 1080x640
+            graphics.IsFullScreen = false;
+            graphics.PreferredBackBufferWidth = 1080;
+            graphics.PreferredBackBufferHeight = 640;
+            graphics.ApplyChanges();
+
+            // Save the new screen dimensions locally
+            screenWidth = GraphicsDevice.Viewport.Width;
+            screenHeight = GraphicsDevice.Viewport.Height;
+
+            // Save the new screen dimensions for other classes
+            GameConstants.SCREEN_WIDTH = GraphicsDevice.Viewport.Width;
+            GameConstants.SCREEN_HEIGHT = GraphicsDevice.Viewport.Height;
 
 			base.Initialize();
 		}
