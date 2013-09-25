@@ -13,67 +13,52 @@ using Microsoft.Xna.Framework.GamerServices;
 
 namespace SleepyScientist
 {
-    class AI
+    class AI : GameObject
     {
         #region Attributes
 
-        // Location
-        private int _x;
-        private int _y;
-
         // Movement
-        private int _speed;
-        private int _xVelo;
-        private int _yVelo;
+        private int _veloX;
+        private int _veloY;
 
         // General
         private string _name;
-        private Texture2D _image;
+        private int _direction;
 
         #endregion
 
         #region Properties
 
-        // Get or set the AI's current position
-        public int X { get { return _x; } set { _x = value; } }
-        public int Y { get { return _y; } set { _y = value; } }
-
-        // Get or set the AI's speed and velocities (movement)
-        public int Speed { get { return _speed; } set { _speed = value; } }
-        public int XVelo { get { return _xVelo; } set { _xVelo = value; } }
-        public int YVelo { get { return _yVelo; } set { _yVelo = value; } }
+        // Get or set the AI's movement
+        public int VeloX { get { return _veloX; } set { _veloX = value; } }
+        public int VeloY { get { return _veloY; } set { _veloY = value; } }
 
         // Get or set the AI's name
         public string Name { get { return _name; } set { _name = value; } }
 
-        // Get or set the AI's image
-        public Texture2D Image { get { return _image; } set { _image = value; } }
+        // Get or set the AI's direction
+        public int Direction { get { return _direction; } set { _direction = value; } }
 
         #endregion
 
         #region Constructor
 
         /// <summary>
-        /// Paramaterized constructor of an AI
+        /// Parameterized constructor of an AI
         /// </summary>
         /// <param name="name">The name</param>
-        /// <param name="x">The starting x coordinate</param>
-        /// <param name="y">The starting y coordinate</param>
+        /// <param name="x">Starting x-coordinate</param>
+        /// <param name="y">Starting y-coordinate</param>
         /// <param name="image">The image</param>
-        public AI(string name, int x, int y, Texture2D image)
+        public AI(string name, int x, int y, int width, int height, Texture2D image)
+            : base(x, y, width, height, image)
         {
-            // Location
-            _x = x;
-            _y = y;
-
             // Movement
-            _speed = 10;
-            _xVelo = 0;
-            _yVelo = 0;
+            _veloX = GameConstants.DEFAULT_X_VELOCITY;
+            _veloY = GameConstants.DEFAULT_Y_VELOCITY;
 
             // General
             _name = name;
-            _image = image;
         }
 
         #endregion
@@ -83,7 +68,21 @@ namespace SleepyScientist
         /// <summary>
         /// Reverses the direction of the AI
         /// </summary>
-        public void Reverse() { XVelo = -XVelo; }
+        public void Reverse() { this.VeloX = -this.VeloX; }
+
+        /// <summary>
+        /// Move the AI
+        /// </summary>
+        public void Move()
+        {
+            this.X += this.VeloX;
+            this.Y += this.VeloY;
+        }
+
+        /// <summary>
+        /// Prevents the AI from going off the left and right sides of the screen
+        /// </summary>
+        public void StayOnScreen() { if ((this.X + this.Width) > GameConstants.SCREEN_WIDTH || (this.X < 0)) { this.Reverse(); } }
 
         #endregion
     }
