@@ -27,6 +27,7 @@ namespace SleepyScientist
         private int screenHeight;
 
         private Scientist _sleepy;
+        private Texture2D scientist;
 
         #endregion
 
@@ -53,12 +54,12 @@ namespace SleepyScientist
             graphics.ApplyChanges();
 
             // Save the new screen dimensions locally
-            screenWidth = GraphicsDevice.Viewport.Width;
-            screenHeight = GraphicsDevice.Viewport.Height;
+            screenWidth = 1080;
+            screenHeight = 640;
 
             // Save the new screen dimensions for other classes
-            GameConstants.SCREEN_WIDTH = GraphicsDevice.Viewport.Width;
-            GameConstants.SCREEN_HEIGHT = GraphicsDevice.Viewport.Height;
+            GameConstants.SCREEN_WIDTH = screenWidth;
+            GameConstants.SCREEN_HEIGHT = screenHeight;
 
             _sleepy = new Scientist("Sleepy", 100, 320, 50, 50);
 
@@ -73,6 +74,12 @@ namespace SleepyScientist
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
+
+            // Load in the scientist placeholder
+            scientist = this.Content.Load<Texture2D>("scientist");
+
+            // Set the scientist image to the AI
+            _sleepy.Image = scientist;
         }
 
         /// <summary>
@@ -105,6 +112,13 @@ namespace SleepyScientist
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
+
+            spriteBatch.Begin();
+
+            // Draw the scientist
+            _sleepy.Draw(spriteBatch);
+
+            spriteBatch.End();
 
             base.Draw(gameTime);
         }
