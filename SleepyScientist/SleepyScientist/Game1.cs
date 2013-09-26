@@ -21,6 +21,8 @@ namespace SleepyScientist
 
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+		SpriteFont _spriteFont;
+		MessageLayer _messageLayer;
 
         // Screen dimensions
         private int screenWidth;
@@ -36,6 +38,7 @@ namespace SleepyScientist
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+			_messageLayer = new MessageLayer();
         }
 
         /// <summary>
@@ -80,6 +83,11 @@ namespace SleepyScientist
 
             // Set the scientist image to the AI
             _sleepy.Image = scientist;
+
+            _spriteFont = Content.Load<SpriteFont>("defaultFont");
+            // Add some test messages.
+            _messageLayer.AddMessage(new Message("Test", 0, 0));
+            _messageLayer.AddMessage(new Message("Test 5 Seconds", 0, 30, 5));
         }
 
         /// <summary>
@@ -101,6 +109,7 @@ namespace SleepyScientist
                 Exit();
 
             _sleepy.Update();
+			_messageLayer.Update(gameTime.ElapsedGameTime.TotalSeconds);
 
             base.Update(gameTime);
         }
@@ -117,6 +126,11 @@ namespace SleepyScientist
 
             // Draw the scientist
             _sleepy.Draw(spriteBatch);
+
+            foreach (Message message in _messageLayer.Messages)
+            {
+                spriteBatch.DrawString(_spriteFont, message.Text, new Vector2(message.X, message.Y), Color.White);
+            }
 
             spriteBatch.End();
 

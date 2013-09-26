@@ -39,6 +39,8 @@
     <Compile Include="Game1.cs" />
     <Compile Include="GameConstants.cs" />
     <Compile Include="GameObject.cs" />
+    <Compile Include="Message.cs" />
+    <Compile Include="MessageLayer.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Scientist.cs" />
@@ -70,6 +72,11 @@
     <Content Include="Icon.ico" />
   </ItemGroup>
   <ItemGroup />
+  <ItemGroup>
+    <None Include="Content\defaultFont.xnb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
