@@ -16,11 +16,14 @@ namespace SleepyScientist {
 	public class Game1 : Game {
 		GraphicsDeviceManager graphics;
 		SpriteBatch spriteBatch;
+        SpriteFont _spriteFont;
+        MessageLayer _messageLayer;
 
 		public Game1()
 			: base() {
 			graphics = new GraphicsDeviceManager( this );
 			Content.RootDirectory = "Content";
+            _messageLayer = new MessageLayer();
 		}
 
 		/// <summary>
@@ -44,6 +47,10 @@ namespace SleepyScientist {
 			spriteBatch = new SpriteBatch( GraphicsDevice );
 
 			// TODO: use this.Content to load your game content here
+            _spriteFont = Content.Load<SpriteFont>("defaultFont");
+            // Add some test messages.
+            _messageLayer.AddMessage(new Message("Test", 0, 0));
+            _messageLayer.AddMessage(new Message("Test 5 Seconds", 0, 30, 5));
 		}
 
 		/// <summary>
@@ -64,6 +71,7 @@ namespace SleepyScientist {
 				Exit();
 
 			// TODO: Add your update logic here
+            _messageLayer.Update(gameTime.ElapsedGameTime.TotalSeconds);
 
 			base.Update( gameTime );
 		}
@@ -76,8 +84,22 @@ namespace SleepyScientist {
 			GraphicsDevice.Clear( Color.CornflowerBlue );
 
 			// TODO: Add your drawing code here
+            DrawMessageLayer();
 
 			base.Draw( gameTime );
 		}
+
+        /**
+         * Handles drawing for all the Messages inside _messageLayer.
+         */
+        public void DrawMessageLayer()
+        {
+            foreach (Message message in _messageLayer.Messages)
+            {
+                spriteBatch.Begin();
+                spriteBatch.DrawString(_spriteFont, message.Text, new Vector2(message.X, message.Y), Color.White);
+                spriteBatch.End();
+            }
+        }
 	}
 }
