@@ -1,8 +1,15 @@
-﻿using System;
+﻿#region using statements
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Storage;
+using Microsoft.Xna.Framework.GamerServices;
+#endregion
 
 namespace SleepyScientist
 {
@@ -53,21 +60,17 @@ namespace SleepyScientist
 
         #endregion
 
+        #region Methods
+
         public static Invention operator + (Invention first, Invention second)
         {
-            Invention combined = new Invention();
-            combined.name = first.name + second.name;
-            combined.numUses = first.numUses + second.numUses;
+            Invention combined = new Invention(first.Name + second.Name,
+                    first.Uses + second.Uses, first.X, first.Y, first.Width, first.Height);
             return combined;
         }
 
-        public void Use()
-        {
-        }
+        public Invention Combine(Invention other) { return (this + other); }
 
-        public Invention Combine(Invention other)
-        {
-            return (this + other);
-        }
+        #endregion
     }
 }
