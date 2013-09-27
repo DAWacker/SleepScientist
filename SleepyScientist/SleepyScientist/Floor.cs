@@ -7,6 +7,11 @@ namespace SleepyScientist
 {
     class Floor : GameObject
     {
-     
+        #region Constructor
+        
+        public Floor(int x, int y, int width, int height)
+            : base(x, y, width, height) { }
+
+        #endregion
     }
 }

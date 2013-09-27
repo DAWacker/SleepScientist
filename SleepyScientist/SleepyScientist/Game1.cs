@@ -79,12 +79,12 @@ namespace SleepyScientist
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // Load in the scientist placeholder
-            scientist = this.Content.Load<Texture2D>("scientist");
+            scientist = this.Content.Load<Texture2D>("Image/scientist");
 
             // Set the scientist image to the AI
             _sleepy.Image = scientist;
 
-            _spriteFont = Content.Load<SpriteFont>("defaultFont");
+            _spriteFont = Content.Load<SpriteFont>("Font/defaultFont");
             // Add some test messages.
             _messageLayer.AddMessage(new Message("Test", 0, 0));
             _messageLayer.AddMessage(new Message("Test 5 Seconds", 0, 30, 5));

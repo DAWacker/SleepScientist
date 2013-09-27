@@ -7,5 +7,11 @@ namespace SleepyScientist
 {
     class Ladder : GameObject
     {
+        #region Constructor
+
+        public Ladder(int x, int y, int width, int height)
+            : base(x, y, width, height) { }
+
+        #endregion
     }
 }

@@ -13,7 +13,7 @@ using Microsoft.Xna.Framework.GamerServices;
 
 namespace SleepyScientist
 {
-    class Invention : GameObject
+    class Invention : AI
     {
         #region Attributes
 
@@ -28,6 +28,20 @@ namespace SleepyScientist
 
         // Is the invention currently activated?
         private bool _active;
+
+        // States for the inventions
+        private InventionState _curState;
+        private InventionState _prevState;
+
+        // Possible states for the invention
+        public enum InventionState
+        {
+            Idle,
+            Walking,
+            JackInTheBox,
+            Ladder,
+            Stairs
+        }
 
         #endregion
     
@@ -45,17 +59,24 @@ namespace SleepyScientist
         // Get or set if the invention is currently activated
         public bool Active { get { return _active; } set { _active = value; } }
 
+        // Get or set the state of the invention
+        public InventionState CurrentState { get { return _curState; } set { _curState = value; } }
+        public InventionState PreviousState { get { return _prevState; } set { _prevState = value; } }
+
         #endregion
 
         #region Constructor
 
         public Invention(string name, int uses, int x, int y, int width, int height)
-            : base(x, y, width, height)
+            : base(name, x, y, width, height)
         {
             _name = name;
             _uses = uses;
             _equipped = false;
             _active = false;
+
+            _curState = InventionState.Idle;
+            _prevState = InventionState.Idle;
         }
 
         #endregion
