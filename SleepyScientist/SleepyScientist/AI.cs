@@ -20,6 +20,7 @@ namespace SleepyScientist
         // Movement
         private int _veloX;
         private int _veloY;
+        private int _prevVeloX;
 
         // General
         private string _name;
@@ -30,8 +31,9 @@ namespace SleepyScientist
         #region Properties
 
         // Get or set the AI's movement
-        public int VeloX { get { return _veloX; } set { _veloX = value; } }
+        public int VeloX { get { return _veloX; } set { _prevVeloX = _veloX;  _veloX = value; } }
         public int VeloY { get { return _veloY; } set { _veloY = value; } }
+        public int PrevVeloX { get { return _prevVeloX; } set { _prevVeloX = value; } }
 
         // Get or set the AI's name
         public string Name { get { return _name; } set { _name = value; } }
@@ -97,6 +99,12 @@ namespace SleepyScientist
         {
             this.Move();
             this.StayOnScreen();
+        }
+
+        public virtual bool InteractWith(GameObject gameObject)
+        {
+            // Update the state of the AI.
+            return false;
         }
 
         #endregion

@@ -104,13 +104,7 @@ namespace SleepyScientist
             _stairs = new List<Stairs>();
 
             // Set up the test "Level".
-            //Floor floor1 = new Floor(0, screenHeight - 64, screenWidth, 64);
-            //Floor floor2 = new Floor(0, screenHeight / 2 - 64, screenWidth, 64);
-            //floor1.Image = _floorTexture;
-            //floor2.Image = _floorTexture;
-            //_floors.Add(floor1);
-            //_floors.Add(floor2);
-            SetupLevel(4);
+            SetupLevel(4, true);
 
             // Set up the Scientist.
             _sleepy = new Scientist("Sleepy", 100, _floors[0].Y - 50, 50, 50);
@@ -136,6 +130,11 @@ namespace SleepyScientist
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
+            if (!handleCollisions(_sleepy))
+            {
+                _sleepy.CurrentState = 0;
+            }
+
             _sleepy.Update();
 			_messageLayer.Update(gameTime.ElapsedGameTime.TotalSeconds);
 
@@ -152,14 +151,20 @@ namespace SleepyScientist
 
             spriteBatch.Begin();
 
-            // Draw the scientist
-            _sleepy.Draw(spriteBatch);
-
+            // Draw the "Level"
             foreach (Floor floor in _floors)
             {
                 floor.Draw(spriteBatch);
             }
+            foreach (Ladder ladder in _ladders)
+            {
+                ladder.Draw(spriteBatch);
+            }
 
+            // Draw the scientist
+            _sleepy.Draw(spriteBatch);
+
+            // Draw the MessageLayer
             foreach (Message message in _messageLayer.Messages)
             {
                 spriteBatch.DrawString(_spriteFont, message.Text, new Vector2(message.X, message.Y), Color.White);
@@ -177,23 +182,51 @@ namespace SleepyScientist
         /// <param name="createLadders">Should Ladders be added to the test environment?</param>
         private void SetupLevel(int numFloors, bool createLadders = false)
         {
+            Random rand = new Random();
             int x = 0;
             int y;
             int width = screenWidth;
             int distanceBetweenFloors = screenHeight / numFloors;
-            Floor toAdd;
 
+            // Add Floors.
             for (int i = 0; i < numFloors; i++)
             {
-                toAdd = new Floor(x, screenHeight - distanceBetweenFloors * i - GameConstants.FLOOR_HEIGHT, width, GameConstants.FLOOR_HEIGHT);
+                y = screenHeight - distanceBetweenFloors * i - GameConstants.FLOOR_HEIGHT;
+                Floor toAdd = new Floor(x, y, width, GameConstants.FLOOR_HEIGHT);
                 toAdd.Image = _floorTexture;
                 _floors.Add(toAdd);
             }
 
+            // Add Ladders.
             if (createLadders)
             {
-                // Add ladders here.
+                for (int i = 0; i < numFloors; i++)
+                {
+                    x = rand.Next(screenWidth);
+                    y = screenHeight - distanceBetweenFloors * i - GameConstants.FLOOR_HEIGHT;
+                    Ladder toAdd = new Ladder(x, y, GameConstants.LADDER_WIDTH, distanceBetweenFloors);
+                    toAdd.Image = _ladderTexture;
+                    _ladders.Add(toAdd);
+                }
             }
+        }
+
+        /// <summary>
+        /// !This should be inside of AI, but it requires AI to have a currentFloor and Floors to have a list of Inventions!
+        /// Updates the states of the objects.
+        /// </summary>
+        private bool handleCollisions(AI ai)
+        {
+            bool hasCollided = false;
+            foreach (Ladder ladder in _ladders)
+            {
+                if ( ladder.RectPosition.Contains( ai.RectPosition.Center ) )
+                {
+                    hasCollided = ai.InteractWith(ladder);                    
+                }
+            }
+
+            return hasCollided;
         }
     }
 }
