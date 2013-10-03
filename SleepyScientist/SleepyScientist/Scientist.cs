@@ -18,7 +18,7 @@ namespace SleepyScientist
         #region Attributes
 
         // Possible states the scientist could be in
-        public enum AIState
+        public enum ScientistState
         {
             Walking,
             JackInTheBox,
@@ -30,15 +30,15 @@ namespace SleepyScientist
         }
 
         // Current and previous states of the scientist
-        private AIState _curState;
-        private AIState _prevState;
+        private ScientistState _curState;
+        private ScientistState _prevState;
 
         #endregion
 
         #region Properties
 
-        public AIState CurrentState { get { return _curState; } set { _curState = value; } }
-        public AIState PreviousState { get { return _prevState; } set { _prevState = value; } }
+        public ScientistState CurrentState { get { return _curState; } set { _curState = value; } }
+        public ScientistState PreviousState { get { return _prevState; } set { _prevState = value; } }
 
         #endregion
 
@@ -54,8 +54,8 @@ namespace SleepyScientist
         public Scientist(string name, int x, int y, int width, int height)
             : base(name, x, y, width, height)
         {
-            _curState = AIState.Walking;
-            _prevState = AIState.Walking;
+            _curState = ScientistState.Walking;
+            _prevState = ScientistState.Walking;
         }
 
         #endregion
@@ -71,8 +71,10 @@ namespace SleepyScientist
         /// <summary>
         /// Update the scientist
         /// </summary>
-        public override void Update() { base.Update(); }
-
+        public override void Update() 
+        {
+            base.Update(); 
+        }
         #endregion
     }
 }

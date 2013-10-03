@@ -28,8 +28,17 @@ namespace SleepyScientist
         private int screenWidth;
         private int screenHeight;
 
+        // GameObjects
         private Scientist _sleepy;
+        private List<Floor> _floors;
+        private List<Ladder> _ladders;
+        private List<Stairs> _stairs;
+
+        // Textures
         private Texture2D scientist;
+        private Texture2D _stairsTexture;
+        private Texture2D _ladderTexture;
+        private Texture2D _floorTexture;
 
         #endregion
 
@@ -64,8 +73,6 @@ namespace SleepyScientist
             GameConstants.SCREEN_WIDTH = screenWidth;
             GameConstants.SCREEN_HEIGHT = screenHeight;
 
-            _sleepy = new Scientist("Sleepy", 100, 320, 50, 50);
-
             base.Initialize();
         }
 
@@ -79,15 +86,36 @@ namespace SleepyScientist
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // Load in the scientist placeholder
-            scientist = this.Content.Load<Texture2D>("scientist");
+            scientist = this.Content.Load<Texture2D>("Image/scientist");
+            // Load content of other GameObjects.
+            _floorTexture = this.Content.Load<Texture2D>("Image/floor");
+            _stairsTexture = this.Content.Load<Texture2D>("Image/stairs");
+            _ladderTexture = this.Content.Load<Texture2D>("Image/ladder");
 
-            // Set the scientist image to the AI
-            _sleepy.Image = scientist;
-
-            _spriteFont = Content.Load<SpriteFont>("defaultFont");
+            // Load the font to be used by the MessageLayer.
+            _spriteFont = Content.Load<SpriteFont>("Font/defaultFont");
             // Add some test messages.
             _messageLayer.AddMessage(new Message("Test", 0, 0));
             _messageLayer.AddMessage(new Message("Test 5 Seconds", 0, 30, 5));
+
+            // Initialize test "Level" objects.
+            _floors = new List<Floor>();
+            _ladders = new List<Ladder>();
+            _stairs = new List<Stairs>();
+
+            // Set up the test "Level".
+            //Floor floor1 = new Floor(0, screenHeight - 64, screenWidth, 64);
+            //Floor floor2 = new Floor(0, screenHeight / 2 - 64, screenWidth, 64);
+            //floor1.Image = _floorTexture;
+            //floor2.Image = _floorTexture;
+            //_floors.Add(floor1);
+            //_floors.Add(floor2);
+            SetupLevel(4);
+
+            // Set up the Scientist.
+            _sleepy = new Scientist("Sleepy", 100, _floors[0].Y - 50, 50, 50);
+            // Set the scientist image to the AI
+            _sleepy.Image = scientist;
         }
 
         /// <summary>
@@ -127,6 +155,11 @@ namespace SleepyScientist
             // Draw the scientist
             _sleepy.Draw(spriteBatch);
 
+            foreach (Floor floor in _floors)
+            {
+                floor.Draw(spriteBatch);
+            }
+
             foreach (Message message in _messageLayer.Messages)
             {
                 spriteBatch.DrawString(_spriteFont, message.Text, new Vector2(message.X, message.Y), Color.White);
@@ -135,6 +168,32 @@ namespace SleepyScientist
             spriteBatch.End();
 
             base.Draw(gameTime);
+        }
+
+        /// <summary>
+        /// Creates and positions Floors and Ladders for testing.
+        /// </summary>
+        /// <param name="numFloors">The number of floors to create for the test environment.</param>
+        /// <param name="createLadders">Should Ladders be added to the test environment?</param>
+        private void SetupLevel(int numFloors, bool createLadders = false)
+        {
+            int x = 0;
+            int y;
+            int width = screenWidth;
+            int distanceBetweenFloors = screenHeight / numFloors;
+            Floor toAdd;
+
+            for (int i = 0; i < numFloors; i++)
+            {
+                toAdd = new Floor(x, screenHeight - distanceBetweenFloors * i - GameConstants.FLOOR_HEIGHT, width, GameConstants.FLOOR_HEIGHT);
+                toAdd.Image = _floorTexture;
+                _floors.Add(toAdd);
+            }
+
+            if (createLadders)
+            {
+                // Add ladders here.
+            }
         }
     }
 }
