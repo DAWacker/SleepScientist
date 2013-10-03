@@ -7,7 +7,7 @@ using System.Text;
 
 namespace SleepyScientist.Inventions
 {
-    class Jack_In_The_Box : Base_Invention
+    class JackInTheBox : Invention
     {
         /// <summary>
         /// Constructor for Jack In The Box invention. Chains to base
@@ -18,7 +18,7 @@ namespace SleepyScientist.Inventions
         /// <param name="y">Initial Y position for invention</param>
         /// <param name="width">Width of invention</param>
         /// <param name="height">Height of invention</param>
-        public Jack_In_The_Box(string name, int max_uses, int x, int y, int width, int height)
+        public JackInTheBox(string name, int max_uses, int x, int y, int width, int height)
             : base(name, max_uses, x, y, width, height)
         {
         }
@@ -26,11 +26,11 @@ namespace SleepyScientist.Inventions
         /// <summary>
         /// Method that executes the functionality of a Jack In The Box
         /// </summary>
-        public override void Use()
-        {
-            // Launch scientist
+        //public override void Use()
+        //{
+        //    // Launch scientist
 
-            base.Use();
-        }
+        //    //base.Use();
+        //}
     }
 }
