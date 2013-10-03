@@ -17,6 +17,9 @@ namespace SleepyScientist
         public static int DEFAULT_X_VELOCITY = 5;
         public static int DEFAULT_Y_VELOCITY = 0;
 
+        // Floor constants
+        public static int FLOOR_HEIGHT = 64;
+
         #endregion
     }
 }
