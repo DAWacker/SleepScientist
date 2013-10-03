@@ -82,9 +82,7 @@
     <Content Include="Content\Image\ladder.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Image\lincolnLog.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    <Content Include="Content\Image\lincolnLog.png" />
     <Content Include="Content\Image\rocketSkateboard.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

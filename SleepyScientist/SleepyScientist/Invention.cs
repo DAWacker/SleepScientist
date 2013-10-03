@@ -17,9 +17,6 @@ namespace SleepyScientist
     {
         #region Attributes
 
-        // Name of the invention
-        private string _name;
-
         // Number of uses allotted to this invention per level
         private int _uses;
 
@@ -47,9 +44,6 @@ namespace SleepyScientist
     
         #region Properties
 
-        // Get or set the name of the invention
-        public string Name { get { return _name; } set { _name = value; } }
-
         // Get or set the number of uses of the invention
         public int Uses { get { return _uses; } set { _uses = value; } }
 
@@ -70,7 +64,6 @@ namespace SleepyScientist
         public Invention(string name, int uses, int x, int y, int width, int height)
             : base(name, x, y, width, height)
         {
-            _name = name;
             _uses = uses;
             _equipped = false;
             _active = false;

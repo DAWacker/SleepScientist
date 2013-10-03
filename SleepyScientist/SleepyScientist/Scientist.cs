@@ -33,12 +33,17 @@ namespace SleepyScientist
         private ScientistState _curState;
         private ScientistState _prevState;
 
+        private List<Ladder> _ladders;
+        private GameObject _currentTile;
+
         #endregion
 
         #region Properties
 
         public ScientistState CurrentState { get { return _curState; } set { _curState = value; } }
         public ScientistState PreviousState { get { return _prevState; } set { _prevState = value; } }
+        public List<Ladder> Ladders { get { return _ladders; } set { _ladders = value; } }
+        public GameObject CurrentTile { get { return _currentTile; } set { _currentTile = value; } }
 
         #endregion
 
@@ -56,6 +61,7 @@ namespace SleepyScientist
         {
             _curState = ScientistState.Walking;
             _prevState = ScientistState.Walking;
+            _currentTile = null;
         }
 
         #endregion
@@ -73,7 +79,39 @@ namespace SleepyScientist
         /// </summary>
         public override void Update() 
         {
-            base.Update(); 
+            // Check if the scientist is climbing a ladder
+            foreach (Ladder piece in this.Ladders)
+            {
+                if (this.RectPosition.Intersects(piece.RectPosition))
+                {
+                    this.CurrentState = ScientistState.Ladder;
+                    this.CurrentTile = piece;
+                    break;
+                }
+                else 
+                {
+                    this.CurrentState = ScientistState.Walking;
+                    this.CurrentTile = null;
+                }
+            }
+
+            switch (this.CurrentState)
+            {
+                case ScientistState.Ladder:
+                    this.VeloX = 0;
+                    this.VeloY = GameConstants.DEFAULT_Y_VELOCITY;
+                    break;
+
+                case ScientistState.Walking:
+                    this.VeloX = GameConstants.DEFAULT_X_VELOCITY * this.Direction;
+                    this.VeloY = 0;
+                    break;
+
+                default:
+                    break;
+            }
+
+            base.Update();
         }
         #endregion
     }

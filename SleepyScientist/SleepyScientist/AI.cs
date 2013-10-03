@@ -23,6 +23,8 @@ namespace SleepyScientist
 
         // General
         private string _name;
+
+        // 1 implies moving to the right, -1 to the left
         private int _direction;
 
         #endregion
@@ -55,10 +57,11 @@ namespace SleepyScientist
         {
             // Movement
             _veloX = GameConstants.DEFAULT_X_VELOCITY;
-            _veloY = GameConstants.DEFAULT_Y_VELOCITY;
+            _veloY = 0;
 
             // General
             _name = name;
+            _direction = 1;
         }
 
         #endregion
@@ -68,7 +71,7 @@ namespace SleepyScientist
         /// <summary>
         /// Reverses the direction of the AI
         /// </summary>
-        public void Reverse() { this.VeloX = -this.VeloX; }
+        public void Reverse() { this.VeloX = -this.VeloX; this.Direction = -this.Direction; }
 
         /// <summary>
         /// Move the AI
@@ -95,8 +98,8 @@ namespace SleepyScientist
         /// </summary>
         public virtual void Update()
         {
-            this.Move();
             this.StayOnScreen();
+            this.Move();
         }
 
         #endregion
