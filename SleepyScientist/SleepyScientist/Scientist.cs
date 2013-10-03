@@ -26,20 +26,24 @@ namespace SleepyScientist
             EggBeater,
             LincolnLogs,
             Ladder,
-            Stairs,
-            NULL
+            Stairs
         }
 
         // Current and previous states of the scientist
         private ScientistState _curState;
         private ScientistState _prevState;
 
+        private List<Ladder> _ladders;
+        private GameObject _currentTile;
+
         #endregion
 
         #region Properties
 
-        public ScientistState CurrentState { get { return _curState; } set { _prevState = _curState;  _curState = value; } }
+        public ScientistState CurrentState { get { return _curState; } set { _curState = value; } }
         public ScientistState PreviousState { get { return _prevState; } set { _prevState = value; } }
+        public List<Ladder> Ladders { get { return _ladders; } set { _ladders = value; } }
+        public GameObject CurrentTile { get { return _currentTile; } set { _currentTile = value; } }
 
         #endregion
 
@@ -57,6 +61,7 @@ namespace SleepyScientist
         {
             _curState = ScientistState.Walking;
             _prevState = ScientistState.Walking;
+            _currentTile = null;
         }
 
         #endregion
@@ -74,63 +79,39 @@ namespace SleepyScientist
         /// </summary>
         public override void Update() 
         {
-            switch (_curState)
+            // Check if the scientist is climbing a ladder
+            foreach (Ladder piece in this.Ladders)
             {
-                case ScientistState.Walking:
-                    if (_prevState != ScientistState.Walking)
-                    {
-                        //VeloX = PrevVeloX; // I had an error with this for some reason.
-                        VeloX = GameConstants.DEFAULT_X_VELOCITY;
-                        VeloY = GameConstants.DEFAULT_Y_VELOCITY;
-                    }
+                if (this.RectPosition.Intersects(piece.RectPosition))
+                {
+                    this.CurrentState = ScientistState.Ladder;
+                    this.CurrentTile = piece;
                     break;
-                case ScientistState.JackInTheBox:
-                    break;
-                case ScientistState.RocketSkates:
-                    break;
-                case ScientistState.EggBeater:
-                    break;
-                case ScientistState.LincolnLogs:
-                    break;
+                }
+                else 
+                {
+                    this.CurrentState = ScientistState.Walking;
+                    this.CurrentTile = null;
+                }
+            }
+
+            switch (this.CurrentState)
+            {
                 case ScientistState.Ladder:
-                    VeloX = 0;
-                    VeloY = GameConstants.LADDER_Y_VELOCITY;
+                    this.VeloX = 0;
+                    this.VeloY = GameConstants.DEFAULT_Y_VELOCITY;
                     break;
-                case ScientistState.Stairs:
+
+                case ScientistState.Walking:
+                    this.VeloX = GameConstants.DEFAULT_X_VELOCITY * this.Direction;
+                    this.VeloY = 0;
+                    break;
+
+                default:
                     break;
             }
 
-            base.Update(); 
-        }
-
-        /// <summary>
-        /// Update the scientist's state based off of the interaction.
-        /// </summary>
-        /// <param name="gameObject">The GameObject being interacted with.</param>
-        public override bool InteractWith(GameObject gameObject)
-        {
-            ScientistState newState = ScientistState.NULL;
-
-            // Check gameObject's type and change state accordingly.
-            if (gameObject.GetType() == typeof(Ladder))
-            {
-                newState = ScientistState.Ladder;
-            }
-            else if (gameObject.GetType() == typeof(Stairs))
-            {
-                newState = ScientistState.Stairs;
-            }
-
-            // Update scientist's state only if state has changed.
-            if (newState != ScientistState.NULL)
-            {
-                // Also sets previous state.
-                CurrentState = newState;
-            }
-
-            base.InteractWith(gameObject);
-
-            return newState != ScientistState.NULL;
+            base.Update();
         }
         #endregion
     }
