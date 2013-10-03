@@ -217,7 +217,7 @@ namespace SleepyScientist
 
             for (int i = 0; i < numFloors; i++)
             {
-                toAdd = new Floor(x, screenHeight - distanceBetweenFloors * i - GameConstants.FLOOR_HEIGHT, width, GameConstants.FLOOR_HEIGHT);
+                toAdd = new Floor(x, screenHeight - distanceBetweenFloors * i - GameConstants.FLOOR_HEIGHT, 50, GameConstants.FLOOR_HEIGHT);
                 toAdd.Image = _floorTexture;
                 _floors.Add(toAdd);
             }
