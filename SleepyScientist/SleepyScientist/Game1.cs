@@ -62,13 +62,13 @@ namespace SleepyScientist
 
             // Turns off full screen and sets the background to 1080x640
             graphics.IsFullScreen = false;
-            graphics.PreferredBackBufferWidth = 1280;
-            graphics.PreferredBackBufferHeight = 720;
+            graphics.PreferredBackBufferWidth = 1080;
+            graphics.PreferredBackBufferHeight = 640;
             graphics.ApplyChanges();
 
             // Save the new screen dimensions locally
-            screenWidth = 1280;
-            screenHeight = 720;
+            screenWidth = 1080;
+            screenHeight = 640;
 
             // Save the new screen dimensions for other classes
             GameConstants.SCREEN_WIDTH = screenWidth;
