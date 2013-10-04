@@ -99,7 +99,7 @@ namespace SleepyScientist
             {
                 case ScientistState.Ladder:
                     this.VeloX = 0;
-                    this.VeloY = GameConstants.DEFAULT_Y_VELOCITY;
+                    this.VeloY = GameConstants.LADDER_Y_VELOCITY;
                     break;
 
                 case ScientistState.Walking:
