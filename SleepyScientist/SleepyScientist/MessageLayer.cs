@@ -10,19 +10,16 @@ namespace SleepyScientist
      */
     class MessageLayer
     {
-        Dictionary<string, Message> _messages;
+        private static Dictionary<string, Message> _messages = new Dictionary<string, Message>();
 
-        public MessageLayer()
-        {
-            _messages = new Dictionary<string, Message>();
-        }
+        public MessageLayer() { }
 
         /**
          * Add a Message to _messages using its text as the key.
          * @param message The Message to be added.
          * @param allowOverwrite Can a repeat Message be added?
          */
-        public void AddMessage(Message message, bool allowOverwrite = true )
+        public static void AddMessage(Message message, bool allowOverwrite = true )
         {
             if (allowOverwrite)
                 _messages[message.Text] = message;
@@ -37,7 +34,7 @@ namespace SleepyScientist
          * Remove message so it doesn't get displayed anymore.
          * @param message The Message to be removed.
          */
-        public void RemoveMessage(Message message)
+        public static void RemoveMessage(Message message)
         {
             _messages.Remove(message.Text);
         }
@@ -46,7 +43,7 @@ namespace SleepyScientist
          * Update all the Messages and remove those that expire.
          * @param time The time to update the Messages by.
          */
-        public void Update(double time)
+        public static void Update(double time)
         {
             List<Message> toRemove = new List<Message>();
 
@@ -61,6 +58,6 @@ namespace SleepyScientist
         }
 
         // Getters and Setters
-        public IEnumerable<Message> Messages { get { return _messages.Values; } }
+        public static IEnumerable<Message> Messages { get { return _messages.Values; } }
     }
 }

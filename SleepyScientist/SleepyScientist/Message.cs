@@ -43,7 +43,7 @@ namespace SleepyScientist
 
         // Getters and Setters.
         public string Text { get { return _text; } set { _text = value; } }
-        public int X { get { return _x; } }
-        public int Y { get { return _y; } }
+        public int X { get { return _x; } set { _x = value; } }
+        public int Y { get { return _y; } set { _y = value; } }
     }
 }

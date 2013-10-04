@@ -22,7 +22,6 @@ namespace SleepyScientist
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 		SpriteFont _spriteFont;
-		MessageLayer _messageLayer;
 
         // Screen dimensions
         private int screenWidth;
@@ -46,7 +45,6 @@ namespace SleepyScientist
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-			_messageLayer = new MessageLayer();
         }
 
         /// <summary>
@@ -113,8 +111,8 @@ namespace SleepyScientist
             _spriteFont = Content.Load<SpriteFont>("Font/defaultFont");
 
             // Add some test messages.
-            _messageLayer.AddMessage(new Message("Test", 0, 0));
-            _messageLayer.AddMessage(new Message("Test 5 Seconds", 0, 30, 5));
+            MessageLayer.AddMessage(new Message("Test", 0, 0));
+            MessageLayer.AddMessage(new Message("Test 5 Seconds", 0, 30, 5));
 
             // Set up the test "Level".
             SetupLevel(4, true);
@@ -144,7 +142,7 @@ namespace SleepyScientist
                 Exit();
 
             _sleepy.Update();
-			_messageLayer.Update(gameTime.ElapsedGameTime.TotalSeconds);
+			MessageLayer.Update(gameTime.ElapsedGameTime.TotalSeconds);
 
             base.Update(gameTime);
         }
@@ -159,16 +157,36 @@ namespace SleepyScientist
 
             spriteBatch.Begin();
 
-            foreach (Message message in _messageLayer.Messages)
-            {
-                spriteBatch.DrawString(_spriteFont, message.Text, new Vector2(message.X, message.Y), Color.White);
-            }
-
+            // Draw the level.
             foreach (Floor tile in _floors) { tile.Draw(spriteBatch); }
             foreach (Ladder piece in _ladders) { piece.Draw(spriteBatch); }
 
-            // Draw the scientist
+            // Draw the scientist.
             _sleepy.Draw(spriteBatch);
+
+            // Draw the messages.
+            foreach (Message message in MessageLayer.Messages)
+            {
+                Vector2 dimensions = _spriteFont.MeasureString(message.Text);
+                if (dimensions.X + message.X > screenWidth)
+                {
+                    message.X = screenWidth - (int)dimensions.X;
+                }
+                else if (message.X < 0)
+                {
+                    message.X = 0;
+                }
+                if (dimensions.Y + message.Y > screenHeight)
+                {
+                    message.Y = screenHeight - (int)dimensions.Y;
+                }
+                else if (message.Y < 0)
+                {
+                    message.Y = 0;
+                }
+
+                spriteBatch.DrawString(_spriteFont, message.Text, new Vector2(message.X, message.Y), Color.White);
+            }
 
             spriteBatch.End();
 

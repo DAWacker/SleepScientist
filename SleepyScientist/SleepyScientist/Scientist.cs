@@ -84,6 +84,7 @@ namespace SleepyScientist
             {
                 if (this.RectPosition.Intersects(piece.RectPosition))
                 {
+                    MessageLayer.AddMessage(new Message("Collided with Ladder", X, Y, GameConstants.MESSAGE_TIME));
                     this.CurrentState = ScientistState.Ladder;
                     this.CurrentTile = piece;
                     break;

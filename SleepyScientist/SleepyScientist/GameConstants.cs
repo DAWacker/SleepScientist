@@ -28,6 +28,9 @@ namespace SleepyScientist
         // Ladder constants
         public static int LADDER_WIDTH = TILE_WIDTH;
 
+        // Message layer constants
+        public static double MESSAGE_TIME = 2;
+
         #endregion
     }
 }
