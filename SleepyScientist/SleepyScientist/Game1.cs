@@ -34,7 +34,7 @@ namespace SleepyScientist
         private List<Ladder> _ladders;
 
         // Textures
-        private Texture2D scientist;
+        private Texture2D _scientistTexture;
         private Texture2D _stairsTexture;
         private Texture2D _ladderTexture;
         private Texture2D _floorTexture;
@@ -58,21 +58,18 @@ namespace SleepyScientist
         protected override void Initialize()
         {
 
-            // Turns off full screen and sets the background to 1080x640
+            // Turns off full screen and sets the background
             graphics.IsFullScreen = false;
-            graphics.PreferredBackBufferWidth = 1080;
-            graphics.PreferredBackBufferHeight = 640;
+            graphics.PreferredBackBufferWidth = GameConstants.SCREEN_WIDTH;
+            graphics.PreferredBackBufferHeight = GameConstants.SCREEN_HEIGHT;
             graphics.ApplyChanges();
 
             // Save the new screen dimensions locally
-            screenWidth = 1080;
-            screenHeight = 640;
+            screenWidth = GameConstants.SCREEN_WIDTH;
+            screenHeight = GameConstants.SCREEN_HEIGHT;
 
-            // Save the new screen dimensions for other classes
-            GameConstants.SCREEN_WIDTH = screenWidth;
-            GameConstants.SCREEN_HEIGHT = screenHeight;
-
-            _sleepy = new Scientist("Sleepy", 100, 320, 50, 50);
+            _sleepy = new Scientist("Sleepy", 0, 0, 50, 50);
+            // Initialize test "Level" objects.
             _floors = new List<Floor>();
             _ladders = new List<Ladder>();
 
@@ -89,7 +86,7 @@ namespace SleepyScientist
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // Load in the scientist placeholder
-            scientist = this.Content.Load<Texture2D>("Image/scientist");
+            _scientistTexture = this.Content.Load<Texture2D>("Image/scientist");
 
             // Load content of other GameObjects.
             _floorTexture = this.Content.Load<Texture2D>("Image/floor");
@@ -97,47 +94,35 @@ namespace SleepyScientist
             _ladderTexture = this.Content.Load<Texture2D>("Image/ladder");
 
             // Set the scientist image to the AI
-            _sleepy.Image = scientist;
+            _sleepy.Image = _scientistTexture;
 
-            Floor _floor1;
-            Floor _floor2;
+            /*Floor floor1 = new Floor(0, 370, screenWidth, GameConstants.FLOOR_HEIGHT);
+            floor1.Image = _floorTexture;
+            Floor floor2 = new Floor(0, 270, screenWidth, GameConstants.FLOOR_HEIGHT);
+            floor2.Image = _floorTexture;
+            _floors.Add(floor1);
+            _floors.Add(floor2);
 
-            for (int i = 0; i < 22; i++)
-            {
-                _floor1 = new Floor(i * 50, 370, 50, 50);
-                _floor1.Image = _floorTexture;
-                _floors.Add(_floor1);
-
-                _floor2 = new Floor(i * 50, 170, 50, 50);
-                _floor2.Image = _floorTexture;
-                _floors.Add(_floor2);
-            }
+            Floor floor3 = new Floor(0, 0, screenWidth / 2, 200);
+            floor3.Image = _floorTexture;
+            _floors.Add(floor3);
 
             Ladder ladderPiece = new Ladder(400, 170, GameConstants.LADDER_WIDTH, 200);
             ladderPiece.Image = _ladderTexture;
-            _ladders.Add(ladderPiece);
-
-
-
-            _sleepy.Ladders = _ladders;
+            _ladders.Add(ladderPiece);*/
             _spriteFont = Content.Load<SpriteFont>("Font/defaultFont");
 
             // Add some test messages.
             _messageLayer.AddMessage(new Message("Test", 0, 0));
             _messageLayer.AddMessage(new Message("Test 5 Seconds", 0, 30, 5));
 
-            // Initialize test "Level" objects.
-            //_floors = new List<Floor>();
-            //_ladders = new List<Ladder>();
-            //_stairs = new List<Stairs>();
-
             // Set up the test "Level".
-            //SetupLevel(4);
+            SetupLevel(4, true);
 
             // Set up the Scientist.
-            //_sleepy = new Scientist("Sleepy", 100, _floors[0].Y - 50, 50, 50);
-            // Set the scientist image to the AI
-            //_sleepy.Image = scientist;
+            _sleepy.X = 100;
+            _sleepy.Y = _floors[0].Y - _sleepy.Height;
+            _sleepy.Ladders = _ladders;
         }
 
         /// <summary>

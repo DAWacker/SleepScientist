@@ -10,8 +10,8 @@ namespace SleepyScientist
         #region Attributes
 
         // Screen dimensions
-        public static int SCREEN_WIDTH;
-        public static int SCREEN_HEIGHT;
+        public static int SCREEN_WIDTH = 1280;
+        public static int SCREEN_HEIGHT = 720;
 
         // Tile dimensions
         public static int TILE_WIDTH = 50;
@@ -23,10 +23,10 @@ namespace SleepyScientist
         public static int LADDER_Y_VELOCITY = -5;
 
         // Floor constants
-        public static int FLOOR_HEIGHT = 64;
+        public static int FLOOR_HEIGHT = TILE_HEIGHT;
 
         // Ladder constants
-        public static int LADDER_WIDTH = 50;
+        public static int LADDER_WIDTH = TILE_WIDTH;
 
         #endregion
     }
