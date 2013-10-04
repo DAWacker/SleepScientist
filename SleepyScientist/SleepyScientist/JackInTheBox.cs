@@ -26,11 +26,11 @@ namespace SleepyScientist
         /// <summary>
         /// Method that executes the functionality of a Jack In The Box
         /// </summary>
-        //public override void Use()
-        //{
-        //    // Launch scientist
+        public override void Use()
+        {
+            // Launch scientist
 
-        //    //base.Use();
-        //}
+            base.Use();
+        }
     }
 }

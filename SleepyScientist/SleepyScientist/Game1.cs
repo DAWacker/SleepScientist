@@ -31,15 +31,13 @@ namespace SleepyScientist
         // GameObjects
         private Scientist _sleepy;
         private List<Floor> _floors;
+        private List<Ladder> _ladders;
 
         // Textures
         private Texture2D scientist;
         private Texture2D _stairsTexture;
         private Texture2D _ladderTexture;
         private Texture2D _floorTexture;
-
-        private List<Floor> floors;
-        private List<Ladder> ladders;
 
         #endregion
 
@@ -75,10 +73,8 @@ namespace SleepyScientist
             GameConstants.SCREEN_HEIGHT = screenHeight;
 
             _sleepy = new Scientist("Sleepy", 100, 320, 50, 50);
-            floors = new List<Floor>();
-            ladders = new List<Ladder>();
-
             _floors = new List<Floor>();
+            _ladders = new List<Ladder>();
 
             base.Initialize();
         }
@@ -110,11 +106,11 @@ namespace SleepyScientist
             {
                 _floor1 = new Floor(i * 50, 370, 50, 50);
                 _floor1.Image = _floorTexture;
-                floors.Add(_floor1);
+                _floors.Add(_floor1);
 
                 _floor2 = new Floor(i * 50, 170, 50, 50);
                 _floor2.Image = _floorTexture;
-                floors.Add(_floor2);
+                _floors.Add(_floor2);
             }
 
             Ladder ladderPiece;
@@ -123,10 +119,10 @@ namespace SleepyScientist
             {
                 ladderPiece = new Ladder(400, 320 - (l * 50), 50, 50);
                 ladderPiece.Image = _ladderTexture;
-                ladders.Add(ladderPiece);
+                _ladders.Add(ladderPiece);
             }
 
-            _sleepy.Ladders = ladders;
+            _sleepy.Ladders = _ladders;
             _spriteFont = Content.Load<SpriteFont>("Font/defaultFont");
 
             // Add some test messages.
@@ -139,12 +135,6 @@ namespace SleepyScientist
             //_stairs = new List<Stairs>();
 
             // Set up the test "Level".
-            //Floor floor1 = new Floor(0, screenHeight - 64, screenWidth, 64);
-            //Floor floor2 = new Floor(0, screenHeight / 2 - 64, screenWidth, 64);
-            //floor1.Image = _floorTexture;
-            //floor2.Image = _floorTexture;
-            //_floors.Add(floor1);
-            //_floors.Add(floor2);
             //SetupLevel(4);
 
             // Set up the Scientist.
@@ -192,8 +182,8 @@ namespace SleepyScientist
                 spriteBatch.DrawString(_spriteFont, message.Text, new Vector2(message.X, message.Y), Color.White);
             }
 
-            foreach (Floor tile in floors) { tile.Draw(spriteBatch); }
-            foreach (Ladder piece in ladders) { piece.Draw(spriteBatch); }
+            foreach (Floor tile in _floors) { tile.Draw(spriteBatch); }
+            foreach (Ladder piece in _ladders) { piece.Draw(spriteBatch); }
 
             // Draw the scientist
             _sleepy.Draw(spriteBatch);
@@ -215,7 +205,6 @@ namespace SleepyScientist
             int y;
             int width = screenWidth;
             int distanceBetweenFloors = screenHeight / numFloors;
-            Floor toAdd;
 
             // Add Floors.
             for (int i = 0; i < numFloors; i++)

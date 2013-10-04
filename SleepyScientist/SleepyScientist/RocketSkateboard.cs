@@ -26,12 +26,12 @@ namespace SleepyScientist
         /// <summary>
         /// Method that executes the functionality of a Rocket Skateboard
         /// </summary>
-        //public override void Use()
-        //{
-        //    Scientist s = new Scientist("", 0, 0, 0, 0);
-        //    s.VeloX *= 3;   // only lasts a certain amount of time, will have to address this
+        public override void Use()
+        {
+            Scientist s = new Scientist("", 0, 0, 0, 0);
+            s.VeloX *= 3;   // only lasts a certain amount of time, will have to address this
 
-        //    //base.Use();
-        //}
+            base.Use();
+        }
     }
 }

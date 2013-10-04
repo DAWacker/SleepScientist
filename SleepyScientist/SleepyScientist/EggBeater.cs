@@ -26,12 +26,12 @@ namespace SleepyScientist
         /// <summary>
         /// Method that executes the functionality of an Egg Beater
         /// </summary>
-        //public override void Use()
-        //{
-        //    Scientist s = new Scientist("",0,0,0,0);
-        //    s.Direction *= -1;  // How exactly do we want to do this? Enum could be better, or bool.
+        public override void Use()
+        {
+            Scientist s = new Scientist("",0,0,0,0);
+            s.Direction *= -1;  // How exactly do we want to do this? Enum could be better, or bool.
 
-        //    //base.Use();
-        //}
+            base.Use();
+        }
     }
 }

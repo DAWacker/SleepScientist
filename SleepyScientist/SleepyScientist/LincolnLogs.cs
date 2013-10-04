@@ -26,11 +26,11 @@ namespace SleepyScientist
         /// <summary>
         /// Method that executes the functionality of a Lincoln Log
         /// </summary>
-        //public override void Use()
-        //{
-        //    // Turn into ladder or stairs
+        public override void Use()
+        {
+            // Turn into ladder or stairs
 
-        //    //base.Use();
-        //}
+            base.Use();
+        }
     }
 }
