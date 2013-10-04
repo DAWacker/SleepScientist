@@ -16,10 +16,6 @@ namespace SleepyScientist
         #region Fields
         public int MAX_USES = 1;
         /// <summary>
-        /// Name of the invention (maybe this can just be derived from the type name)
-        /// </summary>
-        private string name;
-        /// <summary>
         /// Number of uses currently left for this invention.
         /// </summary>
         private int numUses;
@@ -44,14 +40,6 @@ namespace SleepyScientist
         }
 
         #region Properties
-        /// <summary>
-        /// Gets or set the name of the invention.
-        /// </summary>
-        public string Name
-        {
-            get { return name; }
-            set { name = value; }
-        }
         /// <summary>
         /// Gets or sets the number of uses available to this invention
         /// </summary>
@@ -86,8 +74,6 @@ namespace SleepyScientist
         public Invention(string name, int max_uses, int x, int y, int width, int height)
             : base(name, x, y, width, height)
         {
-            this.name = name;
-
             // Set the max uses and the use counter
             this.MAX_USES = max_uses;
             this.numUses = MAX_USES;
@@ -105,7 +91,7 @@ namespace SleepyScientist
         /// <returns></returns>
         public static Invention operator +(Invention first, Invention second)
         {
-            Invention combined = new Invention(first.name + second.name, first.numUses + second.numUses,
+            Invention combined = new Invention(first.Name + second.Name, first.numUses + second.numUses,
                                                             first.X, first.Y, first.Width, first.Height);
             return combined;
         }
