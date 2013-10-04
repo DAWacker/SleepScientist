@@ -13,6 +13,10 @@ namespace SleepyScientist
         public static int SCREEN_WIDTH;
         public static int SCREEN_HEIGHT;
 
+        // Tile dimensions
+        public static int TILE_WIDTH = 50;
+        public static int TILE_HEIGHT = TILE_WIDTH;
+
         // Default movement speeds
         public static int DEFAULT_X_VELOCITY = 5;
         public static int DEFAULT_Y_VELOCITY = 0;
@@ -22,7 +26,7 @@ namespace SleepyScientist
         public static int FLOOR_HEIGHT = 64;
 
         // Ladder constants
-        public static int LADDER_WIDTH = 54;
+        public static int LADDER_WIDTH = 50;
 
         #endregion
     }

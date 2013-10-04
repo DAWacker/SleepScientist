@@ -113,14 +113,11 @@ namespace SleepyScientist
                 _floors.Add(_floor2);
             }
 
-            Ladder ladderPiece;
+            Ladder ladderPiece = new Ladder(400, 170, GameConstants.LADDER_WIDTH, 200);
+            ladderPiece.Image = _ladderTexture;
+            _ladders.Add(ladderPiece);
 
-            for (int l = 0; l < 4; l++)
-            {
-                ladderPiece = new Ladder(400, 320 - (l * 50), 50, 50);
-                ladderPiece.Image = _ladderTexture;
-                _ladders.Add(ladderPiece);
-            }
+
 
             _sleepy.Ladders = _ladders;
             _spriteFont = Content.Load<SpriteFont>("Font/defaultFont");
