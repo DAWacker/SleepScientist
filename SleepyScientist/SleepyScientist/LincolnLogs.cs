@@ -7,8 +7,12 @@ using System.Text;
 
 namespace SleepyScientist
 {
+    enum STATE { NORMAL, STAIRS, LADDER }
+
     class LincolnLogs : Invention
     {
+        STATE currentState = STATE.NORMAL;
+
         /// <summary>
         /// Constructor for Lincoln Logs invention. Chains to base
         /// </summary>
@@ -29,6 +33,8 @@ namespace SleepyScientist
         public override void Use()
         {
             // Turn into ladder or stairs
+            // Animation to change
+            // currentState = STATE.STAIRS | currentState = STAIRS.LADDER
 
             base.Use();
         }

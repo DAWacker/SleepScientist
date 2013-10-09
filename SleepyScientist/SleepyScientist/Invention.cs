@@ -92,7 +92,7 @@ namespace SleepyScientist
         public static Invention operator +(Invention first, Invention second)
         {
             Invention combined = new Invention(first.Name + second.Name, first.numUses + second.numUses,
-                                                            first.X, first.Y, first.Width, first.Height);
+                                                            first.x, first.Y, first.Width, first.Height);
             return combined;
         }
 
