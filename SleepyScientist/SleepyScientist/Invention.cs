@@ -92,14 +92,14 @@ namespace SleepyScientist
         public static Invention operator +(Invention first, Invention second)
         {
             Invention combined = new Invention(first.Name + second.Name, first.numUses + second.numUses,
-                                                            first.x, first.Y, first.Width, first.Height);
+                                                            first.X, first.Y, first.Width, first.Height);
             return combined;
         }
 
         /// <summary>
         /// Method that executes the default functionality of an invention
         /// </summary>
-        public virtual void Use() { numUses--; }
+        public virtual void Use( Scientist s ) { numUses--; }
 
         /// <summary>
         /// Move the invention to a specific coordinate on the level.

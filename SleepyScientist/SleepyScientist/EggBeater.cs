@@ -30,7 +30,7 @@ namespace SleepyScientist
         {
             s.Direction *= -1;  // Direction is a really weird member variable...
 
-            base.Use();
+            base.Use( s );
         }
     }
 }

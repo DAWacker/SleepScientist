@@ -31,7 +31,7 @@ namespace SleepyScientist
             // Launch scientist
             // Need to call the animation and what else to launch?
 
-            base.Use();
+            base.Use( s );
         }
     }
 }

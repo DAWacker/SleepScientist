@@ -30,13 +30,13 @@ namespace SleepyScientist
         /// <summary>
         /// Method that executes the functionality of a Lincoln Log
         /// </summary>
-        public override void Use()
+        public override void Use( Scientist s )
         {
             // Turn into ladder or stairs
             // Animation to change
             // currentState = STATE.STAIRS | currentState = STAIRS.LADDER
 
-            base.Use();
+            base.Use( s );
         }
     }
 }

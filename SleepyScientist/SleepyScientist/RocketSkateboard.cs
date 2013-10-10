@@ -30,7 +30,7 @@ namespace SleepyScientist
         {
             s.VeloX *= 3;   // only lasts a certain amount of time, will have to address this
 
-            base.Use();
+            base.Use( s );
         }
     }
 }
