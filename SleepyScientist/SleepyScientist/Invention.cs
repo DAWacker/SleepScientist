@@ -99,7 +99,27 @@ namespace SleepyScientist
         /// <summary>
         /// Method that executes the default functionality of an invention
         /// </summary>
-        public virtual void Use( Scientist s ) { numUses--; }
+        public virtual void Use( Scientist s )
+        {
+            if (!this.Activated)
+            {
+                this.Activated = true;
+                this.Target = s;
+            }
+            numUses--;
+        }
+
+        /// <summary>
+        /// Returns the invention to its default state.
+        /// </summary>
+        public virtual void UnUse()
+        {
+            if (this.Activated)
+            {
+                this.Activated = false;
+                this.Target = null;
+            }
+        }
 
         /// <summary>
         /// Move the invention to a specific coordinate on the level.

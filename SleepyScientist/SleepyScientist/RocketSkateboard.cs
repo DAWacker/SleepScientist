@@ -28,9 +28,25 @@ namespace SleepyScientist
         /// </summary>
         public override void Use(Scientist s)
         {
-            s.VeloX *= 3;   // only lasts a certain amount of time, will have to address this
+            if (!this.Activated)
+            {
+                base.Use(s);
+                this.Direction = s.Direction;
+                this.VeloX = s.VeloX;
+                VeloX *= GameConstants.SKATEBOARD_SPEEDUP;
+                s.VeloX *= GameConstants.SKATEBOARD_SPEEDUP;   // only lasts a certain amount of time, will have to address this
+                s.X = this.RectPosition.Center.X - s.Width / 2;
+                s.Y -= this.Height / 2;
+            }
+        }
 
-            base.Use( s );
+        public override void UnUse()
+        {
+            if (this.Activated)
+            {
+                base.UnUse();
+                this.VeloX /= GameConstants.SKATEBOARD_SPEEDUP;
+            }
         }
     }
 }

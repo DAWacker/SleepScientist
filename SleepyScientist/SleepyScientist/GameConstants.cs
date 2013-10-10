@@ -21,6 +21,7 @@ namespace SleepyScientist
         public static int DEFAULT_X_VELOCITY = 5;
         public static int DEFAULT_Y_VELOCITY = 0;
         public static int LADDER_Y_VELOCITY = -5;
+        public static int DEFAULT_DIRECTION = 1;
 
         // Floor constants
         public static int FLOOR_HEIGHT = TILE_HEIGHT;
@@ -30,6 +31,9 @@ namespace SleepyScientist
 
         // Message layer constants
         public static double MESSAGE_TIME = 2;
+
+        // Invention constants
+        public static int SKATEBOARD_SPEEDUP = 2;
 
         #endregion
     }
