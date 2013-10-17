@@ -38,6 +38,8 @@ namespace SleepyScientist
 
         public static int GRAVITY = 1;
 
+        public static int BUFFER = 5;
+
         #endregion
     }
 }

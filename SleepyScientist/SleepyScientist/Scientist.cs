@@ -125,29 +125,66 @@ namespace SleepyScientist
                 // Check if the scientist is colliding with a ladder
                 foreach (Ladder piece in this.Ladders)
                 {
-                    if (this.RectPosition.Bottom == piece.RectPosition.Bottom &&
-                        this.RectPosition.X > piece.RectPosition.X &&
-                        this.RectPosition.X < piece.RectPosition.X + piece.RectPosition.Width)
+                    switch (this.Direction)
                     {
-                        MessageLayer.AddMessage(new Message("Collided with Ladder", X, Y, GameConstants.MESSAGE_TIME));
-                        this.CurrentState = ScientistState.Ladder;
-                        this.CurrentTile = piece;
-                        break;
+                        case 1:
+                            if (this.RectPosition.Bottom == piece.RectPosition.Bottom &&
+                                this.RectPosition.X > piece.RectPosition.X - GameConstants.BUFFER &&
+                                this.RectPosition.X < piece.RectPosition.X + piece.RectPosition.Width)
+                            {
+                                MessageLayer.AddMessage(new Message("Direction 1", X, Y, GameConstants.MESSAGE_TIME));
+                                this.CurrentState = ScientistState.Ladder;
+                                this.CurrentTile = piece;
+                            }
+                            break;
+
+                        case -1:
+                            if (this.RectPosition.Bottom == piece.RectPosition.Bottom &&
+                                this.RectPosition.X < piece.RectPosition.X &&
+                                this.RectPosition.X > piece.RectPosition.X - piece.RectPosition.Width)
+                            {
+                                MessageLayer.AddMessage(new Message("Direction -1", X, Y, GameConstants.MESSAGE_TIME));
+                                this.CurrentState = ScientistState.Ladder;
+                                this.CurrentTile = piece;
+                            }
+                            break;
+
+                        default:
+                            break;
                     }
                 }
 
                 // Check if the scientist is colliding with a set of stairs
                 foreach (Stairs piece in this.Stairs)
                 {
-                    if (this.RectPosition.Bottom == piece.RectPosition.Top &&
-                        this.RectPosition.X > piece.RectPosition.X &&
-                        this.RectPosition.X < piece.RectPosition.X + piece.RectPosition.Width)
+                    switch (this.Direction)
                     {
-                        this.PrevY = piece.Y + this.Height;
-                        MessageLayer.AddMessage(new Message("Collided with Stairs", X, Y, GameConstants.MESSAGE_TIME));
-                        this.CurrentState = ScientistState.Stairs;
-                        this.CurrentTile = piece;
-                        break;
+                        case 1:
+                            if (this.RectPosition.Bottom == piece.RectPosition.Top &&
+                                this.RectPosition.X > piece.RectPosition.X - GameConstants.BUFFER &&
+                                this.RectPosition.X < piece.RectPosition.X + piece.RectPosition.Width)
+                            {
+                                this.PrevY = piece.Y + this.Height;
+                                MessageLayer.AddMessage(new Message("Direction 1", X, Y, GameConstants.MESSAGE_TIME));
+                                this.CurrentState = ScientistState.Stairs;
+                                this.CurrentTile = piece;
+                            }
+                            break;
+
+                        case -1:
+                            if (this.RectPosition.Bottom == piece.RectPosition.Top &&
+                                this.RectPosition.X < piece.RectPosition.X &&
+                                this.RectPosition.X > piece.RectPosition.X - piece.RectPosition.Width)
+                            {
+                                this.PrevY = piece.Y + this.Height;
+                                MessageLayer.AddMessage(new Message("Direction -1", X, Y, GameConstants.MESSAGE_TIME));
+                                this.CurrentState = ScientistState.Stairs;
+                                this.CurrentTile = piece;
+                            }
+                            break;
+
+                        default:
+                            break;
                     }
                 }
             }
