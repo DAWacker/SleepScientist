@@ -39,7 +39,7 @@ namespace SleepyScientist
         #region Constructor
         public Animation(String name)
         {
-
+            
         }
         #endregion
 
@@ -49,14 +49,14 @@ namespace SleepyScientist
         /// </summary>
         public void Update()
         {
-
+            
         }
 
         /// <summary>
         /// Gets the current frame of the animation.
         /// </summary>
         /// <returns>The current frame of the Animation.</returns>
-        public Texture2D currentImage()
+        public Texture2D CurrentImage()
         {
             return null;
         }
@@ -66,7 +66,7 @@ namespace SleepyScientist
         /// </summary>
         /// <param name="time">If provided, pause for given time
         /// before resuming.</param>
-        public void pause(float time = 0)
+        public void Pause(float time = 0)
         {
 
         }
@@ -74,7 +74,7 @@ namespace SleepyScientist
         /// <summary>
         /// Resumes the animation from where it was paused.
         /// </summary>
-        public void resume()
+        public void Resume()
         {
 
         }
@@ -84,7 +84,7 @@ namespace SleepyScientist
         /// </summary>
         /// <param name="times">If provided, loop the that many times
         /// before pausing.</param>
-        public void play(int times = 0)
+        public void Play(int times = 0)
         {
 
         }
