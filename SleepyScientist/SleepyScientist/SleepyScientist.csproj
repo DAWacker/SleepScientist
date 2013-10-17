@@ -36,6 +36,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="AI.cs" />
+    <Compile Include="Animation.cs" />
     <Compile Include="EggBeater.cs" />
     <Compile Include="Floor.cs" />
     <Compile Include="Game1.cs" />
@@ -52,6 +53,7 @@
     <Compile Include="RocketSkateboard.cs" />
     <Compile Include="Scientist.cs" />
     <Compile Include="Stairs.cs" />
+    <Compile Include="Time.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="OpenTK">
