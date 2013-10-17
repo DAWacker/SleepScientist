@@ -80,7 +80,7 @@ namespace SleepyScientist
         /// <summary>
         /// Reverses the direction of the AI
         /// </summary>
-        public void Reverse() { this.VeloX = -this.VeloX; this.Direction = -this.Direction; MessageLayer.AddMessage(new Message("Collided with wall", X, Y, GameConstants.MESSAGE_TIME)); }
+        public void Reverse() { this.VeloX = -this.VeloX; this.Direction = -this.Direction;}
 
         /// <summary>
         /// Move the AI

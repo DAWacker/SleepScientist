@@ -9,29 +9,37 @@ namespace SleepyScientist
 {
     class JackInTheBox : Invention
     {
+
+        #region Constructor
+
         /// <summary>
         /// Constructor for Jack In The Box invention. Chains to base
         /// </summary>
-        /// <param name="name">"Jack In The Box" - Do we want to hard code this for each invention then pass the hardcoded to the base?</param>
+        /// <param name="name">"Jack In The Box"</param>
         /// <param name="max_uses">maximum number of uses per level</param>
         /// <param name="x">Initial X position for invention</param>
         /// <param name="y">Initial Y position for invention</param>
         /// <param name="width">Width of invention</param>
         /// <param name="height">Height of invention</param>
-        public JackInTheBox(string name, int max_uses, int x, int y, int width, int height)
-            : base(name, max_uses, x, y, width, height)
-        {
-        }
+        public JackInTheBox(string name, int x, int y, int width, int height)
+            : base(name, x, y, width, height) { }
+
+        #endregion
+
+        #region Method
 
         /// <summary>
         /// Method that executes the functionality of a Jack In The Box
         /// </summary>
-        public override void Use(Scientist s)
+        public override void Use(Scientist scientist)
         {
             // Launch scientist
             // Need to call the animation and what else to launch?
 
-            base.Use( s );
+            scientist.Jump();
+            base.Use(scientist);
         }
+
+        #endregion
     }
 }

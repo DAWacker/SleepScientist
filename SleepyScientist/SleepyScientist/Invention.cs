@@ -13,21 +13,16 @@ namespace SleepyScientist
     /// </summary>
     class Invention : AI
     {
-        #region Fields
-        public int MAX_USES = 1;
-        /// <summary>
-        /// Number of uses currently left for this invention.
-        /// </summary>
-        private int numUses;
-        /// <summary>
-        /// Is the invention currently activated?
-        /// </summary>
-        private bool activated = false;
-        #endregion
+        #region Attributes
+
+        // Is the invention currently activated?
+        private bool _active;
 
         // States for the inventions
         private InventionState _curState;
         private InventionState _prevState;
+
+        #endregion
 
         // Possible states for the invention
         public enum InventionState
@@ -40,47 +35,30 @@ namespace SleepyScientist
         }
 
         #region Properties
-        /// <summary>
-        /// Gets or sets the number of uses available to this invention
-        /// </summary>
-        public int NumUses
-        {
-            get { return numUses; }
-            set { numUses = value; }
-        }
-        /// <summary>
-        /// Gets or sets the activation state of the invention.
-        /// </summary>
-        public bool Activated
-        {
-            get { return activated; }
-            set { activated = value; }
-        }
+
+        // Gets or sets the activation state of the invention.
+        public bool Activated { get { return _active; } set { _active = value; } }
 
         // Get or set the state of the invention
         public InventionState CurrentState { get { return _curState; } set { _curState = value; } }
         public InventionState PreviousState { get { return _prevState; } set { _prevState = value; } }
+
         #endregion
 
         /// <summary>
         /// Chained Constructor (Base_Invention and Game_Object)
         /// </summary>
         /// <param name="name">Name of this invention</param>
-        /// <param name="uses">Max number of uses per invention</param>
         /// <param name="x">X position</param>
         /// <param name="y">Y position</param>
         /// <param name="width">Width of invention</param>
         /// <param name="height">Height of invention</param>
-        public Invention(string name, int max_uses, int x, int y, int width, int height)
+        public Invention(string name, int x, int y, int width, int height)
             : base(name, x, y, width, height)
         {
-            // Set the max uses and the use counter
-            this.MAX_USES = max_uses;
-            this.numUses = MAX_USES;
-
             _curState = InventionState.Idle;
             _prevState = InventionState.Idle;
-            this.activated = false;
+            _active = false;
         }
 
         /// <summary>
@@ -89,12 +67,7 @@ namespace SleepyScientist
         /// <param name="first">First invention of combo.</param>
         /// <param name="second">Second invention of combo.</param>
         /// <returns></returns>
-        public static Invention operator +(Invention first, Invention second)
-        {
-            Invention combined = new Invention(first.Name + second.Name, first.numUses + second.numUses,
-                                                            first.X, first.Y, first.Width, first.Height);
-            return combined;
-        }
+        public static Invention operator +(Invention first, Invention second) { return new Invention(first.Name + second.Name, first.X, first.Y, first.Width, first.Height); }
 
         /// <summary>
         /// Method that executes the default functionality of an invention
@@ -106,7 +79,6 @@ namespace SleepyScientist
                 this.Activated = true;
                 this.Target = s;
             }
-            numUses--;
         }
 
         /// <summary>
@@ -119,6 +91,11 @@ namespace SleepyScientist
                 this.Activated = false;
                 this.Target = null;
             }
+        }
+
+        public override void Update()
+        {
+            this.StayOnScreen();
         }
 
         /// <summary>

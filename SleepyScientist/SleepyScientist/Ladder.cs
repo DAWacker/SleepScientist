@@ -21,6 +21,7 @@ namespace SleepyScientist
         #endregion
 
         #region Methods
+
         public override void Draw(SpriteBatch batch)
         {
             // Only draw this much of the _image. Prevents overdraw.
@@ -52,6 +53,7 @@ namespace SleepyScientist
                 drawDest.Height = Image.Height;
             }
         }
+
         #endregion
     }
 }

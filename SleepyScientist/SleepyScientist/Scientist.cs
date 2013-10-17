@@ -35,6 +35,7 @@ namespace SleepyScientist
         private ScientistState _prevState;
 
         private List<Ladder> _ladders;
+        private List<Stairs> _stairs;
         private List<Invention> _inventions;
         private GameObject _currentTile;
 
@@ -45,6 +46,7 @@ namespace SleepyScientist
         public ScientistState CurrentState { get { return _curState; } set { _curState = value; } }
         public ScientistState PreviousState { get { return _prevState; } set { _prevState = value; } }
         public List<Ladder> Ladders { get { return _ladders; } set { _ladders = value; } }
+        public List<Stairs> Stairs { get { return _stairs; } set { _stairs = value; } }
         public List<Invention> Inventions { get { return _inventions; } set { _inventions = value; } }
         public GameObject CurrentTile { get { return _currentTile; } set { _currentTile = value; } }
 
@@ -83,45 +85,69 @@ namespace SleepyScientist
         public override void Update() 
         {
             // Check if the scientist is using an invention.
-            bool inventionCollision = false;
-            foreach (Invention invention in this._inventions)
+            foreach (Invention invention in this.Inventions)
             {
-                if (this.RectPosition.Intersects(invention.RectPosition))
+                if (this.RectPosition.Intersects(invention.RectPosition) && !invention.Activated)
                 {
-                    this.PrevY = this.Y;
                     MessageLayer.AddMessage(new Message("Collided with " + invention.GetType().Name, X, Y, GameConstants.MESSAGE_TIME));
                     InteractWith(invention);
-                    this.CurrentTile = invention;
-                    inventionCollision = true;
                     break;
                 }
-                else
-                {
-                    invention.UnUse();
-                }
-            }
-            if (!inventionCollision)
-            {
-                this.CurrentState = ScientistState.Walking;
             }
 
-            // Check if the scientist is climbing a ladder
-            foreach (Ladder piece in this.Ladders)
+            // Check if the scientist is already on a tile
+            if (this.CurrentTile != null)
             {
-                if (this.RectPosition.Intersects(piece.RectPosition))
+                // Check if the scientist is walking down stairs
+                if (this.CurrentTile is Stairs)
                 {
-                    this.PrevY = piece.Y - this.Height;
-                    MessageLayer.AddMessage(new Message("Collided with Ladder", X, Y, GameConstants.MESSAGE_TIME));
-                    this.CurrentState = ScientistState.Ladder;
-                    this.CurrentTile = piece;
-                    break;
-                }
-                else 
-                {
-                    if (this.CurrentState == ScientistState.Ladder)
+                    // Check if the scientist has reached the bottom of the stairs
+                    if (this.RectPosition.Bottom >= this.CurrentTile.RectPosition.Bottom)
                     {
                         this.CurrentState = ScientistState.Walking;
                         this.CurrentTile = null;
+                    }
+                }
+
+                // Check if the scientist is climbing up a ladder
+                else if (this.CurrentTile is Ladder)
+                {
+                    // Check if the scientist has reached the top of the ladder
+                    if (this.RectPosition.Bottom <= this.CurrentTile.RectPosition.Top)
+                    {
+                        this.CurrentState = ScientistState.Walking;
+                        this.CurrentTile = null;
+                    }
+                }
+            }
+            else
+            {
+                // Check if the scientist is colliding with a ladder
+                foreach (Ladder piece in this.Ladders)
+                {
+                    if (this.RectPosition.Bottom == piece.RectPosition.Bottom &&
+                        this.RectPosition.X > piece.RectPosition.X &&
+                        this.RectPosition.X < piece.RectPosition.X + piece.RectPosition.Width)
+                    {
+                        MessageLayer.AddMessage(new Message("Collided with Ladder", X, Y, GameConstants.MESSAGE_TIME));
+                        this.CurrentState = ScientistState.Ladder;
+                        this.CurrentTile = piece;
+                        break;
+                    }
+                }
+
+                // Check if the scientist is colliding with a set of stairs
+                foreach (Stairs piece in this.Stairs)
+                {
+                    if (this.RectPosition.Bottom == piece.RectPosition.Top &&
+                        this.RectPosition.X > piece.RectPosition.X &&
+                        this.RectPosition.X < piece.RectPosition.X + piece.RectPosition.Width)
+                    {
+                        this.PrevY = piece.Y + this.Height;
+                        MessageLayer.AddMessage(new Message("Collided with Stairs", X, Y, GameConstants.MESSAGE_TIME));
+                        this.CurrentState = ScientistState.Stairs;
+                        this.CurrentTile = piece;
+                        break;
                     }
                 }
             }
@@ -134,20 +160,43 @@ namespace SleepyScientist
                     this.VeloY = GameConstants.LADDER_Y_VELOCITY;
                     break;
 
+                case ScientistState.Stairs:
+                    this.VeloX = 0;
+                    this.VeloY = -GameConstants.LADDER_Y_VELOCITY;
+                    break;
+
                 case ScientistState.RocketSkates:
                     // Keep the current UPPED velocity.
                     break;
+
+                case ScientistState.EggBeater:
+                    break;
+
+                case ScientistState.JackInTheBox:
+                    this.VeloY--;
+                    if (this.VeloY <= -6) 
+                    { 
+                        this.VeloY = 0;
+                        this.CurrentState = ScientistState.Walking;
+                    }
+                    break;
+
                 case ScientistState.Walking:
                     this.VeloX = GameConstants.DEFAULT_X_VELOCITY * this.Direction;
                     this.VeloY = 0;
-                    this.Y = this.PrevY;
                     break;
 
                 default:
                     break;
             }
-
+            MessageLayer.AddMessage(new Message(this.CurrentState.ToString(), 50, 100, 0));
             base.Update();
+        }
+
+        public void Jump() 
+        { 
+            //this.Y -= GameConstants.DEFAULT_JUMP_VELOCITY;
+            this.CurrentState = ScientistState.JackInTheBox;
         }
 
         /// Update the scientist's state based off of the interaction.
@@ -159,14 +208,10 @@ namespace SleepyScientist
             Type objType = invention.GetType();
 
             // Check gameObject's type and change state accordingly.
-            if (objType == typeof(RocketSkateboard))
-            {
-                newState = ScientistState.RocketSkates;
-            }
-            else if (objType == typeof(LincolnLogs))
-            {
-                newState = ScientistState.LincolnLogs;
-            }
+            if (objType == typeof(RocketSkateboard)) { newState = ScientistState.RocketSkates; }
+            else if (objType == typeof(LincolnLogs)) { newState = ScientistState.LincolnLogs; }
+            else if (objType == typeof(EggBeater)) { newState = ScientistState.EggBeater; }
+            else if (objType == typeof(JackInTheBox)) { newState = ScientistState.JackInTheBox; }
 
             // Update scientist's state only if state has changed.
             if (newState != ScientistState.NULL)
@@ -177,7 +222,6 @@ namespace SleepyScientist
 
             return newState != ScientistState.NULL;
         }
-
 
         #endregion
     }
