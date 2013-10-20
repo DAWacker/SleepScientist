@@ -40,6 +40,8 @@ namespace SleepyScientist
         private Texture2D _floorTexture;
         private Texture2D _rocketSkateboardTexture;
 
+        // Debug Messages
+
         #endregion
 
         public Game1()
@@ -86,8 +88,9 @@ namespace SleepyScientist
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            // Load the font for the Messages.
+            // Load the font for the Messages and give it to the MessageLayer.
             _spriteFont = Content.Load<SpriteFont>("Font/defaultFont");
+            MessageLayer.Font = _spriteFont;
 
             // Load in the scientist placeholder
             _scientistTexture = this.Content.Load<Texture2D>("Image/scientist");
@@ -172,28 +175,7 @@ namespace SleepyScientist
             _sleepy.Draw(spriteBatch);
 
             // Draw the messages.
-            foreach (Message message in MessageLayer.Messages)
-            {
-                Vector2 dimensions = _spriteFont.MeasureString(message.Text);
-                if (dimensions.X + message.X > screenWidth)
-                {
-                    message.X = screenWidth - (int)dimensions.X;
-                }
-                else if (message.X < 0)
-                {
-                    message.X = 0;
-                }
-                if (dimensions.Y + message.Y > screenHeight)
-                {
-                    message.Y = screenHeight - (int)dimensions.Y;
-                }
-                else if (message.Y < 0)
-                {
-                    message.Y = 0;
-                }
-
-                spriteBatch.DrawString(_spriteFont, message.Text, new Vector2(message.X, message.Y), Color.White);
-            }
+            MessageLayer.Draw(spriteBatch);
 
             spriteBatch.End();
 
