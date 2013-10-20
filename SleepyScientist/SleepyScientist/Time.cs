@@ -27,7 +27,8 @@ namespace SleepyScientist
         /// <param name="deltaTime">The amount to update by.</param>
         public static void Update(float deltaTime)
         {
-
+            _deltaTime = deltaTime;
+            _curTime += deltaTime;
         }
         #endregion
     }
