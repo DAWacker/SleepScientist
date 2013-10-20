@@ -19,8 +19,8 @@ namespace SleepyScientist
     class Animation
     {
         #region Attributes
-        private static const int UNPAUSED = -1;// Unpaused status flag.
-        private static const int CONTINUOUS = -1;// Continuous play flag.
+        private const int UNPAUSED = -1;// Unpaused status flag.
+        private const int CONTINUOUS = -1;// Continuous play flag.
         private List<Texture2D> _images;// The frames of the animation.
         private String _name;           // Name of the animation.
         private int _curFrame;          // Index of the current frame of the animation.
