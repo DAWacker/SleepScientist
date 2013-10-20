@@ -19,6 +19,8 @@ namespace SleepyScientist
     class Animation
     {
         #region Attributes
+        private static const int UNPAUSED = -1;// Unpaused status flag.
+        private static const int CONTINUOUS = -1;// Continuous play flag.
         private List<Texture2D> _images;// The frames of the animation.
         private String _name;           // Name of the animation.
         private int _curFrame;          // Index of the current frame of the animation.
@@ -37,9 +39,17 @@ namespace SleepyScientist
         #endregion
 
         #region Constructor
+        /// <summary>
+        /// Construct an animation and assign its name.
+        /// Set default values for member data.
+        /// </summary>
+        /// <param name="name">Name of the animation.</param>
         public Animation(String name)
         {
-            
+            _name = name;
+            _curFrameTime = 0;
+            _pauseTime = UNPAUSED;
+            _playAmount = CONTINUOUS;
         }
         #endregion
 
@@ -49,7 +59,38 @@ namespace SleepyScientist
         /// </summary>
         public void Update()
         {
-            
+            // If not paused.
+            if ( _pauseTime == UNPAUSED &&
+            ( _playAmount == CONTINUOUS || _playAmount > 0 ) )
+            {
+                // Increase time on current frame and advance if neccessary.
+                _curFrameTime += Time.DeltaTime;
+                if (_curFrameTime > _timePerFrame)
+                {
+                    // If not set to play continuously, then update and
+                    // pause if neccessary.
+                    if (_playAmount > 0)
+                    {
+                        if (--_playAmount == 0)
+                        {
+                            Pause();
+                            return;
+                        }
+                    }
+
+                    _curFrame = ( _curFrame + 1 ) % _images.Count;
+                }
+            }
+            // Else if paused for only a certain amount of time.
+            else if (_pauseTime > 0)
+            {
+                // Decrease pause time and resume playing if neccessary.
+                _pauseTime -= Time.DeltaTime;
+                if (_pauseTime <= 0)
+                {
+                    Resume();
+                }
+            }
         }
 
         /// <summary>
@@ -58,7 +99,7 @@ namespace SleepyScientist
         /// <returns>The current frame of the Animation.</returns>
         public Texture2D CurrentImage()
         {
-            return null;
+            return _images[_curFrame];
         }
 
         /// <summary>
@@ -68,7 +109,7 @@ namespace SleepyScientist
         /// before resuming.</param>
         public void Pause(float time = 0)
         {
-
+            _pauseTime = time;
         }
 
         /// <summary>
@@ -76,7 +117,7 @@ namespace SleepyScientist
         /// </summary>
         public void Resume()
         {
-
+            _pauseTime = UNPAUSED;
         }
 
         /// <summary>
@@ -86,7 +127,7 @@ namespace SleepyScientist
         /// before pausing.</param>
         public void Play(int times = 0)
         {
-
+            _playAmount = times;
         }
         #endregion
 
