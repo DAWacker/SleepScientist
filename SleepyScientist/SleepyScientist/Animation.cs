@@ -36,6 +36,7 @@ namespace SleepyScientist
         #region Properties
         public String Name { get { return _name; } set { _name = value; } }
         public List<Texture2D> Images { get { return _images; } set { _images = value; } }
+        public float TimePerFrame { get { return _timePerFrame; } set { _timePerFrame = value; } }
         #endregion
 
         #region Constructor
@@ -79,6 +80,7 @@ namespace SleepyScientist
                     }
 
                     _curFrame = ( _curFrame + 1 ) % _images.Count;
+                    _curFrameTime = 0;
                 }
             }
             // Else if paused for only a certain amount of time.
