@@ -52,6 +52,21 @@ namespace SleepyScientist
             _pauseTime = UNPAUSED;
             _playAmount = CONTINUOUS;
         }
+
+        /// <summary>
+        /// Copy construct an Animation.
+        /// References the _images used to prevent unnecessary copying.
+        /// </summary>
+        /// <param name="other">The Animation to copy.</param>
+        public Animation(Animation other)
+        {
+            _name = other._name;
+            _curFrameTime = 0;
+            _pauseTime = UNPAUSED;
+            _playAmount = CONTINUOUS;
+            _timePerFrame = other._timePerFrame;
+            _images = other._images;
+        }
         #endregion
 
         #region Methods
