@@ -119,6 +119,28 @@ namespace SleepyScientist
 
             return newSet;
         }
+
+        /// <summary>
+        /// Returns a copy of the requested set.
+        /// Useful for GameObjects that use the same set.
+        /// </summary>
+        /// <param name="name">Requested set's name.</param>
+        /// <returns></returns>
+        public static AnimationSet GetSetCopy(String name)
+        {
+            AnimationSet toReturn = null;
+
+            if (_sets.ContainsKey(name))
+            {
+                toReturn = new AnimationSet(_sets[name]);
+            }
+            else
+            {
+                throw new KeyNotFoundException("\"" + name + "\" animation set not found.");
+            }
+
+            return toReturn;
+        }
         #endregion
     }
 }
