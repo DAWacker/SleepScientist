@@ -37,6 +37,7 @@ namespace SleepyScientist
         public String Name { get { return _name; } set { _name = value; } }
         public List<Texture2D> Images { get { return _images; } set { _images = value; } }
         public float TimePerFrame { get { return _timePerFrame; } set { _timePerFrame = value; } }
+        public float FramesPerTime { get { return 1 / _timePerFrame; } set { _timePerFrame = 1 / value; } }
         #endregion
 
         #region Constructor
