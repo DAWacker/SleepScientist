@@ -40,6 +40,10 @@ namespace SleepyScientist
         private Texture2D _floorTexture;
         private Texture2D _rocketSkateboardTexture;
 
+        // Animations
+        private Animation _testAnimation;
+        private Animation _testAnimation2;
+
         // Debug Messages
 
         #endregion
@@ -129,6 +133,20 @@ namespace SleepyScientist
             _sleepy.PrevY = _sleepy.Y;
             _sleepy.Ladders = _ladders;
             _sleepy.Inventions = _inventions;
+
+            // Set up the test animation.
+            AnimationLoader.Load("test.xml", Content);
+
+            _testAnimation = AnimationLoader.Sets["Test"].Animations["Test1"];
+            _testAnimation2 = AnimationLoader.Sets["Test"].Animations["Test2"];
+            /*_testAnimation = new Animation("Test");
+            _testAnimation.TimePerFrame = .25F;    // Second/Frame
+            _testAnimation.Images = new List<Texture2D>() {
+                _floorTexture,
+                _ladderTexture,
+                _rocketSkateboardTexture,
+                _scientistTexture
+            };*/
         }
 
         /// <summary>
@@ -149,6 +167,13 @@ namespace SleepyScientist
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
+            // Update global Time class.
+            Time.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
+
+            // Update test animations.
+            _testAnimation.Update();
+            _testAnimation2.Update();
+
             foreach (Invention invention in _inventions) { invention.Update(); }
             _sleepy.Update();
 			MessageLayer.Update(gameTime.ElapsedGameTime.TotalSeconds);
@@ -165,6 +190,10 @@ namespace SleepyScientist
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             spriteBatch.Begin();
+
+            // Draw the test animations.
+            spriteBatch.Draw(_testAnimation.CurrentImage(), new Vector2( screenWidth / 2, screenHeight / 2 ), Color.White);
+            spriteBatch.Draw(_testAnimation2.CurrentImage(), new Vector2(screenWidth / 2 + 100, screenHeight / 2), Color.White);
 
             // Draw the level.
             foreach (Floor tile in _floors) { tile.Draw(spriteBatch); }
