@@ -109,6 +109,7 @@ namespace SleepyScientist
         {
             this.StayOnScreen();
             this.Move();
+            base.Update();
         }
 
         public virtual bool InteractWith(Invention invention)
