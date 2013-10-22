@@ -54,6 +54,7 @@ namespace SleepyScientist
         public AnimationSet(AnimationSet other)
         {
             _name = other._name;
+            _animations = new Dictionary<String, Animation>();
             // Copy all Animations from other AnimationSet.
             foreach (String name in other._animations.Keys)
             {
