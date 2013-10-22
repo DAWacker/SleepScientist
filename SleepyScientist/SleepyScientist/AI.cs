@@ -21,9 +21,11 @@ namespace SleepyScientist
         private int _veloX;
         private int _veloY;
         private int _prevVeloX;
+        private int _prevY;
 
         // General
         private string _name;
+        private AI _target;
 
         // 1 implies moving to the right, -1 to the left
         private int _direction;
@@ -33,15 +35,19 @@ namespace SleepyScientist
         #region Properties
 
         // Get or set the AI's movement
-        public int VeloX { get { return _veloX; } set { _prevVeloX = _veloX;  _veloX = value; } }
+        public int VeloX { get { return _veloX; } set { _veloX = value; } }
         public int VeloY { get { return _veloY; } set { _veloY = value; } }
         public int PrevVeloX { get { return _prevVeloX; } set { _prevVeloX = value; } }
+        public int PrevY { get { return _prevY; } set { _prevY = value; } }
 
         // Get or set the AI's name
         public string Name { get { return _name; } set { _name = value; } }
 
+        // Get or set target
+        public AI Target { get { return _target; } set { _target = value; } }
+
         // Get or set the AI's direction
-        public int Direction { get { return _direction; } set { _direction = value; } }
+        public int Direction { get { return _direction; } set { _direction = value; if ( _target != null ) _target.Direction = value; } }
 
         #endregion
 
@@ -57,13 +63,14 @@ namespace SleepyScientist
         public AI(string name, int x, int y, int width, int height)
             : base(x, y, width, height)
         {
-            // Movement
-            _veloX = GameConstants.DEFAULT_X_VELOCITY;
-            _veloY = 0;
-
             // General
             _name = name;
-            _direction = 1;
+            _direction = GameConstants.DEFAULT_DIRECTION;
+
+            // Movement
+            _veloX = GameConstants.DEFAULT_X_VELOCITY * _direction;
+            _veloY = 0;
+            _prevY = y;
         }
 
         #endregion
@@ -73,7 +80,7 @@ namespace SleepyScientist
         /// <summary>
         /// Reverses the direction of the AI
         /// </summary>
-        public void Reverse() { this.VeloX = -this.VeloX; this.Direction = -this.Direction; }
+        public void Reverse() { this.VeloX = -this.VeloX; this.Direction = -this.Direction; MessageLayer.AddMessage(new Message("Collided with wall", X, Y, GameConstants.MESSAGE_TIME)); }
 
         /// <summary>
         /// Move the AI
@@ -102,9 +109,10 @@ namespace SleepyScientist
         {
             this.StayOnScreen();
             this.Move();
+            base.Update();
         }
 
-        public virtual bool InteractWith(GameObject gameObject)
+        public virtual bool InteractWith(Invention invention)
         {
             // Update the state of the AI.
             return false;

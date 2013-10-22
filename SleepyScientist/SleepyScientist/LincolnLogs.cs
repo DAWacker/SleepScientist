@@ -5,10 +5,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace SleepyScientist.Inventions
+namespace SleepyScientist
 {
+    enum STATE { NORMAL, STAIRS, LADDER }
+
     class LincolnLogs : Invention
     {
+        STATE currentState = STATE.NORMAL;
+
         /// <summary>
         /// Constructor for Lincoln Logs invention. Chains to base
         /// </summary>
@@ -26,11 +30,13 @@ namespace SleepyScientist.Inventions
         /// <summary>
         /// Method that executes the functionality of a Lincoln Log
         /// </summary>
-        //public override void Use()
-        //{
-        //    // Turn into ladder or stairs
+        public override void Use( Scientist s )
+        {
+            // Turn into ladder or stairs
+            // Animation to change
+            // currentState = STATE.STAIRS | currentState = STAIRS.LADDER
 
-        //    //base.Use();
-        //}
+            base.Use( s );
+        }
     }
 }

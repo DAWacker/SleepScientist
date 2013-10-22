@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace SleepyScientist.Inventions
+namespace SleepyScientist
 {
     class RocketSkateboard : Invention
     {
@@ -26,12 +26,27 @@ namespace SleepyScientist.Inventions
         /// <summary>
         /// Method that executes the functionality of a Rocket Skateboard
         /// </summary>
-        //public override void Use()
-        //{
-        //    Scientist s = new Scientist("", 0, 0, 0, 0);
-        //    s.VeloX *= 3;   // only lasts a certain amount of time, will have to address this
+        public override void Use(Scientist s)
+        {
+            if (!this.Activated)
+            {
+                base.Use(s);
+                this.Direction = s.Direction;
+                this.VeloX = s.VeloX;
+                VeloX *= GameConstants.SKATEBOARD_SPEEDUP;
+                s.VeloX *= GameConstants.SKATEBOARD_SPEEDUP;   // only lasts a certain amount of time, will have to address this
+                s.X = this.RectPosition.Center.X - s.Width / 2;
+                s.Y -= this.Height / 2;
+            }
+        }
 
-        //    //base.Use();
-        //}
+        public override void UnUse()
+        {
+            if (this.Activated)
+            {
+                base.UnUse();
+                this.VeloX /= GameConstants.SKATEBOARD_SPEEDUP;
+            }
+        }
     }
 }

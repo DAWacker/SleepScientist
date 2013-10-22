@@ -22,7 +22,6 @@ namespace SleepyScientist
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 		SpriteFont _spriteFont;
-		MessageLayer _messageLayer;
 
         // Screen dimensions
         private int screenWidth;
@@ -31,15 +30,21 @@ namespace SleepyScientist
         // GameObjects
         private Scientist _sleepy;
         private List<Floor> _floors;
+        private List<Ladder> _ladders;
+        private List<Invention> _inventions;
 
         // Textures
-        private Texture2D scientist;
+        private Texture2D _scientistTexture;
         private Texture2D _stairsTexture;
         private Texture2D _ladderTexture;
         private Texture2D _floorTexture;
+        private Texture2D _rocketSkateboardTexture;
 
-        private List<Floor> floors;
-        private List<Ladder> ladders;
+        // Animations
+        private Animation _testAnimation;
+        private Animation _testAnimation2;
+
+        // Debug Messages
 
         #endregion
 
@@ -48,7 +53,6 @@ namespace SleepyScientist
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-			_messageLayer = new MessageLayer();
         }
 
         /// <summary>
@@ -60,25 +64,21 @@ namespace SleepyScientist
         protected override void Initialize()
         {
 
-            // Turns off full screen and sets the background to 1080x640
+            // Turns off full screen and sets the background
             graphics.IsFullScreen = false;
-            graphics.PreferredBackBufferWidth = 1280;
-            graphics.PreferredBackBufferHeight = 720;
+            graphics.PreferredBackBufferWidth = GameConstants.SCREEN_WIDTH;
+            graphics.PreferredBackBufferHeight = GameConstants.SCREEN_HEIGHT;
             graphics.ApplyChanges();
 
             // Save the new screen dimensions locally
-            screenWidth = 1280;
-            screenHeight = 720;
+            screenWidth = GameConstants.SCREEN_WIDTH;
+            screenHeight = GameConstants.SCREEN_HEIGHT;
 
-            // Save the new screen dimensions for other classes
-            GameConstants.SCREEN_WIDTH = screenWidth;
-            GameConstants.SCREEN_HEIGHT = screenHeight;
-
-            _sleepy = new Scientist("Sleepy", 100, 320, 50, 50);
-            floors = new List<Floor>();
-            ladders = new List<Ladder>();
-
+            _sleepy = new Scientist("Sleepy", 0, 0, 50, 50);
+            // Initialize test "Level" objects.
             _floors = new List<Floor>();
+            _ladders = new List<Ladder>();
+            _inventions = new List<Invention>();
 
             base.Initialize();
         }
@@ -92,65 +92,63 @@ namespace SleepyScientist
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
+            // Load the font for the Messages and give it to the MessageLayer.
+            _spriteFont = Content.Load<SpriteFont>("Font/defaultFont");
+            MessageLayer.Font = _spriteFont;
+
             // Load in the scientist placeholder
-            scientist = this.Content.Load<Texture2D>("Image/scientist");
+            _scientistTexture = this.Content.Load<Texture2D>("Image/scientist");
 
             // Load content of other GameObjects.
             _floorTexture = this.Content.Load<Texture2D>("Image/floor");
             _stairsTexture = this.Content.Load<Texture2D>("Image/stairs");
             _ladderTexture = this.Content.Load<Texture2D>("Image/ladder");
+            _rocketSkateboardTexture = this.Content.Load<Texture2D>("Image/rocketSkateboard");
 
             // Set the scientist image to the AI
-            _sleepy.Image = scientist;
-
-            Floor _floor1;
-            Floor _floor2;
-
-            for (int i = 0; i < 22; i++)
-            {
-                _floor1 = new Floor(i * 50, 370, 50, 50);
-                _floor1.Image = _floorTexture;
-                floors.Add(_floor1);
-
-                _floor2 = new Floor(i * 50, 170, 50, 50);
-                _floor2.Image = _floorTexture;
-                floors.Add(_floor2);
-            }
-
-            Ladder ladderPiece;
-
-            for (int l = 0; l < 4; l++)
-            {
-                ladderPiece = new Ladder(400, 320 - (l * 50), 50, 50);
-                ladderPiece.Image = _ladderTexture;
-                ladders.Add(ladderPiece);
-            }
-
-            _sleepy.Ladders = ladders;
-            _spriteFont = Content.Load<SpriteFont>("Font/defaultFont");
-
+            _sleepy.Image = _scientistTexture;
+            
             // Add some test messages.
-            _messageLayer.AddMessage(new Message("Test", 0, 0));
-            _messageLayer.AddMessage(new Message("Test 5 Seconds", 0, 30, 5));
-
-            // Initialize test "Level" objects.
-            //_floors = new List<Floor>();
-            //_ladders = new List<Ladder>();
-            //_stairs = new List<Stairs>();
+            MessageLayer.AddMessage(new Message("Test", 0, 0));
+            MessageLayer.AddMessage(new Message("Test 5 Seconds", 0, 30, 5));
 
             // Set up the test "Level".
-            //Floor floor1 = new Floor(0, screenHeight - 64, screenWidth, 64);
-            //Floor floor2 = new Floor(0, screenHeight / 2 - 64, screenWidth, 64);
-            //floor1.Image = _floorTexture;
-            //floor2.Image = _floorTexture;
-            //_floors.Add(floor1);
-            //_floors.Add(floor2);
-            //SetupLevel(4);
+            SetupLevel(4, true);
+
+            // Set up inventions.
+            Invention toAdd = new RocketSkateboard("RocketSkateboard", 1, screenWidth / 2, _floors[0].Y - _sleepy.Height, 50, 50);
+            toAdd.VeloX *= -1;
+            toAdd.Image = _rocketSkateboardTexture;
+            _inventions.Add(toAdd);
+            toAdd = new RocketSkateboard("RocketSkateboard", 1, screenWidth / 2, _floors[1].Y - _sleepy.Height, 50, 50);
+            toAdd.Image = _rocketSkateboardTexture;
+            _inventions.Add(toAdd);
+            toAdd = new RocketSkateboard("RocketSkateboard", 1, screenWidth / 2, _floors[3].Y - _sleepy.Height, 50, 50);
+            toAdd.Image = _rocketSkateboardTexture;
+            _inventions.Add(toAdd);
 
             // Set up the Scientist.
-            //_sleepy = new Scientist("Sleepy", 100, _floors[0].Y - 50, 50, 50);
-            // Set the scientist image to the AI
-            //_sleepy.Image = scientist;
+            _sleepy.X = 100;
+            _sleepy.Y = _floors[0].Y - _sleepy.Height;
+            _sleepy.PrevY = _sleepy.Y;
+            _sleepy.Ladders = _ladders;
+            _sleepy.Inventions = _inventions;
+
+            // Set up the test animation.
+            AnimationLoader.Load("test.xml", Content);
+
+            _testAnimation = AnimationLoader.Sets["Test"].Animations["Test1"];
+            _testAnimation2 = AnimationLoader.Sets["Test"].Animations["Test2"];
+            _sleepy.Animations = new AnimationSet(AnimationLoader.Sets["Test"]);
+            _sleepy.Animations.ChangeAnimation("Test1");
+            /*_testAnimation = new Animation("Test");
+            _testAnimation.TimePerFrame = .25F;    // Second/Frame
+            _testAnimation.Images = new List<Texture2D>() {
+                _floorTexture,
+                _ladderTexture,
+                _rocketSkateboardTexture,
+                _scientistTexture
+            };*/
         }
 
         /// <summary>
@@ -171,8 +169,16 @@ namespace SleepyScientist
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
+            // Update global Time class.
+            Time.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
+
+            // Update test animations.
+            _testAnimation.Update();
+            _testAnimation2.Update();
+
+            foreach (Invention invention in _inventions) { invention.Update(); }
             _sleepy.Update();
-			_messageLayer.Update(gameTime.ElapsedGameTime.TotalSeconds);
+			MessageLayer.Update(gameTime.ElapsedGameTime.TotalSeconds);
 
             base.Update(gameTime);
         }
@@ -187,16 +193,20 @@ namespace SleepyScientist
 
             spriteBatch.Begin();
 
-            foreach (Message message in _messageLayer.Messages)
-            {
-                spriteBatch.DrawString(_spriteFont, message.Text, new Vector2(message.X, message.Y), Color.White);
-            }
+            // Draw the test animations.
+            spriteBatch.Draw(_testAnimation.CurrentImage(), new Vector2( screenWidth / 2, screenHeight / 2 ), Color.White);
+            spriteBatch.Draw(_testAnimation2.CurrentImage(), new Vector2(screenWidth / 2 + 100, screenHeight / 2), Color.White);
 
-            foreach (Floor tile in floors) { tile.Draw(spriteBatch); }
-            foreach (Ladder piece in ladders) { piece.Draw(spriteBatch); }
+            // Draw the level.
+            foreach (Floor tile in _floors) { tile.Draw(spriteBatch); }
+            foreach (Ladder piece in _ladders) { piece.Draw(spriteBatch); }
+            foreach (Invention invention in _inventions) { invention.Draw(spriteBatch); }
 
-            // Draw the scientist
+            // Draw the scientist.
             _sleepy.Draw(spriteBatch);
+
+            // Draw the messages.
+            MessageLayer.Draw(spriteBatch);
 
             spriteBatch.End();
 
@@ -215,7 +225,6 @@ namespace SleepyScientist
             int y;
             int width = screenWidth;
             int distanceBetweenFloors = screenHeight / numFloors;
-            Floor toAdd;
 
             // Add Floors.
             for (int i = 0; i < numFloors; i++)
@@ -251,7 +260,7 @@ namespace SleepyScientist
             {
                 if ( ladder.RectPosition.Contains( ai.RectPosition.Center ) )
                 {
-                    hasCollided = ai.InteractWith(ladder);                    
+                    //hasCollided = ai.InteractWith(ladder);                    
                 }
             }
 

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace SleepyScientist.Inventions
+namespace SleepyScientist
 {
     class JackInTheBox : Invention
     {
@@ -26,11 +26,12 @@ namespace SleepyScientist.Inventions
         /// <summary>
         /// Method that executes the functionality of a Jack In The Box
         /// </summary>
-        //public override void Use()
-        //{
-        //    // Launch scientist
+        public override void Use(Scientist s)
+        {
+            // Launch scientist
+            // Need to call the animation and what else to launch?
 
-        //    //base.Use();
-        //}
+            base.Use( s );
+        }
     }
 }
