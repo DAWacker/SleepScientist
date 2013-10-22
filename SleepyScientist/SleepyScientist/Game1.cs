@@ -139,6 +139,8 @@ namespace SleepyScientist
 
             _testAnimation = AnimationLoader.Sets["Test"].Animations["Test1"];
             _testAnimation2 = AnimationLoader.Sets["Test"].Animations["Test2"];
+            _sleepy.Animations = new AnimationSet(AnimationLoader.Sets["Test"]);
+            _sleepy.Animations.ChangeAnimation("Test1");
             /*_testAnimation = new Animation("Test");
             _testAnimation.TimePerFrame = .25F;    // Second/Frame
             _testAnimation.Images = new List<Texture2D>() {
