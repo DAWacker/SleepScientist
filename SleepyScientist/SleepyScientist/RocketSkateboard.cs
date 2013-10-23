@@ -18,8 +18,8 @@ namespace SleepyScientist
         /// <param name="y">Initial Y position for invention</param>
         /// <param name="width">Width of invention</param>
         /// <param name="height">Height of invention</param>
-        public RocketSkateboard(string name, int max_uses, int x, int y, int width, int height)
-            : base(name, max_uses, x, y, width, height)
+        public RocketSkateboard(string name, int x, int y, int width, int height)
+            : base(name, x, y, width, height)
         {
         }
 
