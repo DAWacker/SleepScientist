@@ -71,6 +71,10 @@ namespace SleepyScientist
             _curState = ScientistState.Walking;
             _prevState = ScientistState.Walking;
             _currentTile = null;
+
+            // Get a copy of the Scientist Animation
+            Animations = AnimationLoader.GetSetCopy("Scientist");
+            Animations.ChangeAnimation("Walk");
         }
 
         #endregion

@@ -77,7 +77,6 @@ namespace SleepyScientist
             screenWidth = GameConstants.SCREEN_WIDTH;
             screenHeight = GameConstants.SCREEN_HEIGHT;
 
-            _sleepy = new Scientist("Sleepy", 0, 0, 50, 50);
             // Initialize test "Level" objects.
             _floors = new List<Floor>();
             _ladders = new List<Ladder>();
@@ -100,6 +99,10 @@ namespace SleepyScientist
             _spriteFont = Content.Load<SpriteFont>("Font/defaultFont");
             MessageLayer.Font = _spriteFont;
 
+            // Load animation sets.
+            AnimationLoader.Load("test.xml", Content);
+            AnimationLoader.Load("ScientistAnimationSet.xml", Content);
+
             // Load in the scientist placeholder
             _scientistTexture = this.Content.Load<Texture2D>("Image/scientist");
 
@@ -110,6 +113,9 @@ namespace SleepyScientist
             _rocketSkateboardTexture = this.Content.Load<Texture2D>("Image/rocketSkateboard");
             _eggBeaterTexture = this.Content.Load<Texture2D>("Image/eggBeater");
             _jackintheboxTexture = this.Content.Load<Texture2D>("Image/jackInTheBox");
+
+            // Create the scientist.
+            _sleepy = new Scientist("Sleepy", 0, 0, 50, 50);
 
             // Set the scientist image to the AI
             _sleepy.Image = _scientistTexture;
@@ -156,13 +162,12 @@ namespace SleepyScientist
             _sleepy.Floors = _floors;
             _sleepy.Inventions = _inventions;
 
-            // Set up the test animation.
-            AnimationLoader.Load("test.xml", Content);
-
+            // Setup test animations.
             _testAnimation = AnimationLoader.Sets["Test"].Animations["Test1"];
             _testAnimation2 = AnimationLoader.Sets["Test"].Animations["Test2"];
-            _sleepy.Animations = new AnimationSet(AnimationLoader.Sets["Test"]);
-            _sleepy.Animations.ChangeAnimation("Test1");
+            //_sleepy.Animations = AnimationLoader.GetSetCopy("Scientist");
+            //_sleepy.Animations.ChangeAnimation("Walk");
+            //_sleepy.Animations.CurAnimation.Pause();
             /*_testAnimation = new Animation("Test");
             _testAnimation.TimePerFrame = .25F;    // Second/Frame
             _testAnimation.Images = new List<Texture2D>() {
