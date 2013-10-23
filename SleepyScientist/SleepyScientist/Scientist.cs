@@ -36,8 +36,10 @@ namespace SleepyScientist
 
         private List<Ladder> _ladders;
         private List<Stairs> _stairs;
+        private List<Floor> _floors;
         private List<Invention> _inventions;
         private GameObject _currentTile;
+        private Invention _prevInvention;
 
         #endregion
 
@@ -47,8 +49,10 @@ namespace SleepyScientist
         public ScientistState PreviousState { get { return _prevState; } set { _prevState = value; } }
         public List<Ladder> Ladders { get { return _ladders; } set { _ladders = value; } }
         public List<Stairs> Stairs { get { return _stairs; } set { _stairs = value; } }
+        public List<Floor> Floors { get { return _floors; } set { _floors = value; } }
         public List<Invention> Inventions { get { return _inventions; } set { _inventions = value; } }
         public GameObject CurrentTile { get { return _currentTile; } set { _currentTile = value; } }
+        public Invention PreviousInvention { get { return _prevInvention; } set { _prevInvention = value; } }
 
         #endregion
 
@@ -84,108 +88,97 @@ namespace SleepyScientist
         /// </summary>
         public override void Update() 
         {
+
+            // Check if the scientist is on the ground
+            foreach (Floor floor in this.Floors)
+            {
+                // Check if the scientist is on the ground or just landing
+                if (this.RectPosition.Bottom == floor.RectPosition.Top ||
+                    (this.RectPosition.Intersects(floor.RectPosition) &&
+                      this.CurrentState == ScientistState.JackInTheBox))
+                {
+                    // If the scientist is in the floor, slowly move him up to the top
+                    while (this.RectPosition.Bottom > floor.RectPosition.Top) { this.Y--; }
+                    this.CurrentTile = floor;
+                    this.CurrentState = ScientistState.Walking;
+                }
+            }
+
             // Check if the scientist is using an invention.
             foreach (Invention invention in this.Inventions)
             {
                 if (this.RectPosition.Intersects(invention.RectPosition) && !invention.Activated)
                 {
-                    MessageLayer.AddMessage(new Message("Collided with " + invention.GetType().Name, X, Y, GameConstants.MESSAGE_TIME));
                     InteractWith(invention);
                     break;
                 }
             }
 
-            // Check if the scientist is already on a tile
-            if (this.CurrentTile != null)
+            // Check if the scientist is colliding with a ladder
+            foreach (Ladder piece in this.Ladders)
             {
-                // Check if the scientist is walking down stairs
-                if (this.CurrentTile is Stairs)
+                // Check if the scientist is moving left or right
+                switch (this.Direction)
                 {
-                    // Check if the scientist has reached the bottom of the stairs
-                    if (this.RectPosition.Bottom >= this.CurrentTile.RectPosition.Bottom)
-                    {
-                        this.CurrentState = ScientistState.Walking;
-                        this.CurrentTile = null;
-                    }
-                }
+                    // Moving right
+                    case 1:
+                        if (this.RectPosition.Bottom == piece.RectPosition.Bottom &&
+                            this.RectPosition.X > piece.RectPosition.X - GameConstants.BUFFER &&
+                            this.RectPosition.X < piece.RectPosition.X + piece.RectPosition.Width)
+                        {
+                            this.CurrentTile = piece;
+                            this.CurrentState = ScientistState.Ladder;
+                        }
+                        break;
 
-                // Check if the scientist is climbing up a ladder
-                else if (this.CurrentTile is Ladder)
-                {
-                    // Check if the scientist has reached the top of the ladder
-                    if (this.RectPosition.Bottom <= this.CurrentTile.RectPosition.Top)
-                    {
-                        this.CurrentState = ScientistState.Walking;
-                        this.CurrentTile = null;
-                    }
+                    // Moving left
+                    case -1:
+                        if (this.RectPosition.Bottom == piece.RectPosition.Bottom &&
+                            this.RectPosition.X < piece.RectPosition.X &&
+                            this.RectPosition.X > piece.RectPosition.X - piece.RectPosition.Width)
+                        {
+                            this.CurrentTile = piece;
+                            this.CurrentState = ScientistState.Ladder;
+                        }
+                        break;
+
+                    // Something is horribly wrong
+                    default:
+                        break;
                 }
             }
-            else
+
+            // Check if the scientist is colliding with stairs
+            foreach (Stairs stair in this.Stairs)
             {
-                // Check if the scientist is colliding with a ladder
-                foreach (Ladder piece in this.Ladders)
+                // Check if the scientist is moving left or right
+                switch (this.Direction)
                 {
-                    switch (this.Direction)
-                    {
-                        case 1:
-                            if (this.RectPosition.Bottom == piece.RectPosition.Bottom &&
-                                this.RectPosition.X > piece.RectPosition.X - GameConstants.BUFFER &&
-                                this.RectPosition.X < piece.RectPosition.X + piece.RectPosition.Width)
-                            {
-                                MessageLayer.AddMessage(new Message("Direction 1", X, Y, GameConstants.MESSAGE_TIME));
-                                this.CurrentState = ScientistState.Ladder;
-                                this.CurrentTile = piece;
-                            }
-                            break;
+                    // Moving right
+                    case 1:
+                        if (this.RectPosition.Bottom == stair.RectPosition.Top &&
+                            this.RectPosition.X > stair.RectPosition.X - GameConstants.BUFFER &&
+                            this.RectPosition.X < stair.RectPosition.X + stair.RectPosition.Width)
+                        {
+                            this.CurrentTile = stair;
+                            this.CurrentState = ScientistState.Stairs;
+                        }
+                        break;
 
-                        case -1:
-                            if (this.RectPosition.Bottom == piece.RectPosition.Bottom &&
-                                this.RectPosition.X < piece.RectPosition.X &&
-                                this.RectPosition.X > piece.RectPosition.X - piece.RectPosition.Width)
-                            {
-                                MessageLayer.AddMessage(new Message("Direction -1", X, Y, GameConstants.MESSAGE_TIME));
-                                this.CurrentState = ScientistState.Ladder;
-                                this.CurrentTile = piece;
-                            }
-                            break;
+                    // Moving left
+                    case -1:
+                        if (this.RectPosition.Bottom == stair.RectPosition.Top &&
+                            this.RectPosition.X < stair.RectPosition.X &&
+                            this.RectPosition.X > stair.RectPosition.X - stair.RectPosition.Width)
+                        {
+                            this.CurrentTile = stair;
+                            this.CurrentState = ScientistState.Stairs;
+                        }
+                        break;
 
-                        default:
-                            break;
-                    }
-                }
-
-                // Check if the scientist is colliding with a set of stairs
-                foreach (Stairs piece in this.Stairs)
-                {
-                    switch (this.Direction)
-                    {
-                        case 1:
-                            if (this.RectPosition.Bottom == piece.RectPosition.Top &&
-                                this.RectPosition.X > piece.RectPosition.X - GameConstants.BUFFER &&
-                                this.RectPosition.X < piece.RectPosition.X + piece.RectPosition.Width)
-                            {
-                                this.PrevY = piece.Y + this.Height;
-                                MessageLayer.AddMessage(new Message("Direction 1", X, Y, GameConstants.MESSAGE_TIME));
-                                this.CurrentState = ScientistState.Stairs;
-                                this.CurrentTile = piece;
-                            }
-                            break;
-
-                        case -1:
-                            if (this.RectPosition.Bottom == piece.RectPosition.Top &&
-                                this.RectPosition.X < piece.RectPosition.X &&
-                                this.RectPosition.X > piece.RectPosition.X - piece.RectPosition.Width)
-                            {
-                                this.PrevY = piece.Y + this.Height;
-                                MessageLayer.AddMessage(new Message("Direction -1", X, Y, GameConstants.MESSAGE_TIME));
-                                this.CurrentState = ScientistState.Stairs;
-                                this.CurrentTile = piece;
-                            }
-                            break;
-
-                        default:
-                            break;
-                    }
+                    // Something is horribly wrong
+                    default:
+                        break;
                 }
             }
 
@@ -195,30 +188,41 @@ namespace SleepyScientist
                 case ScientistState.Ladder:
                     this.VeloX = 0;
                     this.VeloY = GameConstants.LADDER_Y_VELOCITY;
+
+                    // Check if the scientist has reached the top of the ladder
+                    if (this.RectPosition.Bottom <= this.CurrentTile.RectPosition.Top)
+                    {
+                        this.CurrentState = ScientistState.Walking;
+                        this.CurrentTile = null;
+                    }
+
                     break;
 
                 case ScientistState.Stairs:
                     this.VeloX = 0;
                     this.VeloY = -GameConstants.LADDER_Y_VELOCITY;
+
+                    // Check if the scientist has reached the bottom of the stairs
+                    if (this.RectPosition.Bottom >= this.CurrentTile.RectPosition.Bottom)
+                    {
+                        this.CurrentState = ScientistState.Walking;
+                        this.CurrentTile = null;
+                    }
+
                     break;
 
                 case ScientistState.RocketSkates:
-                    // Keep the current UPPED velocity.
                     break;
 
                 case ScientistState.EggBeater:
                     break;
 
                 case ScientistState.JackInTheBox:
-                    this.VeloY--;
-                    if (this.VeloY <= -6) 
-                    { 
-                        this.VeloY = 0;
-                        this.CurrentState = ScientistState.Walking;
-                    }
+                    this.VeloY++;
                     break;
 
                 case ScientistState.Walking:
+                    this.RefreshInventions();
                     this.VeloX = GameConstants.DEFAULT_X_VELOCITY * this.Direction;
                     this.VeloY = 0;
                     break;
@@ -226,13 +230,14 @@ namespace SleepyScientist
                 default:
                     break;
             }
-            MessageLayer.AddMessage(new Message(this.CurrentState.ToString(), 50, 100, 0));
+            MessageLayer.AddMessage(new Message(this.CurrentState.ToString(), X, Y - Height/2, GameConstants.MESSAGE_TIME));
             base.Update();
         }
 
         public void Jump() 
         { 
-            //this.Y -= GameConstants.DEFAULT_JUMP_VELOCITY;
+            this.VeloY = GameConstants.DEFAULT_JUMP_VELOCITY_Y;
+            this.VeloX = GameConstants.DEFAULT_JUMP_VELOCITY_X * this.Direction;
             this.CurrentState = ScientistState.JackInTheBox;
         }
 
@@ -254,10 +259,17 @@ namespace SleepyScientist
             if (newState != ScientistState.NULL)
             {
                 invention.Use(this);
+                this.PreviousInvention = invention;
                 this.CurrentState = newState;
             }
 
             return newState != ScientistState.NULL;
+        }
+
+        public void RefreshInventions()
+        {
+            if (this.PreviousInvention != null) this.PreviousInvention.UnUse();
+            this.PreviousInvention = null;
         }
 
         #endregion

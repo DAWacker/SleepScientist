@@ -113,7 +113,7 @@ namespace SleepyScientist
 
             // Set up the test "Level".
             // SetupLevel(4, true);
-            SetupLevel(4, true, true);
+            SetupLevel(4);
 
             // Set up inventions.
             /*
@@ -128,16 +128,17 @@ namespace SleepyScientist
             toAdd.Image = _rocketSkateboardTexture;
             _inventions.Add(toAdd);
              */
-
+            /*
             Invention beater = new EggBeater("EggBeater", screenWidth / 2, _floors[1].Y - _sleepy.Height, 50, 50);
             beater.Image = _eggBeaterTexture;
             _inventions.Add(beater);
+            */
 
-            /*
+            
             Invention box = new JackInTheBox("JackInTheBox", screenWidth / 2, _floors[0].Y - _sleepy.Height, 50, 50);
             box.Image = _jackintheboxTexture;
             _inventions.Add(box);
-            */
+            
 
             // Set up the Scientist.
             _sleepy.X = 100;
@@ -145,6 +146,7 @@ namespace SleepyScientist
             _sleepy.PrevY = _sleepy.Y;
             _sleepy.Ladders = _ladders;
             _sleepy.Stairs = _stairs;
+            _sleepy.Floors = _floors;
             _sleepy.Inventions = _inventions;
         }
 
