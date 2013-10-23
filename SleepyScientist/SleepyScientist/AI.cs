@@ -100,7 +100,14 @@ namespace SleepyScientist
         /// Draw the AI
         /// </summary>
         /// <param name="batch">The sprite batch you want to draw on</param>
-        public override void Draw(SpriteBatch batch) { base.Draw(batch); }
+        public override void Draw(SpriteBatch batch) {
+            if (Direction == -1)
+                //batch.Draw(this.Image, new Rectangle(this.X, this.Y, Image.Width, Image.Height), null, Color.White, 0, Vector2.Zero, SpriteEffects.FlipHorizontally, 0);
+                batch.Draw(this.Image, RectPosition, null, Color.White, 0, Vector2.Zero, SpriteEffects.FlipHorizontally, 0);
+            else
+                base.Draw(batch);
+                //batch.Draw(this.Image, new Rectangle(this.X, this.Y, Image.Width, Image.Height), Color.White);
+        }
 
         /// <summary>
         /// Update the AI
