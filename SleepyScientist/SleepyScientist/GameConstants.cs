@@ -41,6 +41,10 @@ namespace SleepyScientist
 
         public static int BUFFER = 5;
 
+        // Floor info
+        public static int NUMBER_OF_FLOORS = 4;
+        public static int DISTANCE_BETWEEN_FLOORS = SCREEN_HEIGHT / NUMBER_OF_FLOORS;
+
         #endregion
     }
 }

@@ -195,7 +195,6 @@ namespace SleepyScientist
                         this.CurrentState = ScientistState.Walking;
                         this.CurrentTile = null;
                     }
-
                     break;
 
                 case ScientistState.Stairs:
@@ -208,7 +207,6 @@ namespace SleepyScientist
                         this.CurrentState = ScientistState.Walking;
                         this.CurrentTile = null;
                     }
-
                     break;
 
                 case ScientistState.RocketSkates:

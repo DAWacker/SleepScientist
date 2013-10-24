@@ -43,6 +43,10 @@ namespace SleepyScientist
         private Texture2D _eggBeaterTexture;
         private Texture2D _jackintheboxTexture;
 
+        // Mouse Input
+        private MouseState _prevMouseState;
+        private MouseState _curMouseState;
+
         #endregion
 
         public Game1()
@@ -113,7 +117,7 @@ namespace SleepyScientist
 
             // Set up the test "Level".
             // SetupLevel(4, true);
-            SetupLevel(4);
+            SetupLevel(GameConstants.NUMBER_OF_FLOORS, true, true);
 
             // Set up inventions.
             /*
@@ -137,6 +141,9 @@ namespace SleepyScientist
             
             Invention box = new JackInTheBox("JackInTheBox", screenWidth / 2, _floors[0].Y - _sleepy.Height, 50, 50);
             box.Image = _jackintheboxTexture;
+            box.Stairs = _stairs;
+            box.Ladders = _ladders;
+            box.Floors = _floors;
             _inventions.Add(box);
             
 
@@ -168,7 +175,33 @@ namespace SleepyScientist
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            foreach (Invention invention in _inventions) { invention.Update(); }
+            _prevMouseState = _curMouseState;
+            _curMouseState = Mouse.GetState();
+            foreach (Invention invention in _inventions) 
+            {
+                invention.Update();
+                if (_prevMouseState.LeftButton == ButtonState.Pressed && 
+                    _curMouseState.LeftButton == ButtonState.Released &&
+                    _curMouseState.X > invention.X && _curMouseState.X < invention.X + invention.Width &&
+                    _curMouseState.Y > invention.Y && _curMouseState.Y < invention.Y + invention.Height)
+                {
+                    invention.Clicked = true;
+                    break;
+                }
+
+                if (invention.Clicked && _prevMouseState.LeftButton == ButtonState.Pressed &&
+                    _curMouseState.LeftButton == ButtonState.Released)
+                {
+                    invention.HasTarget = true;
+                    invention.Clicked = false;
+                    invention.TargetX = _curMouseState.X;
+                    invention.TargetY = _curMouseState.Y;
+                    invention.VeloX = GameConstants.DEFAULT_X_VELOCITY;
+                    Console.WriteLine(invention.TargetX + " : " + (invention.Y + invention.Height - invention.TargetY));
+                    Console.WriteLine(GameConstants.SCREEN_HEIGHT / GameConstants.NUMBER_OF_FLOORS);
+                    invention.DeterminePath();
+                }
+            }
             _sleepy.Update();
 			MessageLayer.Update(gameTime.ElapsedGameTime.TotalSeconds);
 

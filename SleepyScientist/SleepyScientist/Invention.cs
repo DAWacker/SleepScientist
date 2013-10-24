@@ -21,6 +21,19 @@ namespace SleepyScientist
         // States for the inventions
         private InventionState _curState;
         private InventionState _prevState;
+        private GameObject _curTile;
+
+        // Movement attributes
+        private int _laddersHit;
+        private int _laddersNeeded;
+        private int _targetX;
+        private int _targetY;
+        private bool _clicked;
+        private bool _hasTarget;
+
+        private List<Stairs> _stairs;
+        private List<Ladder> _ladders;
+        private List<Floor> _floors;
 
         #endregion
 
@@ -43,6 +56,32 @@ namespace SleepyScientist
         public InventionState CurrentState { get { return _curState; } set { _curState = value; } }
         public InventionState PreviousState { get { return _prevState; } set { _prevState = value; } }
 
+        // Get or set the current tile of the invention
+        public GameObject CurrentTile { get { return _curTile; } set { _curTile = value; } }
+
+        // Get or set if the invention has just been clicked
+        public bool Clicked { get { return _clicked; } set { _clicked = value; } }
+
+        // Get or set if the invention has a target location
+        public bool HasTarget { get { return _hasTarget; } set { _hasTarget = value; } }
+
+        // Get or set the target coordinates
+        public int TargetX { get { return _targetX; } set { _targetX = value; } }
+        public int TargetY { get { return _targetY; } set { _targetY = value; } }
+
+        // Get or set ladders needed and hit
+        public int LaddersHit { get { return _laddersHit; } set { _laddersHit = value; } }
+        public int LaddersNeeded { get { return _laddersNeeded; } set { _laddersNeeded = value; } }
+
+        // Get or set the ladders in the room
+        public List<Ladder> Ladders { get { return _ladders; } set { _ladders = value; } }
+
+        //Get or set the stairs in the room
+        public List<Stairs> Stairs { get { return _stairs; } set { _stairs = value; } }
+
+        // Get or set the floors in the room
+        public List<Floor> Floors { get { return _floors; } set { _floors = value; } }
+
         #endregion
 
         /// <summary>
@@ -58,6 +97,10 @@ namespace SleepyScientist
         {
             _curState = InventionState.Idle;
             _prevState = InventionState.Idle;
+            _targetX = 0;
+            _targetY = 0;
+            _laddersHit = 0;
+            _laddersNeeded = 0;
             _active = false;
         }
 
@@ -95,18 +138,172 @@ namespace SleepyScientist
 
         public override void Update()
         {
-            this.StayOnScreen();
+            if (this.HasTarget)
+            {
+                // Check if the invention is on the ground
+                foreach (Floor floor in this.Floors)
+                {
+                    // Check if the invention is on the ground
+                    if (this.RectPosition.Bottom == floor.RectPosition.Top)
+                    {
+                        this.CurrentTile = floor;
+                        this.CurrentState = InventionState.Walking;
+                    }
+                }
+
+                // Check if the invention is colliding with a ladder
+                foreach (Ladder piece in this.Ladders)
+                {
+                    // Check if the invention is moving left or right
+                    switch (this.Direction)
+                    {
+                        // Moving right
+                        case 1:
+                            if (this.RectPosition.Bottom == piece.RectPosition.Bottom &&
+                                this.RectPosition.X > piece.RectPosition.X - GameConstants.BUFFER &&
+                                this.RectPosition.X < piece.RectPosition.X + piece.RectPosition.Width &&
+                                this.LaddersHit != this.LaddersNeeded)
+                            {
+                                this.LaddersHit++;
+                                this.CurrentTile = piece;
+                                this.CurrentState = InventionState.Ladder;
+                                Console.WriteLine(this.LaddersHit);
+                            }
+                            break;
+
+                        // Moving left
+                        case -1:
+                            if (this.RectPosition.Bottom == piece.RectPosition.Bottom &&
+                                this.RectPosition.X < piece.RectPosition.X &&
+                                this.RectPosition.X > piece.RectPosition.X - piece.RectPosition.Width &&
+                                this.LaddersHit != this.LaddersNeeded)
+                            {
+                                this.CurrentTile = piece;
+                                this.CurrentState = InventionState.Ladder;
+                            }
+                            break;
+
+                        // Something is horribly wrong
+                        default:
+                            break;
+                    }
+                }
+
+                // Check if the invention is colliding with stairs
+                foreach (Stairs stair in this.Stairs)
+                {
+                    // Check if the invention is moving left or right
+                    switch (this.Direction)
+                    {
+                        // Moving right
+                        case 1:
+                            if (this.RectPosition.Bottom == stair.RectPosition.Top &&
+                                this.RectPosition.X > stair.RectPosition.X - GameConstants.BUFFER &&
+                                this.RectPosition.X < stair.RectPosition.X + stair.RectPosition.Width)
+                            {
+                                this.CurrentTile = stair;
+                                this.CurrentState = InventionState.Stairs;
+                            }
+                            break;
+
+                        // Moving left
+                        case -1:
+                            if (this.RectPosition.Bottom == stair.RectPosition.Top &&
+                                this.RectPosition.X < stair.RectPosition.X &&
+                                this.RectPosition.X > stair.RectPosition.X - stair.RectPosition.Width)
+                            {
+                                this.CurrentTile = stair;
+                                this.CurrentState = InventionState.Stairs;
+                            }
+                            break;
+
+                        // Something is horribly wrong
+                        default:
+                            break;
+                    }
+
+                    // Update invention based on current state.
+                    switch (this.CurrentState)
+                    {
+                        case InventionState.Ladder:
+                            this.VeloX = 0;
+                            this.VeloY = GameConstants.LADDER_Y_VELOCITY;
+
+                            // Check if the invention has reached the top of the ladder
+                            if (this.RectPosition.Bottom <= this.CurrentTile.RectPosition.Top)
+                            {
+                                this.LaddersHit++;
+                                this.CurrentState = InventionState.Walking;
+                                this.CurrentTile = null;
+                                Console.WriteLine(this.LaddersHit);
+                            }
+                            break;
+
+                        case InventionState.Stairs:
+                            this.VeloX = 0;
+                            this.VeloY = -GameConstants.LADDER_Y_VELOCITY;
+
+                            // Check if the invention has reached the bottom of the stairs
+                            if (this.RectPosition.Bottom >= this.CurrentTile.RectPosition.Bottom)
+                            {
+                                this.CurrentState = InventionState.Walking;
+                                this.CurrentTile = null;
+                            }
+                            break;
+
+                        case InventionState.Walking:
+
+                            // Check if the invention is on the floor it needs to be
+                            if (this.LaddersHit == this.LaddersNeeded)
+                            {
+                                switch (this.Direction)
+                                {
+                                    // Moving right
+                                    case 1:
+                                        if (this.X + this.Width >= this.TargetX) { this.ReachedTarget(); }
+                                        break;
+                                    
+                                    // Moving left
+                                    case -1:
+                                        if (this.X <= this.TargetX) { this.ReachedTarget(); }
+                                        break;
+
+                                    // Something went horribly wrong
+                                    default:
+                                        break;
+                                }
+                            }
+                            this.VeloX = GameConstants.DEFAULT_X_VELOCITY * this.Direction;
+                            this.VeloY = 0;
+                            break;
+
+                        default:
+                            break;
+                    }
+                }
+
+                base.Update();
+            }
         }
 
-        /// <summary>
-        /// Move the invention to a specific coordinate on the level.
-        /// (might do this some other way than just x/y)
-        /// </summary>
-        /// <param name="x">X-coordinate</param>
-        /// <param name="y">Y-coordinate</param>
-        public void Move(int x, int y)
+        public void DeterminePath()
         {
-            // Pathing code here
+            int verticalChange = this.Y + this.Height - this.TargetY;
+            if (verticalChange > GameConstants.DISTANCE_BETWEEN_FLOORS)
+            {
+                this.LaddersNeeded = verticalChange / GameConstants.DISTANCE_BETWEEN_FLOORS;
+            }
+        }
+
+        public void ReachedTarget()
+        {
+            this.HasTarget = false;
+            this.VeloX = 0;
+            this.VeloY = 0;
+            this.TargetX = 0;
+            this.TargetY = 0;
+            this.LaddersHit = 0;
+            this.LaddersNeeded = 0;
         }
 
         /// <summary>
