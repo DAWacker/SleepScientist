@@ -27,12 +27,17 @@ namespace SleepyScientist
         private int screenWidth;
         private int screenHeight;
 
+        // Scroll wheel state
+        private int _curScrollWheel;
+        private int _deltaScrollWheel;
+
         // GameObjects
         private Scientist _sleepy;
         private List<Floor> _floors;
         private List<Ladder> _ladders;
         private List<Stairs> _stairs;
         private List<Invention> _inventions;
+        private List<GameObject> _allGameObjects;
 
         // Textures
         private Texture2D _scientistTexture;
@@ -48,6 +53,9 @@ namespace SleepyScientist
         private Animation _testAnimation2;
 
         // Debug Messages
+
+        // Camera
+        private Camera _camera;
 
         #endregion
 
@@ -77,11 +85,20 @@ namespace SleepyScientist
             screenWidth = GameConstants.SCREEN_WIDTH;
             screenHeight = GameConstants.SCREEN_HEIGHT;
 
+            // Initialize scroll wheel position.
+            _curScrollWheel = Mouse.GetState().ScrollWheelValue;
+
             // Initialize test "Level" objects.
             _floors = new List<Floor>();
             _ladders = new List<Ladder>();
             _stairs = new List<Stairs>();
             _inventions = new List<Invention>();
+
+            // Initialize Camera.
+            _camera = new Camera();
+
+            // Initialize what the Camera will be drawing.
+            _allGameObjects = new List<GameObject>();
 
             base.Initialize();
         }
@@ -126,7 +143,7 @@ namespace SleepyScientist
 
             // Set up the test "Level".
             // SetupLevel(4, true);
-            SetupLevel(4);
+            SetupLevel(4, true);
 
             // Set up inventions.
             /*
@@ -176,6 +193,15 @@ namespace SleepyScientist
                 _rocketSkateboardTexture,
                 _scientistTexture
             };*/
+
+            // Store all the GameObjects.
+            // This should be inside of the Level Class when we get to it.
+            _allGameObjects.AddRange(_floors);
+            _allGameObjects.AddRange(_ladders);
+            _allGameObjects.AddRange(_stairs);
+            _allGameObjects.AddRange(_inventions);
+            _allGameObjects.Add(_sleepy);
+
         }
 
         /// <summary>
@@ -193,8 +219,29 @@ namespace SleepyScientist
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
+            // Handle input.
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
+
+            if (Keyboard.GetState().IsKeyDown(Keys.OemPlus))
+                _camera.ModZoom(GameConstants.ZOOM_STEP);
+
+            if (Keyboard.GetState().IsKeyDown(Keys.OemMinus))
+                _camera.ModZoom(-GameConstants.ZOOM_STEP);
+
+            if (Keyboard.GetState().IsKeyDown(Keys.NumPad0))
+                _camera.Zoom(1);
+
+
+            // Update mouse
+            _deltaScrollWheel = Mouse.GetState().ScrollWheelValue - _curScrollWheel;
+
+            if (_deltaScrollWheel != 0)
+            {
+                _curScrollWheel = Mouse.GetState().ScrollWheelValue;
+                if (_deltaScrollWheel > 0)
+                    _camera.ZoomToLocation(Mouse.GetState().X, Mouse.GetState().Y);
+            }
 
             // Update global Time class.
             Time.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
@@ -221,9 +268,10 @@ namespace SleepyScientist
             spriteBatch.Begin();
 
             // Draw the test animations.
-            spriteBatch.Draw(_testAnimation.CurrentImage(), new Vector2( screenWidth / 2, screenHeight / 2 ), Color.White);
-            spriteBatch.Draw(_testAnimation2.CurrentImage(), new Vector2(screenWidth / 2 + 100, screenHeight / 2), Color.White);
+            //spriteBatch.Draw(_testAnimation.CurrentImage(), new Vector2( screenWidth / 2, screenHeight / 2 ), Color.White);
+            //spriteBatch.Draw(_testAnimation2.CurrentImage(), new Vector2(screenWidth / 2 + 100, screenHeight / 2), Color.White);
 
+            /*
             // Draw the level.
             foreach (Floor tile in _floors) { tile.Draw(spriteBatch); }
             foreach (Ladder piece in _ladders) { piece.Draw(spriteBatch); }
@@ -235,6 +283,9 @@ namespace SleepyScientist
 
             // Draw the messages.
             MessageLayer.Draw(spriteBatch);
+            */
+
+            _camera.DrawGameObjects(spriteBatch, _allGameObjects);
 
             spriteBatch.End();
 
