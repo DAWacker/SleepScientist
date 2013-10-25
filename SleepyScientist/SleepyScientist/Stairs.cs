@@ -22,7 +22,7 @@ namespace SleepyScientist
 
         #region Methods
 
-        public override void Draw(SpriteBatch batch)
+        public override void Draw(SpriteBatch batch, Rectangle? pos = null)
         {
             // Only draw this much of the _image. Prevents overdraw.
             Rectangle drawClip = new Rectangle(0, 0, Image.Width, Image.Height);
@@ -48,7 +48,10 @@ namespace SleepyScientist
                         drawClip.Height = Height - yOff;
                         drawDest.Height = drawClip.Height;
                     }
-                    batch.Draw(Image, drawDest, drawClip, Color.White);
+                    if (pos != null)
+                        batch.Draw(this.Image, pos.Value, Color.White);
+                    else
+                        batch.Draw(Image, drawDest, drawClip, Color.White);
                 }
                 drawDest.Height = Image.Height;
             }

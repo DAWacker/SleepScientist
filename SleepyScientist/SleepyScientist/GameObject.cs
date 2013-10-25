@@ -84,7 +84,12 @@ namespace SleepyScientist
         /// Draw the game object
         /// </summary>
         /// <param name="batch">The sprite batch you want to draw on</param>
-        public virtual void Draw(SpriteBatch batch) { batch.Draw(this.Image, this.RectPosition, Color.White); }
+        public virtual void Draw(SpriteBatch batch, Rectangle? pos = null) {
+            if (pos != null)
+                batch.Draw(this.Image, pos.Value, Color.White);
+            else
+                batch.Draw(this.Image, this.RectPosition, Color.White);
+        }
 
         /// <summary>
         /// Update the GameObject, namely the animation.
