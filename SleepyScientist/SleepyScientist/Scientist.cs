@@ -80,13 +80,7 @@ namespace SleepyScientist
         #endregion
 
         #region Methods
-
-        /// <summary>
-        /// Draw the scientist
-        /// </summary>
-        /// <param name="batch">The sprite batch you want to draw on</param>
-        public override void Draw(SpriteBatch batch) { base.Draw(batch); }
-
+        
         /// <summary>
         /// Update the scientist
         /// </summary>
