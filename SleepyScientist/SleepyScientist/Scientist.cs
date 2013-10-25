@@ -107,7 +107,8 @@ namespace SleepyScientist
             // Check if the scientist is using an invention.
             foreach (Invention invention in this.Inventions)
             {
-                if (this.RectPosition.Intersects(invention.RectPosition) && !invention.Activated)
+                if (this.RectPosition.Intersects(invention.RectPosition) 
+                    && !invention.Activated && !invention.HasTarget)
                 {
                     InteractWith(invention);
                     break;
@@ -192,6 +193,8 @@ namespace SleepyScientist
                     // Check if the scientist has reached the top of the ladder
                     if (this.RectPosition.Bottom <= this.CurrentTile.RectPosition.Top)
                     {
+                        this.VeloY = 0;
+                        this.Y = this.CurrentTile.Y - this.Height;
                         this.CurrentState = ScientistState.Walking;
                         this.CurrentTile = null;
                     }

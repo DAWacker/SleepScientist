@@ -236,8 +236,9 @@ namespace SleepyScientist
                             this.Y = this.CurrentTile.Y - this.Height;
                             this.CurrentState = InventionState.Walking;
                             this.CurrentTile = null;
-                            this.DetermineDirection();
+                            if (this.X > this.TargetX) { this.Direction = -1; } else { this.Direction = 1; }
                         }
+
                         break;
 
                     case InventionState.Stairs:
@@ -287,16 +288,11 @@ namespace SleepyScientist
             }
         }
 
-        public void DetermineDirection()
-        {
-            if (this.X > this.TargetX) { this.Direction = -1; } else { this.Direction = 1; }
-        }
-
         public void DeterminePath()
         {
             int verticalChange = this.Y + this.Height - this.TargetY;
             this.LaddersNeeded = verticalChange / GameConstants.DISTANCE_BETWEEN_FLOORS;
-            this.DetermineDirection();
+            if (this.X > this.TargetX) { this.Direction = -1; } else { this.Direction = 1; }
         }
 
         public void ReachedTarget()
