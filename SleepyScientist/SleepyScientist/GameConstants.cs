@@ -17,13 +17,22 @@ namespace SleepyScientist
         public static int TILE_WIDTH = 50;
         public static int TILE_HEIGHT = TILE_WIDTH;
 
-        // Default movement speeds
-        public static int DEFAULT_X_VELOCITY = 5;
+        // Default movement speeds for the scientist
+        public static int DEFAULT_X_VELOCITY = 4;
         public static int DEFAULT_Y_VELOCITY = 0;
-        public static int LADDER_Y_VELOCITY = -5;
+        public static int LADDER_Y_VELOCITY = -4;
         public static int DEFAULT_DIRECTION = 1;
         public static int DEFAULT_JUMP_VELOCITY_Y = -12;
-        public static int DEFAULT_JUMP_VELOCITY_X = 15;
+        public static int DEFAULT_JUMP_VELOCITY_X = 10;
+        
+        // User input related
+        public static bool MOVING_INVENTION = false;
+        public static int SLOW_MOTION = 3;
+
+        // Default movement speeds for inventions
+        public static int DEFAULT_INVENTION_X_VELO = 8;
+        public static int DEFAULT_INVENTION_Y_VELO = 0;
+        public static int INVENTION_LADDER_Y_VELO = -8;
 
         // Floor constants
         public static int FLOOR_HEIGHT = TILE_HEIGHT;
@@ -37,8 +46,8 @@ namespace SleepyScientist
         // Invention constants
         public static int SKATEBOARD_SPEEDUP = 2;
 
+        // Others
         public static int GRAVITY = 1;
-
         public static int BUFFER = 5;
 
         // Floor info

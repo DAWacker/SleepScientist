@@ -87,8 +87,17 @@ namespace SleepyScientist
         /// </summary>
         public void Move()
         {
-            this.X += this.VeloX;
-            this.Y += this.VeloY;
+            // Check if the user is moving an invention
+            if (GameConstants.MOVING_INVENTION)
+            {
+                this.X += this.VeloX / GameConstants.SLOW_MOTION;
+                this.Y += this.VeloY / GameConstants.SLOW_MOTION;
+            }
+            else
+            {
+                this.X += this.VeloX;
+                this.Y += this.VeloY;
+            }
         }
 
         /// <summary>

@@ -117,7 +117,7 @@ namespace SleepyScientist
 
             // Set up the test "Level".
             // SetupLevel(4, true);
-            SetupLevel(GameConstants.NUMBER_OF_FLOORS, true, true);
+            SetupLevel(GameConstants.NUMBER_OF_FLOORS, true);
 
             // Set up inventions.
             /*
@@ -186,6 +186,7 @@ namespace SleepyScientist
                     _curMouseState.Y > invention.Y && _curMouseState.Y < invention.Y + invention.Height)
                 {
                     invention.Clicked = true;
+                    GameConstants.MOVING_INVENTION = true;
                     break;
                 }
 
@@ -196,10 +197,10 @@ namespace SleepyScientist
                     invention.Clicked = false;
                     invention.TargetX = _curMouseState.X;
                     invention.TargetY = _curMouseState.Y;
-                    invention.VeloX = GameConstants.DEFAULT_X_VELOCITY;
+                    invention.VeloX = GameConstants.DEFAULT_INVENTION_X_VELO;
                     Console.WriteLine(invention.TargetX + " : " + (invention.Y + invention.Height - invention.TargetY));
-                    Console.WriteLine(GameConstants.SCREEN_HEIGHT / GameConstants.NUMBER_OF_FLOORS);
                     invention.DeterminePath();
+                    GameConstants.MOVING_INVENTION = false;
                 }
             }
             _sleepy.Update();

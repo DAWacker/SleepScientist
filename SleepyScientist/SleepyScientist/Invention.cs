@@ -20,7 +20,6 @@ namespace SleepyScientist
 
         // States for the inventions
         private InventionState _curState;
-        private InventionState _prevState;
         private GameObject _curTile;
 
         // Movement attributes
@@ -54,7 +53,6 @@ namespace SleepyScientist
 
         // Get or set the state of the invention
         public InventionState CurrentState { get { return _curState; } set { _curState = value; } }
-        public InventionState PreviousState { get { return _prevState; } set { _prevState = value; } }
 
         // Get or set the current tile of the invention
         public GameObject CurrentTile { get { return _curTile; } set { _curTile = value; } }
@@ -95,13 +93,12 @@ namespace SleepyScientist
         public Invention(string name, int x, int y, int width, int height)
             : base(name, x, y, width, height)
         {
-            _curState = InventionState.Idle;
-            _prevState = InventionState.Idle;
-            _targetX = 0;
-            _targetY = 0;
-            _laddersHit = 0;
-            _laddersNeeded = 0;
-            _active = false;
+            this.CurrentState = InventionState.Idle;
+            this.TargetY = 0;
+            this.TargetX = 0;
+            this.LaddersHit = 0;
+            this.LaddersNeeded = 0;
+            this.Activated = false;
         }
 
         /// <summary>
@@ -148,6 +145,7 @@ namespace SleepyScientist
                     {
                         this.CurrentTile = floor;
                         this.CurrentState = InventionState.Walking;
+                        break;
                     }
                 }
 
@@ -164,10 +162,9 @@ namespace SleepyScientist
                                 this.RectPosition.X < piece.RectPosition.X + piece.RectPosition.Width &&
                                 this.LaddersHit != this.LaddersNeeded)
                             {
-                                this.LaddersHit++;
+                                this.X = piece.X;
                                 this.CurrentTile = piece;
                                 this.CurrentState = InventionState.Ladder;
-                                Console.WriteLine(this.LaddersHit);
                             }
                             break;
 
@@ -178,6 +175,7 @@ namespace SleepyScientist
                                 this.RectPosition.X > piece.RectPosition.X - piece.RectPosition.Width &&
                                 this.LaddersHit != this.LaddersNeeded)
                             {
+                                this.X = piece.X;
                                 this.CurrentTile = piece;
                                 this.CurrentState = InventionState.Ladder;
                             }
@@ -221,83 +219,90 @@ namespace SleepyScientist
                         default:
                             break;
                     }
-
-                    // Update invention based on current state.
-                    switch (this.CurrentState)
-                    {
-                        case InventionState.Ladder:
-                            this.VeloX = 0;
-                            this.VeloY = GameConstants.LADDER_Y_VELOCITY;
-
-                            // Check if the invention has reached the top of the ladder
-                            if (this.RectPosition.Bottom <= this.CurrentTile.RectPosition.Top)
-                            {
-                                this.LaddersHit++;
-                                this.CurrentState = InventionState.Walking;
-                                this.CurrentTile = null;
-                                Console.WriteLine(this.LaddersHit);
-                            }
-                            break;
-
-                        case InventionState.Stairs:
-                            this.VeloX = 0;
-                            this.VeloY = -GameConstants.LADDER_Y_VELOCITY;
-
-                            // Check if the invention has reached the bottom of the stairs
-                            if (this.RectPosition.Bottom >= this.CurrentTile.RectPosition.Bottom)
-                            {
-                                this.CurrentState = InventionState.Walking;
-                                this.CurrentTile = null;
-                            }
-                            break;
-
-                        case InventionState.Walking:
-
-                            // Check if the invention is on the floor it needs to be
-                            if (this.LaddersHit == this.LaddersNeeded)
-                            {
-                                switch (this.Direction)
-                                {
-                                    // Moving right
-                                    case 1:
-                                        if (this.X + this.Width >= this.TargetX) { this.ReachedTarget(); }
-                                        break;
-                                    
-                                    // Moving left
-                                    case -1:
-                                        if (this.X <= this.TargetX) { this.ReachedTarget(); }
-                                        break;
-
-                                    // Something went horribly wrong
-                                    default:
-                                        break;
-                                }
-                            }
-                            this.VeloX = GameConstants.DEFAULT_X_VELOCITY * this.Direction;
-                            this.VeloY = 0;
-                            break;
-
-                        default:
-                            break;
-                    }
                 }
 
+                // Update invention based on current state.
+                switch (this.CurrentState)
+                {
+                    case InventionState.Ladder:
+                        this.VeloX = 0;
+                        this.VeloY = GameConstants.INVENTION_LADDER_Y_VELO;
+
+                        // Check if the invention has reached the top of the ladder
+                        if (this.RectPosition.Bottom <= this.CurrentTile.RectPosition.Top)
+                        {
+                            this.LaddersHit++;
+                            this.VeloY = 0;
+                            this.Y = this.CurrentTile.Y - this.Height;
+                            this.CurrentState = InventionState.Walking;
+                            this.CurrentTile = null;
+                            this.DetermineDirection();
+                        }
+                        break;
+
+                    case InventionState.Stairs:
+                        this.VeloX = 0;
+                        this.VeloY = -GameConstants.INVENTION_LADDER_Y_VELO;
+
+                        // Check if the invention has reached the bottom of the stairs
+                        if (this.RectPosition.Bottom >= this.CurrentTile.RectPosition.Bottom)
+                        {
+                            this.CurrentState = InventionState.Walking;
+                            this.CurrentTile = null;
+                        }
+                        break;
+
+                    case InventionState.Walking:
+
+                        // Check if the invention is on the floor it needs to be
+                        if (this.LaddersHit == this.LaddersNeeded)
+                        {
+                            switch (this.Direction)
+                            {
+                                // Moving right
+                                case 1:
+                                    if (this.X + this.Width >= this.TargetX) { this.ReachedTarget(); }
+                                    break;
+
+                                // Moving left
+                                case -1:
+                                    if (this.X <= this.TargetX) { this.ReachedTarget(); }
+                                    break;
+
+                                // Something went horribly wrong
+                                default:
+                                    break;
+                            }
+                        }
+                        this.VeloX = GameConstants.DEFAULT_INVENTION_X_VELO * this.Direction;
+                        this.VeloY = 0;
+                        break;
+
+                    default:
+                        break;
+                }
+
+                // MessageLayer.AddMessage(new Message(this.LaddersHit.ToString(), X - 10, Y - 30, GameConstants.MESSAGE_TIME));
                 base.Update();
             }
+        }
+
+        public void DetermineDirection()
+        {
+            if (this.X > this.TargetX) { this.Direction = -1; } else { this.Direction = 1; }
         }
 
         public void DeterminePath()
         {
             int verticalChange = this.Y + this.Height - this.TargetY;
-            if (verticalChange > GameConstants.DISTANCE_BETWEEN_FLOORS)
-            {
-                this.LaddersNeeded = verticalChange / GameConstants.DISTANCE_BETWEEN_FLOORS;
-            }
+            this.LaddersNeeded = verticalChange / GameConstants.DISTANCE_BETWEEN_FLOORS;
+            this.DetermineDirection();
         }
 
         public void ReachedTarget()
         {
             this.HasTarget = false;
+            this.CurrentState = InventionState.Idle;
             this.VeloX = 0;
             this.VeloY = 0;
             this.TargetX = 0;

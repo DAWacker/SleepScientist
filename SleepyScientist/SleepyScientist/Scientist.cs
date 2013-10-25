@@ -228,7 +228,6 @@ namespace SleepyScientist
                 default:
                     break;
             }
-            MessageLayer.AddMessage(new Message(this.CurrentState.ToString(), X, Y - Height/2, GameConstants.MESSAGE_TIME));
             base.Update();
         }
 
