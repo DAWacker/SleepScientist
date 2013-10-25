@@ -41,6 +41,12 @@ namespace SleepyScientist
 
         public static int BUFFER = 5;
 
+        // Camera constants.
+        public static float MINIMUM_ZOOM = 1F;
+        public static float ZOOM_STEP = 0.1F;
+        public static float ZOOM_LEVEL_0 = 1F;
+        public static float ZOOM_LEVEL_1 = 2F;
+
         #endregion
     }
 }

@@ -39,6 +39,7 @@
     <Compile Include="Animation.cs" />
     <Compile Include="AnimationLoader.cs" />
     <Compile Include="AnimationSet.cs" />
+    <Compile Include="Camera.cs" />
     <Compile Include="EggBeater.cs" />
     <Compile Include="Floor.cs" />
     <Compile Include="Game1.cs" />
