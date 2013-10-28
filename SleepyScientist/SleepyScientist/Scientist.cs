@@ -17,6 +17,21 @@ namespace SleepyScientist
     {
         #region Attributes
 
+        // Current and previous states of the scientist
+        private ScientistState _curState;
+        private ScientistState _prevState;
+
+        private List<Ladder> _ladders;
+        private List<Stairs> _stairs;
+        private List<Floor> _floors;
+        private List<Invention> _inventions;
+        private GameObject _currentTile;
+        private Invention _prevInvention;
+
+        #endregion
+
+        #region States
+
         // Possible states the scientist could be in
         public enum ScientistState
         {
@@ -29,17 +44,6 @@ namespace SleepyScientist
             Stairs,
             NULL
         }
-
-        // Current and previous states of the scientist
-        private ScientistState _curState;
-        private ScientistState _prevState;
-
-        private List<Ladder> _ladders;
-        private List<Stairs> _stairs;
-        private List<Floor> _floors;
-        private List<Invention> _inventions;
-        private GameObject _currentTile;
-        private Invention _prevInvention;
 
         #endregion
 
@@ -107,8 +111,9 @@ namespace SleepyScientist
             // Check if the scientist is using an invention.
             foreach (Invention invention in this.Inventions)
             {
+                // Check if the scientist is colliding with an invention
                 if (this.RectPosition.Intersects(invention.RectPosition) 
-                    && !invention.Activated && !invention.HasTarget)
+                    && !invention.Activated && !invention.HasTarget && !invention.Clicked)
                 {
                     InteractWith(invention);
                     break;

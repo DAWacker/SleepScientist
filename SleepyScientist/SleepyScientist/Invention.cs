@@ -36,6 +36,8 @@ namespace SleepyScientist
 
         #endregion
 
+        #region States
+
         // Possible states for the invention
         public enum InventionState
         {
@@ -45,6 +47,8 @@ namespace SleepyScientist
             Ladder,
             Stairs
         }
+
+        #endregion
 
         #region Properties
 
@@ -82,6 +86,8 @@ namespace SleepyScientist
 
         #endregion
 
+        #region Constructor
+
         /// <summary>
         /// Chained Constructor (Base_Invention and Game_Object)
         /// </summary>
@@ -100,6 +106,10 @@ namespace SleepyScientist
             this.LaddersNeeded = 0;
             this.Activated = false;
         }
+
+        #endregion
+
+        #region Methods
 
         /// <summary>
         /// Operator overload (Invention + Invention) = combo
@@ -316,5 +326,7 @@ namespace SleepyScientist
         {
             return (this + other);
         }
+
+        #endregion
     }
 }
