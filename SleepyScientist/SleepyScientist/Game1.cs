@@ -118,21 +118,17 @@ namespace SleepyScientist
 
             // Load animation sets.
             AnimationLoader.Load("ScientistAnimationSet.xml", Content);
-
-            // Load in the scientist placeholder
-            _scientistTexture = this.Content.Load<Texture2D>("Image/scientist");
-
+            
             // Load content of other GameObjects.
             _floorTexture = this.Content.Load<Texture2D>("Image/floor");
             _stairsTexture = this.Content.Load<Texture2D>("Image/stairs");
             _ladderTexture = this.Content.Load<Texture2D>("Image/ladder");
-            _rocketSkateboardTexture = this.Content.Load<Texture2D>("Image/rocketSkateboard");
-            _eggBeaterTexture = this.Content.Load<Texture2D>("Image/eggBeater");
-            _jackintheboxTexture = this.Content.Load<Texture2D>("Image/jackInTheBox");
+            _rocketSkateboardTexture = this.Content.Load<Texture2D>("Image/skateboard");
+            _eggBeaterTexture = this.Content.Load<Texture2D>("Image/beater");
+            _jackintheboxTexture = this.Content.Load<Texture2D>("Image/jack");
 
             // Create the scientist and set his image
             _sleepy = new Scientist("Sleepy", 0, 0, 50, 50);
-            _sleepy.Image = _scientistTexture;
             
             // Add some test messages.
             MessageLayer.AddMessage(new Message("Test", 0, 0));
@@ -237,8 +233,12 @@ namespace SleepyScientist
             if (_deltaScrollWheel != 0)
             {
                 _curScrollWheel = Mouse.GetState().ScrollWheelValue;
+                // If scroll up.
                 if (_deltaScrollWheel > 0)
                     _camera.ZoomToLocation(Mouse.GetState().X, Mouse.GetState().Y);
+                // If scroll down.
+                else
+                    _camera.Zoom( GameConstants.ZOOM_ROOM_VIEW );
             }
 
             // Update global Time class.
