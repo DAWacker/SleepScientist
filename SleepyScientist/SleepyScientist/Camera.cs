@@ -52,8 +52,8 @@ namespace SleepyScientist
             else
                 _zoomFactor = GameConstants.MINIMUM_ZOOM;
 
-            _cameraView.Width = (int)(GameConstants.SCREEN_WIDTH / _zoomFactor);
-            _cameraView.Height = (int)(GameConstants.SCREEN_HEIGHT / _zoomFactor);
+            _cameraView.Width = GameConstants.SCREEN_WIDTH;
+            _cameraView.Height = GameConstants.SCREEN_HEIGHT;
             _cameraView.X = 0;
             _cameraView.Y = 0;
             FixOffset();
@@ -79,6 +79,10 @@ namespace SleepyScientist
         public void ZoomToLocation(int x, int y)
         {
             Zoom(GameConstants.ZOOM_INVENTION_VIEW);
+            // Convert coords to zoomed-scale coords
+            x = (int)(x * _zoomFactor);
+            y = (int)(y * _zoomFactor);
+            // Update camera coords.
             _cameraView.X = (int)(x - _cameraView.Width / 2);
             _cameraView.Y = (int)(y - _cameraView.Height / 2);
             FixOffset();
@@ -92,14 +96,14 @@ namespace SleepyScientist
             // Fix x if needed.
             if (_cameraView.X < 0)
                 _cameraView.X = 0;
-            else if (_cameraView.X + _cameraView.Width > GameConstants.SCREEN_WIDTH)
-                _cameraView.X = GameConstants.SCREEN_WIDTH - _cameraView.Width;
+            else if (_cameraView.X + _cameraView.Width > GameConstants.SCREEN_WIDTH * _zoomFactor)
+                _cameraView.X = (int)(GameConstants.SCREEN_WIDTH * _zoomFactor - _cameraView.Width);
 
             // Fix y if needed.
             if (_cameraView.Y < 0)
                 _cameraView.Y = 0;
-            else if (_cameraView.Y + _cameraView.Height > GameConstants.SCREEN_HEIGHT)
-                _cameraView.Y = GameConstants.SCREEN_HEIGHT - _cameraView.Height;
+            else if (_cameraView.Y + _cameraView.Height > GameConstants.SCREEN_HEIGHT * _zoomFactor)
+                _cameraView.Y = (int)(GameConstants.SCREEN_HEIGHT * _zoomFactor - _cameraView.Height);
         }
 
         /// <summary>
