@@ -129,7 +129,7 @@ namespace SleepyScientist
         /// <summary>
         /// Update the AI
         /// </summary>
-        public virtual void Update()
+        public override void Update()
         {
             this.StayOnScreen();
             this.Move();
