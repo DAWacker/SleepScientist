@@ -126,9 +126,9 @@ namespace SleepyScientist
             _floorTexture = this.Content.Load<Texture2D>("Image/floor");
             _stairsTexture = this.Content.Load<Texture2D>("Image/stairs");
             _ladderTexture = this.Content.Load<Texture2D>("Image/ladder");
-            _rocketSkateboardTexture = this.Content.Load<Texture2D>("Image/rocketSkateboard");
-            _eggBeaterTexture = this.Content.Load<Texture2D>("Image/eggBeater");
-            _jackintheboxTexture = this.Content.Load<Texture2D>("Image/jackInTheBox");
+            _rocketSkateboardTexture = this.Content.Load<Texture2D>("Image/skateboard");
+            _eggBeaterTexture = this.Content.Load<Texture2D>("Image/beater");
+            _jackintheboxTexture = this.Content.Load<Texture2D>("Image/jack");
 
             // Create the scientist and set his image
             _sleepy = new Scientist("Sleepy", 0, 0, 50, 50);
@@ -159,21 +159,7 @@ namespace SleepyScientist
             Invention beater = new EggBeater("EggBeater", screenWidth / 2, _floors[1].Y - _sleepy.Height, 50, 50);
             beater.Image = _eggBeaterTexture;
             _inventions.Add(beater);
-            */
-
-            
-            Invention box = new JackInTheBox("JackInTheBox", screenWidth / 2, _floors[0].Y - _sleepy.Height, 50, 50);
-            box.Image = _jackintheboxTexture;
-            box.Stairs = _stairs;
-            box.Ladders = _ladders;
-            box.Floors = _floors;
-            _inventions.Add(box);
-            
-
-            // Set up the Scientist.
-            _sleepy.X = 100;
-            _sleepy.Y = _floors[0].Y - _sleepy.Height;
-            _sleepy.PrevY = _sleepy.Y;
+            */  
 
             // Setup test animations.
             //_sleepy.Animations = AnimationLoader.GetSetCopy("Scientist");
@@ -340,6 +326,13 @@ namespace SleepyScientist
                 }
             }
 
+            Invention box = new JackInTheBox("JackInTheBox", screenWidth / 2, room.Floors[0].Y - _sleepy.Height, 50, 50);
+            box.Image = _jackintheboxTexture;
+            room.Floors[0].Inventions.Add(box);
+
+            _sleepy.X = 100;
+            _sleepy.Y = room.Floors[0].Y - _sleepy.Height;
+            _sleepy.PrevY = _sleepy.Y;
             _sleepy.Room = room;
         }
 

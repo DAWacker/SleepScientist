@@ -111,6 +111,7 @@ namespace SleepyScientist
         public override void Update() 
         {
 
+            /*
             // Check if the scientist is on the ground
             foreach (Floor floor in this.Floors)
             {
@@ -254,6 +255,7 @@ namespace SleepyScientist
                 default:
                     break;
             }
+            */
             base.Update();
         }
 
