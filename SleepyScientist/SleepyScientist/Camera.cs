@@ -51,6 +51,12 @@ namespace SleepyScientist
                 _zoomFactor = zoomFactor;
             else
                 _zoomFactor = GameConstants.MINIMUM_ZOOM;
+
+            _cameraView.Width = (int)(GameConstants.SCREEN_WIDTH / _zoomFactor);
+            _cameraView.Height = (int)(GameConstants.SCREEN_HEIGHT / _zoomFactor);
+            _cameraView.X = 0;
+            _cameraView.Y = 0;
+            FixOffset();
         }
 
         /// <summary>
@@ -62,6 +68,7 @@ namespace SleepyScientist
             _zoomFactor += zoomFactorMod;
             if (_zoomFactor < GameConstants.MINIMUM_ZOOM)
                 _zoomFactor = GameConstants.MINIMUM_ZOOM;
+            FixOffset();
         }
 
         /// <summary>
@@ -71,11 +78,28 @@ namespace SleepyScientist
         /// <param name="y">Y coordinate.</param>
         public void ZoomToLocation(int x, int y)
         {
-            _zoomFactor = GameConstants.ZOOM_LEVEL_1;
-            _cameraView.Width = (int)(GameConstants.SCREEN_WIDTH / _zoomFactor);
-            _cameraView.Height = (int)(GameConstants.SCREEN_HEIGHT / _zoomFactor);
+            Zoom(GameConstants.ZOOM_INVENTION_VIEW);
             _cameraView.X = (int)(x - _cameraView.Width / 2);
             _cameraView.Y = (int)(y - _cameraView.Height / 2);
+            FixOffset();
+        }
+
+        /// <summary>
+        /// Called after camera is zoomed to fix any view clipping.
+        /// </summary>
+        private void FixOffset()
+        {
+            // Fix x if needed.
+            if (_cameraView.X < 0)
+                _cameraView.X = 0;
+            else if (_cameraView.X + _cameraView.Width > GameConstants.SCREEN_WIDTH)
+                _cameraView.X = GameConstants.SCREEN_WIDTH - _cameraView.Width;
+
+            // Fix y if needed.
+            if (_cameraView.Y < 0)
+                _cameraView.Y = 0;
+            else if (_cameraView.Y + _cameraView.Height > GameConstants.SCREEN_HEIGHT)
+                _cameraView.Y = GameConstants.SCREEN_HEIGHT - _cameraView.Height;
         }
 
         /// <summary>
