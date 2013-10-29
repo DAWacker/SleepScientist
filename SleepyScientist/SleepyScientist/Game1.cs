@@ -27,12 +27,17 @@ namespace SleepyScientist
         private int screenWidth;
         private int screenHeight;
 
+        // Scroll wheel state
+        private int _curScrollWheel;
+        private int _deltaScrollWheel;
+
         // GameObjects
         private Scientist _sleepy;
         private List<Floor> _floors;
         private List<Ladder> _ladders;
         private List<Stairs> _stairs;
         private List<Invention> _inventions;
+        private List<GameObject> _allGameObjects;
 
         // Textures
         private Texture2D _scientistTexture;
@@ -46,6 +51,15 @@ namespace SleepyScientist
         // Mouse Input
         private MouseState _prevMouseState;
         private MouseState _curMouseState;
+
+        // Animations
+        private Animation _testAnimation;
+        private Animation _testAnimation2;
+
+        // Debug Messages
+
+        // Camera
+        private Camera _camera;
 
         #endregion
 
@@ -75,12 +89,21 @@ namespace SleepyScientist
             screenWidth = GameConstants.SCREEN_WIDTH;
             screenHeight = GameConstants.SCREEN_HEIGHT;
 
+            // Initialize scroll wheel position.
+            _curScrollWheel = Mouse.GetState().ScrollWheelValue;
+
             _sleepy = new Scientist("Sleepy", 0, 0, 50, 50);
             // Initialize test "Level" objects.
             _floors = new List<Floor>();
             _ladders = new List<Ladder>();
             _stairs = new List<Stairs>();
             _inventions = new List<Invention>();
+
+            // Initialize Camera.
+            _camera = new Camera();
+
+            // Initialize what the Camera will be drawing.
+            _allGameObjects = new List<GameObject>();
 
             base.Initialize();
         }
@@ -94,8 +117,13 @@ namespace SleepyScientist
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            // Load the font for the Messages.
+            // Load the font for the Messages and give it to the MessageLayer.
             _spriteFont = Content.Load<SpriteFont>("Font/defaultFont");
+            MessageLayer.Font = _spriteFont;
+
+            // Load animation sets.
+            AnimationLoader.Load("test.xml", Content);
+            AnimationLoader.Load("ScientistAnimationSet.xml", Content);
 
             // Load in the scientist placeholder
             _scientistTexture = this.Content.Load<Texture2D>("Image/scientist");
@@ -155,6 +183,30 @@ namespace SleepyScientist
             _sleepy.Stairs = _stairs;
             _sleepy.Floors = _floors;
             _sleepy.Inventions = _inventions;
+
+            // Setup test animations.
+            _testAnimation = AnimationLoader.Sets["Test"].Animations["Test1"];
+            _testAnimation2 = AnimationLoader.Sets["Test"].Animations["Test2"];
+            //_sleepy.Animations = AnimationLoader.GetSetCopy("Scientist");
+            //_sleepy.Animations.ChangeAnimation("Walk");
+            //_sleepy.Animations.CurAnimation.Pause();
+            /*_testAnimation = new Animation("Test");
+            _testAnimation.TimePerFrame = .25F;    // Second/Frame
+            _testAnimation.Images = new List<Texture2D>() {
+                _floorTexture,
+                _ladderTexture,
+                _rocketSkateboardTexture,
+                _scientistTexture
+            };*/
+
+            // Store all the GameObjects.
+            // This should be inside of the Level Class when we get to it.
+            _allGameObjects.AddRange(_floors);
+            _allGameObjects.AddRange(_ladders);
+            _allGameObjects.AddRange(_stairs);
+            _allGameObjects.AddRange(_inventions);
+            _allGameObjects.Add(_sleepy);
+
         }
 
         /// <summary>
@@ -172,8 +224,36 @@ namespace SleepyScientist
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
+            // Handle input.
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
+
+            if (Keyboard.GetState().IsKeyDown(Keys.OemPlus))
+                _camera.ModZoom(GameConstants.ZOOM_STEP);
+
+            if (Keyboard.GetState().IsKeyDown(Keys.OemMinus))
+                _camera.ModZoom(-GameConstants.ZOOM_STEP);
+
+            if (Keyboard.GetState().IsKeyDown(Keys.NumPad0))
+                _camera.Zoom(1);
+
+
+            // Update mouse
+            _deltaScrollWheel = Mouse.GetState().ScrollWheelValue - _curScrollWheel;
+
+            if (_deltaScrollWheel != 0)
+            {
+                _curScrollWheel = Mouse.GetState().ScrollWheelValue;
+                if (_deltaScrollWheel > 0)
+                    _camera.ZoomToLocation(Mouse.GetState().X, Mouse.GetState().Y);
+            }
+
+            // Update global Time class.
+            Time.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
+
+            // Update test animations.
+            _testAnimation.Update();
+            _testAnimation2.Update();
 
             _prevMouseState = _curMouseState;
             _curMouseState = Mouse.GetState();
@@ -219,6 +299,11 @@ namespace SleepyScientist
 
             spriteBatch.Begin();
 
+            // Draw the test animations.
+            //spriteBatch.Draw(_testAnimation.CurrentImage(), new Vector2( screenWidth / 2, screenHeight / 2 ), Color.White);
+            //spriteBatch.Draw(_testAnimation2.CurrentImage(), new Vector2(screenWidth / 2 + 100, screenHeight / 2), Color.White);
+
+            /*
             // Draw the level.
             foreach (Floor tile in _floors) { tile.Draw(spriteBatch); }
             foreach (Ladder piece in _ladders) { piece.Draw(spriteBatch); }
@@ -229,28 +314,10 @@ namespace SleepyScientist
             _sleepy.Draw(spriteBatch);
 
             // Draw the messages.
-            foreach (Message message in MessageLayer.Messages)
-            {
-                Vector2 dimensions = _spriteFont.MeasureString(message.Text);
-                if (dimensions.X + message.X > screenWidth)
-                {
-                    message.X = screenWidth - (int)dimensions.X;
-                }
-                else if (message.X < 0)
-                {
-                    message.X = 0;
-                }
-                if (dimensions.Y + message.Y > screenHeight)
-                {
-                    message.Y = screenHeight - (int)dimensions.Y;
-                }
-                else if (message.Y < 0)
-                {
-                    message.Y = 0;
-                }
+            MessageLayer.Draw(spriteBatch);
+            */
 
-                spriteBatch.DrawString(_spriteFont, message.Text, new Vector2(message.X, message.Y), Color.White);
-            }
+            _camera.DrawGameObjects(spriteBatch, _allGameObjects);
 
             spriteBatch.End();
 

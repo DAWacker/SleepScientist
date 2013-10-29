@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<AnimationSet Version="0.1">
+  <Name>Test</Name>
+  <Animations>
+    <Animation>
+      <Name>Test1</Name>
+      <Fps>12</Fps>
+      <Frames>
+        <Frame>Image/ichi1</Frame>
+        <Frame>Image/ichi2</Frame>
+        <Frame>Image/ichi3</Frame>
+        <Frame>Image/ichi4</Frame>
+      </Frames>
+    </Animation>
+    <Animation>
+      <Name>Test2</Name>
+      <Fps>3</Fps>
+      <Frames>
+        <Frame>Image/walk1</Frame>
+        <Frame>Image/walk2</Frame>
+        <Frame>Image/walk3</Frame>
+      </Frames>
+    </Animation>
+  </Animations>
+</AnimationSet>

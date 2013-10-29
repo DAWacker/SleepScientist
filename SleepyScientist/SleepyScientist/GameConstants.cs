@@ -54,6 +54,12 @@ namespace SleepyScientist
         public static int NUMBER_OF_FLOORS = 4;
         public static int DISTANCE_BETWEEN_FLOORS = SCREEN_HEIGHT / NUMBER_OF_FLOORS;
 
+        // Camera constants.
+        public static float MINIMUM_ZOOM = 1F;
+        public static float ZOOM_STEP = 0.1F;
+        public static float ZOOM_LEVEL_0 = 1F;
+        public static float ZOOM_LEVEL_1 = 2F;
+
         #endregion
     }
 }

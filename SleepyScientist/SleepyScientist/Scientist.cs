@@ -75,18 +75,16 @@ namespace SleepyScientist
             _curState = ScientistState.Walking;
             _prevState = ScientistState.Walking;
             _currentTile = null;
+
+            // Get a copy of the Scientist Animation
+            Animations = AnimationLoader.GetSetCopy("Scientist");
+            Animations.ChangeAnimation("Walk");
         }
 
         #endregion
 
         #region Methods
-
-        /// <summary>
-        /// Draw the scientist
-        /// </summary>
-        /// <param name="batch">The sprite batch you want to draw on</param>
-        public override void Draw(SpriteBatch batch) { base.Draw(batch); }
-
+        
         /// <summary>
         /// Update the scientist
         /// </summary>
