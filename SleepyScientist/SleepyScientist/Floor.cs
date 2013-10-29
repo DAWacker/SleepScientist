@@ -16,20 +16,46 @@ namespace SleepyScientist
 
         #region Attributes
 
+        // The inventions on the floor
         public List<Invention> _inventions;
+
+        // The ladders on the floor
+        public List<Ladder> _ladders;
+
+        // The stairs on the floor
+        public List<Stairs> _stairs;
 
         #endregion
 
         #region Properties
 
+        // Gets or sets the inventions on the floor
         public List<Invention> Inventions { get { return _inventions; } set { _inventions = value; } }
+
+        // Gets or sets the ladders on the floor
+        public List<Ladder> Ladders { get { return _ladders; } set { _ladders = value; } }
+
+        // Gets or sets the stairs on the floor
+        public List<Stairs> Stairs { get { return _stairs; } set { _stairs = value; } }
 
         #endregion
 
         #region Constructor
 
+        /// <summary>
+        /// Constructor for a Floor
+        /// </summary>
+        /// <param name="x">The x coordinate of the floor</param>
+        /// <param name="y">The y coordinate of the floor</param>
+        /// <param name="width">The width of the floor</param>
+        /// <param name="height">The height of the floor</param>
         public Floor(int x, int y, int width, int height)
-            : base(x, y, width, height) { _inventions = null; }
+            : base(x, y, width, height) 
+        {
+            _inventions = new List<Invention>();
+            _ladders = new List<Ladder>();
+            _stairs = new List<Stairs>();
+        }
 
         #endregion
 
@@ -70,6 +96,10 @@ namespace SleepyScientist
                 }
                 drawDest.Height = Image.Height;
             }
+
+            foreach (Ladder ladder in this.Ladders) { ladder.Draw(batch); }
+            foreach (Stairs stair in this.Stairs) { stair.Draw(batch); }
+            foreach (Invention invention in this.Inventions) { invention.Draw(batch); }
         }
         #endregion
     }

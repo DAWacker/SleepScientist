@@ -21,11 +21,19 @@ namespace SleepyScientist
         private ScientistState _curState;
         private ScientistState _prevState;
 
-        private List<Ladder> _ladders;
-        private List<Stairs> _stairs;
-        private List<Floor> _floors;
-        private List<Invention> _inventions;
+        // The room (level) the scientist is in
+        private Room _room;
+
+        // The current floor number the scientist is on
+        private int _curFloorNum;
+
+        // The current floor the scientist is on
+        private Floor _curFloor;
+
+        // The current tile the scientist is on
         private GameObject _currentTile;
+
+        // The previous invention the scientist used
         private Invention _prevInvention;
 
         #endregion
@@ -49,13 +57,25 @@ namespace SleepyScientist
 
         #region Properties
 
+        // Get or set the current state of the scientist
         public ScientistState CurrentState { get { return _curState; } set { _curState = value; } }
+
+        // Get or set the previous state of the scientst
         public ScientistState PreviousState { get { return _prevState; } set { _prevState = value; } }
-        public List<Ladder> Ladders { get { return _ladders; } set { _ladders = value; } }
-        public List<Stairs> Stairs { get { return _stairs; } set { _stairs = value; } }
-        public List<Floor> Floors { get { return _floors; } set { _floors = value; } }
-        public List<Invention> Inventions { get { return _inventions; } set { _inventions = value; } }
+        
+        // Get or set the room the scientist is in
+        public Room Room { get { return _room; } set { _room = value; } }
+
+        // Get or set the floor number the scientist is on
+        public int FloorNumber { get { return _curFloorNum; } set { _curFloorNum = value; } }
+
+        // Get or set the current floor the scientist is on
+        public Floor CurrentFloor { get { return _curFloor; } set { _curFloor = value; } }
+        
+        // Get or set the current tile the scientist is on
         public GameObject CurrentTile { get { return _currentTile; } set { _currentTile = value; } }
+        
+        // Get or set the previous invention the scientist used
         public Invention PreviousInvention { get { return _prevInvention; } set { _prevInvention = value; } }
 
         #endregion

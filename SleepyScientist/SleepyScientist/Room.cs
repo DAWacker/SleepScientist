@@ -15,37 +15,46 @@ namespace SleepyScientist
     {
         #region Attributes
 
-        public int _numFloors;
-        public List<Ladder> _ladders;
-        public List<Stairs> _stairs;
-        public List<Floor> _floors;
+        private int _numFloors;
+        private int _startFloor;
+        private List<Floor> _floors;
 
         #endregion
 
         #region Properties
-
+        
+        // Get or set the number of floors
         public int NumberFloors { get { return _numFloors; } set { _numFloors = value; } }
-        public List<Ladder> Ladders { get { return _ladders; } set { _ladders = value; } }
-        public List<Stairs> Stairs { get { return _stairs; } set { _stairs = value; } }
+
+        // Get or set the starting floor of the room
+        public int StartFloor { get { return _startFloor; } set { _startFloor = value; } }
+
+        // Get or set the floors that are in the room
         public List<Floor> Floors { get { return _floors; } set { _floors = value; } }
 
         #endregion
 
         #region Constructor
 
-        public Room(int numFloors, List<Ladder> ladders, List<Stairs> stairs, List<Floor> floors)
+        /// <summary>
+        /// Constructor for a Room
+        /// </summary>
+        /// <param name="numFloors">The number of floors in the room</param>
+        /// <param name="ladders">The ladders in the room</param>
+        /// <param name="stairs">The stairs in the room</param>
+        /// <param name="floors">The floors in the room</param>
+        public Room(int numFloors, int startFloor)
         {
             _numFloors = numFloors;
-            _ladders = ladders;
-            _stairs = stairs;
-            _floors = floors;
+            _startFloor = startFloor;
+            _floors = new List<Floor>();
         }
 
         #endregion
 
         #region Methods
 
-
+        public void Draw(SpriteBatch batch) { foreach (Floor floor in this.Floors) { floor.Draw(batch); } }
 
         #endregion
     }

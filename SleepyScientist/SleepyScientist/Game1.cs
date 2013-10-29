@@ -140,7 +140,7 @@ namespace SleepyScientist
 
             // Set up the test "Level".
             // SetupLevel(4, true);
-            SetupLevel(GameConstants.NUMBER_OF_FLOORS, true);
+            SetupLevel(GameConstants.NUMBER_OF_FLOORS, 1, true);
 
             // Set up inventions.
             /*
@@ -174,10 +174,6 @@ namespace SleepyScientist
             _sleepy.X = 100;
             _sleepy.Y = _floors[0].Y - _sleepy.Height;
             _sleepy.PrevY = _sleepy.Y;
-            _sleepy.Ladders = _ladders;
-            _sleepy.Stairs = _stairs;
-            _sleepy.Floors = _floors;
-            _sleepy.Inventions = _inventions;
 
             // Setup test animations.
             //_sleepy.Animations = AnimationLoader.GetSetCopy("Scientist");
@@ -287,22 +283,15 @@ namespace SleepyScientist
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             spriteBatch.Begin();
-
-            /*
+ 
             // Draw the level.
-            foreach (Floor tile in _floors) { tile.Draw(spriteBatch); }
-            foreach (Ladder piece in _ladders) { piece.Draw(spriteBatch); }
-            foreach (Stairs piece in _stairs) { piece.Draw(spriteBatch); }
-            foreach (Invention invention in _inventions) { invention.Draw(spriteBatch); }
+            _sleepy.Room.Draw(spriteBatch);
 
             // Draw the scientist.
             _sleepy.Draw(spriteBatch);
 
             // Draw the messages.
             MessageLayer.Draw(spriteBatch);
-            */
-
-            _camera.DrawGameObjects(spriteBatch, _allGameObjects);
 
             spriteBatch.End();
 
@@ -314,9 +303,10 @@ namespace SleepyScientist
         /// </summary>
         /// <param name="numFloors">The number of floors to create for the test environment.</param>
         /// <param name="createLadders">Should Ladders be added to the test environment?</param>
-        private void SetupLevel(int numFloors, bool createLadders = false, bool createStairs = false)
+        private void SetupLevel(int numFloors, int startFloor, bool createLadders = false, bool createStairs = false)
         {
             Random rand = new Random();
+            Room room = new Room(numFloors, startFloor-1);
             int x = 0;
             int y;
             int width = screenWidth;
@@ -326,36 +316,31 @@ namespace SleepyScientist
             for (int i = 0; i < numFloors; i++)
             {
                 y = screenHeight - distanceBetweenFloors * i - GameConstants.FLOOR_HEIGHT;
-                Floor toAdd = new Floor(x, y, width, GameConstants.FLOOR_HEIGHT);
-                toAdd.Image = _floorTexture;
-                _floors.Add(toAdd);
-            }
+                Floor floor = new Floor(x, y, width, GameConstants.FLOOR_HEIGHT);
+                floor.Image = _floorTexture;
+                room.Floors.Add(floor);
 
-            // Add Ladders.
-            if (createLadders)
-            {
-                for (int i = 1; i < numFloors; i++)
+                // Add ladder
+                if (createLadders)
                 {
                     x = rand.Next(screenWidth);
                     y = screenHeight - distanceBetweenFloors * i - GameConstants.FLOOR_HEIGHT;
-                    Ladder toAdd = new Ladder(x, y, GameConstants.LADDER_WIDTH, distanceBetweenFloors);
-                    toAdd.Image = _ladderTexture;
-                    _ladders.Add(toAdd);
+                    Ladder ladderToAdd = new Ladder(x, y, GameConstants.LADDER_WIDTH, distanceBetweenFloors);
+                    ladderToAdd.Image = _ladderTexture;
+                    floor.Ladders.Add(ladderToAdd);
                 }
-            }
 
-            // Add Stairs.
-            if (createStairs)
-            {
-                for (int i = 1; i < numFloors; i++)
+                if (createStairs && i != 0)
                 {
                     x = rand.Next(screenWidth);
                     y = screenHeight - distanceBetweenFloors * i - GameConstants.FLOOR_HEIGHT;
-                    Stairs toAdd = new Stairs(x, y, GameConstants.LADDER_WIDTH, distanceBetweenFloors);
-                    toAdd.Image = _stairsTexture;
-                    _stairs.Add(toAdd);
+                    Stairs stair = new Stairs(x, y, GameConstants.LADDER_WIDTH, distanceBetweenFloors);
+                    stair.Image = _stairsTexture;
+                    floor.Stairs.Add(stair);
                 }
             }
+
+            _sleepy.Room = room;
         }
 
         /// <summary>
