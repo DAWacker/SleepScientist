@@ -52,6 +52,10 @@ namespace SleepyScientist
         private MouseState _prevMouseState;
         private MouseState _curMouseState;
 
+        // Animations
+        private Animation _testAnimation;
+        private Animation _testAnimation2;
+
         // Debug Messages
 
         // Camera
@@ -88,6 +92,7 @@ namespace SleepyScientist
             // Initialize scroll wheel position.
             _curScrollWheel = Mouse.GetState().ScrollWheelValue;
 
+            _sleepy = new Scientist("Sleepy", 0, 0, 50, 50);
             // Initialize test "Level" objects.
             _floors = new List<Floor>();
             _ladders = new List<Ladder>();
@@ -117,6 +122,7 @@ namespace SleepyScientist
             MessageLayer.Font = _spriteFont;
 
             // Load animation sets.
+            AnimationLoader.Load("test.xml", Content);
             AnimationLoader.Load("ScientistAnimationSet.xml", Content);
 
             // Load in the scientist placeholder
@@ -130,8 +136,7 @@ namespace SleepyScientist
             _eggBeaterTexture = this.Content.Load<Texture2D>("Image/eggBeater");
             _jackintheboxTexture = this.Content.Load<Texture2D>("Image/jackInTheBox");
 
-            // Set up the scientist and his image
-            _sleepy = new Scientist("Sleepy", 0, 0, 50, 50);
+            // Set the scientist image to the AI
             _sleepy.Image = _scientistTexture;
             
             // Add some test messages.
@@ -180,6 +185,8 @@ namespace SleepyScientist
             _sleepy.Inventions = _inventions;
 
             // Setup test animations.
+            _testAnimation = AnimationLoader.Sets["Test"].Animations["Test1"];
+            _testAnimation2 = AnimationLoader.Sets["Test"].Animations["Test2"];
             //_sleepy.Animations = AnimationLoader.GetSetCopy("Scientist");
             //_sleepy.Animations.ChangeAnimation("Walk");
             //_sleepy.Animations.CurAnimation.Pause();
@@ -243,6 +250,10 @@ namespace SleepyScientist
 
             // Update global Time class.
             Time.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
+
+            // Update test animations.
+            _testAnimation.Update();
+            _testAnimation2.Update();
 
             _prevMouseState = _curMouseState;
             _curMouseState = Mouse.GetState();
