@@ -11,13 +11,16 @@ using Microsoft.Xna.Framework.GamerServices;
 
 namespace SleepyScientist
 {
+    enum STATE { MAIN_MENU, LEVEL_SELECT, OPTIONS, PLAY, PAUSE }
+
     /// <summary>
     /// This is the main type for your game
     /// </summary>
     public class Game1 : Game
     {
-
         #region Attributes
+
+        STATE state = STATE.MAIN_MENU;
 
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
@@ -38,6 +41,9 @@ namespace SleepyScientist
         private List<Stairs> _stairs;
         private List<Invention> _inventions;
         private List<GameObject> _allGameObjects;
+        private List<Button> _mainMenuButtons;
+        private List<Button> _optionsMenuButtons;
+        private List<Button> _levelSelectMenuButtons;
 
         // Textures
         private Texture2D _scientistTexture;
@@ -47,6 +53,14 @@ namespace SleepyScientist
         private Texture2D _rocketSkateboardTexture;
         private Texture2D _eggBeaterTexture;
         private Texture2D _jackintheboxTexture;
+
+        private Texture2D _mainMenuButtonTexture;
+        private Texture2D _newGameButtonTexture;
+        private Texture2D _optionsButtonTexture;
+        private Texture2D _levelNumButtonTexture;
+        private Texture2D _levelSelectButtonTexture;
+        private Texture2D _yesButtonTexture;
+        private Texture2D _noButtonTexture;
 
         // Mouse Input
         private MouseState _prevMouseState;
@@ -93,6 +107,9 @@ namespace SleepyScientist
             _ladders = new List<Ladder>();
             _stairs = new List<Stairs>();
             _inventions = new List<Invention>();
+            _mainMenuButtons = new List<Button>();
+            _optionsMenuButtons = new List<Button>();
+            _levelSelectMenuButtons = new List<Button>();
 
             // Initialize Camera.
             _camera = new Camera();
@@ -129,6 +146,14 @@ namespace SleepyScientist
             _rocketSkateboardTexture = this.Content.Load<Texture2D>("Image/rocketSkateboard");
             _eggBeaterTexture = this.Content.Load<Texture2D>("Image/eggBeater");
             _jackintheboxTexture = this.Content.Load<Texture2D>("Image/jackInTheBox");
+
+            _mainMenuButtonTexture = this.Content.Load<Texture2D>("Image/button_MainMenu");
+            _newGameButtonTexture = this.Content.Load<Texture2D>("Image/button_NewGame");
+            _optionsButtonTexture = this.Content.Load<Texture2D>("Image/button_Options");
+            _levelNumButtonTexture = this.Content.Load<Texture2D>("Image/button_Level");
+            _levelSelectButtonTexture = this.Content.Load<Texture2D>("Image/button_LevelSelect");
+            _yesButtonTexture = this.Content.Load<Texture2D>("Image/button_Yes");
+            _noButtonTexture = this.Content.Load<Texture2D>("Image/button_No");
 
             // Create the scientist and set his image
             _sleepy = new Scientist("Sleepy", 0, 0, 50, 50);
@@ -200,6 +225,15 @@ namespace SleepyScientist
             _allGameObjects.AddRange(_inventions);
             _allGameObjects.Add(_sleepy);
 
+            // Set up Main Menu
+            _mainMenuButtons.Add(new Button((screenWidth / 2) - (_newGameButtonTexture.Width / 2), screenHeight / 2 - _newGameButtonTexture.Height, _newGameButtonTexture.Width, _newGameButtonTexture.Height, _newGameButtonTexture));
+            _mainMenuButtons.Add(new Button((screenWidth / 2) + (_levelNumButtonTexture.Width/2), screenHeight / 2 - _levelSelectButtonTexture.Height, _levelSelectButtonTexture.Width, _levelSelectButtonTexture.Height, _levelSelectButtonTexture));
+            _mainMenuButtons.Add(new Button((screenWidth / 2), screenHeight / 2 + _optionsButtonTexture.Height, _optionsButtonTexture.Width, _optionsButtonTexture.Height, _optionsButtonTexture));
+
+            // Set up Options Menu
+            _optionsMenuButtons.Add(new Button((screenWidth / 2), screenHeight - _optionsButtonTexture.Height, _optionsButtonTexture.Width, _optionsButtonTexture.Height, _optionsButtonTexture));
+
+            // Set up Level Select Menu
         }
 
         /// <summary>
@@ -221,59 +255,66 @@ namespace SleepyScientist
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            if (Keyboard.GetState().IsKeyDown(Keys.OemPlus))
-                _camera.ModZoom(GameConstants.ZOOM_STEP);
-
-            if (Keyboard.GetState().IsKeyDown(Keys.OemMinus))
-                _camera.ModZoom(-GameConstants.ZOOM_STEP);
-
-            if (Keyboard.GetState().IsKeyDown(Keys.NumPad0))
-                _camera.Zoom(1);
-
-
-            // Update mouse
-            _deltaScrollWheel = Mouse.GetState().ScrollWheelValue - _curScrollWheel;
-
-            if (_deltaScrollWheel != 0)
+            if (state == STATE.PLAY)
             {
-                _curScrollWheel = Mouse.GetState().ScrollWheelValue;
-                if (_deltaScrollWheel > 0)
-                    _camera.ZoomToLocation(Mouse.GetState().X, Mouse.GetState().Y);
-            }
+                if (Keyboard.GetState().IsKeyDown(Keys.OemPlus))
+                    _camera.ModZoom(GameConstants.ZOOM_STEP);
 
-            // Update global Time class.
-            Time.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
+                if (Keyboard.GetState().IsKeyDown(Keys.OemMinus))
+                    _camera.ModZoom(-GameConstants.ZOOM_STEP);
 
-            _prevMouseState = _curMouseState;
-            _curMouseState = Mouse.GetState();
-            foreach (Invention invention in _inventions) 
-            {
-                invention.Update();
-                if (_prevMouseState.LeftButton == ButtonState.Pressed && 
-                    _curMouseState.LeftButton == ButtonState.Released &&
-                    _curMouseState.X > invention.X && _curMouseState.X < invention.X + invention.Width &&
-                    _curMouseState.Y > invention.Y && _curMouseState.Y < invention.Y + invention.Height)
+                if (Keyboard.GetState().IsKeyDown(Keys.NumPad0))
+                    _camera.Zoom(1);
+
+
+                // Update mouse
+                _deltaScrollWheel = Mouse.GetState().ScrollWheelValue - _curScrollWheel;
+
+                if (_deltaScrollWheel != 0)
                 {
-                    invention.Clicked = true;
-                    GameConstants.MOVING_INVENTION = true;
-                    break;
+                    _curScrollWheel = Mouse.GetState().ScrollWheelValue;
+                    if (_deltaScrollWheel > 0)
+                        _camera.ZoomToLocation(Mouse.GetState().X, Mouse.GetState().Y);
                 }
 
-                if (invention.Clicked && _prevMouseState.LeftButton == ButtonState.Pressed &&
-                    _curMouseState.LeftButton == ButtonState.Released)
+                // Update global Time class.
+                Time.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
+
+                _prevMouseState = _curMouseState;
+                _curMouseState = Mouse.GetState();
+                foreach (Invention invention in _inventions)
                 {
-                    invention.HasTarget = true;
-                    invention.Clicked = false;
-                    invention.TargetX = _curMouseState.X;
-                    invention.TargetY = _curMouseState.Y;
-                    invention.VeloX = GameConstants.DEFAULT_INVENTION_X_VELO;
-                    Console.WriteLine(invention.TargetX + " : " + (invention.Y + invention.Height - invention.TargetY));
-                    invention.DeterminePath();
-                    GameConstants.MOVING_INVENTION = false;
+                    invention.Update();
+                    if (_prevMouseState.LeftButton == ButtonState.Pressed &&
+                        _curMouseState.LeftButton == ButtonState.Released &&
+                        _curMouseState.X > invention.X && _curMouseState.X < invention.X + invention.Width &&
+                        _curMouseState.Y > invention.Y && _curMouseState.Y < invention.Y + invention.Height)
+                    {
+                        invention.Clicked = true;
+                        GameConstants.MOVING_INVENTION = true;
+                        break;
+                    }
+
+                    if (invention.Clicked && _prevMouseState.LeftButton == ButtonState.Pressed &&
+                        _curMouseState.LeftButton == ButtonState.Released)
+                    {
+                        invention.HasTarget = true;
+                        invention.Clicked = false;
+                        invention.TargetX = _curMouseState.X;
+                        invention.TargetY = _curMouseState.Y;
+                        invention.VeloX = GameConstants.DEFAULT_INVENTION_X_VELO;
+                        Console.WriteLine(invention.TargetX + " : " + (invention.Y + invention.Height - invention.TargetY));
+                        invention.DeterminePath();
+                        GameConstants.MOVING_INVENTION = false;
+                    }
                 }
+                _sleepy.Update();
+                MessageLayer.Update(gameTime.ElapsedGameTime.TotalSeconds);
             }
-            _sleepy.Update();
-			MessageLayer.Update(gameTime.ElapsedGameTime.TotalSeconds);
+            else if (state == STATE.MAIN_MENU)
+            {
+
+            }
 
             base.Update(gameTime);
         }
@@ -301,8 +342,13 @@ namespace SleepyScientist
             // Draw the messages.
             MessageLayer.Draw(spriteBatch);
             */
-
-            _camera.DrawGameObjects(spriteBatch, _allGameObjects);
+            if(state == STATE.PLAY)
+                _camera.DrawGameObjects(spriteBatch, _allGameObjects);
+            else if (state == STATE.MAIN_MENU)
+            {
+                foreach (Button b in _mainMenuButtons)
+                    b.Draw(spriteBatch);
+            }
 
             spriteBatch.End();
 
