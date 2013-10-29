@@ -13,10 +13,23 @@ namespace SleepyScientist
 {
     class Floor : GameObject
     {
+
+        #region Attributes
+
+        public List<Invention> _inventions;
+
+        #endregion
+
+        #region Properties
+
+        public List<Invention> Inventions { get { return _inventions; } set { _inventions = value; } }
+
+        #endregion
+
         #region Constructor
-        
+
         public Floor(int x, int y, int width, int height)
-            : base(x, y, width, height) { }
+            : base(x, y, width, height) { _inventions = null; }
 
         #endregion
 
