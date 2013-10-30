@@ -11,51 +11,12 @@ using Microsoft.Xna.Framework.GamerServices;
 
 namespace SleepyScientist
 {
-    class Ladder : GameObject
+    class Ladder : TileableGameObject
     {
         #region Constructor
 
         public Ladder(int x, int y, int width, int height)
             : base(x, y, width, height) { }
-
-        #endregion
-
-        #region Methods
-
-        public override void Draw(SpriteBatch batch, Rectangle? pos = null)
-        {
-            // Only draw this much of the _image. Prevents overdraw.
-            Rectangle drawClip = new Rectangle(0, 0, Image.Width, Image.Height);
-            // Where to draw the current tile. Include offset.
-            Rectangle drawDest = new Rectangle(X, Y, Image.Width, Image.Height);
-
-            for (int xOff = 0; xOff < Width; xOff += Image.Width)
-            {
-                drawDest.X = X + xOff;
-                if (xOff + Image.Width > Width)
-                {
-                    // Prevent overdraw.
-                    drawClip.Width = Width - xOff;
-                    drawDest.Width = drawClip.Width;
-                }
-
-                for (int yOff = 0; yOff < Height; yOff += Image.Height)
-                {
-                    drawDest.Y = Y + yOff;
-                    if (yOff + Image.Height > Height)
-                    {
-                        // Prevent overdraw.
-                        drawClip.Height = Height - yOff;
-                        drawDest.Height = drawClip.Height;
-                    }
-                    if (pos != null)
-                        batch.Draw(this.Image, pos.Value, Color.White);
-                    else
-                        batch.Draw(Image, drawDest, drawClip, Color.White);
-                }
-                drawDest.Height = Image.Height;
-            }
-        }
 
         #endregion
     }
