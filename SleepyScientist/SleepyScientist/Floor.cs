@@ -26,37 +26,50 @@ namespace SleepyScientist
         /// </summary>
         public override void Draw(SpriteBatch batch, Rectangle? pos = null)
         {
-            // Only draw this much of the _image. Prevents overdraw.
-            Rectangle drawClip = new Rectangle(0, 0, Image.Width, Image.Height);
-            // Where to draw the current tile. Include offset.
-            Rectangle drawDest = new Rectangle(X, Y, Image.Width, Image.Height);
+            float zoomFactor;           // Calculated zoomFactor based value of pos.
+            Rectangle prevRectPosition; // Contains the previous position of the game object.
+            Rectangle drawClip;         // Only draw this much of the _image. Prevents overdraw.
+            Rectangle drawDest;         // Where to draw the current tile. Include offset.
 
-            for (int xOff = 0; xOff < Width; xOff += Image.Width)
+            prevRectPosition = this.RectPosition;
+            if (pos != null)
+            {
+                zoomFactor = (float)pos.Value.Width / this.RectPosition.Width;
+                this.RectPosition = pos.Value;    // Temporarily overwrite the position of the GameObject.
+            }
+            else
+                zoomFactor = 1.0F;
+
+            drawClip = new Rectangle(0, 0, Image.Width, Image.Height);
+            drawDest = new Rectangle(X, Y, (int)(zoomFactor * Image.Width), (int)(zoomFactor * Image.Height));
+
+            // Draw width of object.
+            for (int xOff = 0; xOff < Width; xOff += drawDest.Width)
             {
                 drawDest.X = X + xOff;
-                if (xOff + Image.Width > Width)
+                if (xOff + drawDest.Width > Width)
                 {
                     // Prevent overdraw.
                     drawClip.Width = Width - xOff;
                     drawDest.Width = drawClip.Width;
                 }
 
-                for (int yOff = 0; yOff < Height; yOff += Image.Height)
+                // Draw height of object.
+                for (int yOff = 0; yOff < Height; yOff += drawDest.Height)
                 {
                     drawDest.Y = Y + yOff;
-                    if (yOff + Image.Height > Height)
+                    if (yOff + drawDest.Height > Height)
                     {
                         // Prevent overdraw.
                         drawClip.Height = Height - yOff;
                         drawDest.Height = drawClip.Height;
                     }
-                    if (pos != null)
-                        batch.Draw(this.Image, pos.Value, Color.White);
-                    else
-                        batch.Draw(Image, drawDest, drawClip, Color.White);
+                    batch.Draw(Image, drawDest, drawClip, Color.White);
                 }
-                drawDest.Height = Image.Height;
+                drawDest.Height = (int)(zoomFactor * Image.Height);
             }
+
+            this.RectPosition = prevRectPosition;
         }
         #endregion
     }
