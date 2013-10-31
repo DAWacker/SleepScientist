@@ -195,6 +195,7 @@ namespace SleepyScientist
             _allGameObjects.AddRange(_stairs);
             _allGameObjects.AddRange(_inventions);
             _allGameObjects.Add(_sleepy);
+            _camera.FollowTarget = _sleepy;
 
         }
 
@@ -235,10 +236,20 @@ namespace SleepyScientist
                 _curScrollWheel = Mouse.GetState().ScrollWheelValue;
                 // If scroll up.
                 if (_deltaScrollWheel > 0)
+                {
+                    // Zoom in.
                     _camera.ZoomToLocation(Mouse.GetState().X, Mouse.GetState().Y);
+                    // Camera resumes following target if player is not moving an invention.
+                    if ( GameConstants.MOVING_INVENTION == false )
+                        _camera.ShouldFollowTarget = true;
+                }
                 // If scroll down.
                 else
-                    _camera.Zoom( GameConstants.ZOOM_ROOM_VIEW );
+                {
+                    // Zoom out and camera stops following its target.
+                    _camera.Zoom(GameConstants.ZOOM_ROOM_VIEW);
+                    _camera.ShouldFollowTarget = false;
+                }
             }
 
             // Update global Time class.
@@ -256,6 +267,9 @@ namespace SleepyScientist
                 {
                     invention.Clicked = true;
                     GameConstants.MOVING_INVENTION = true;
+
+                    _camera.ShouldFollowTarget = false;
+                    _camera.Zoom(GameConstants.ZOOM_ROOM_VIEW);
                     break;
                 }
 
@@ -270,10 +284,14 @@ namespace SleepyScientist
                     Console.WriteLine(invention.TargetX + " : " + (invention.Y + invention.Height - invention.TargetY));
                     invention.DeterminePath();
                     GameConstants.MOVING_INVENTION = false;
+
+                    _camera.ShouldFollowTarget = true;
+                    _camera.Zoom(GameConstants.ZOOM_INVENTION_VIEW);
                 }
             }
             _sleepy.Update();
 			MessageLayer.Update(gameTime.ElapsedGameTime.TotalSeconds);
+            _camera.Update();
 
             base.Update(gameTime);
         }
