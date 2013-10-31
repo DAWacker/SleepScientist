@@ -126,6 +126,9 @@ namespace SleepyScientist
                 this.CurrentState = ScientistState.Walking;
             }
 
+            // Check if the scientist hit a wall
+            foreach (Wall wall in this.CurrentFloor.Walls) { if (this.RectPosition.Intersects(wall.RectPosition)) { this.Reverse(); } }
+
             // Check if the scientist is using an invention.
             foreach (Invention invention in this.CurrentFloor.Inventions)
             {

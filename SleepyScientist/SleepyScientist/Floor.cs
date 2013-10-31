@@ -25,6 +25,9 @@ namespace SleepyScientist
         // The stairs on the floor
         public List<Stairs> _stairs;
 
+        // The walls on the floor
+        public List<Wall> _walls;
+
         #endregion
 
         #region Properties
@@ -37,6 +40,9 @@ namespace SleepyScientist
 
         // Gets or sets the stairs on the floor
         public List<Stairs> Stairs { get { return _stairs; } set { _stairs = value; } }
+
+        // Gets or sets the walls on the floor
+        public List<Wall> Walls { get { return _walls; } set { _walls = value; } }
 
         #endregion
 
@@ -52,9 +58,10 @@ namespace SleepyScientist
         public Floor(int x, int y, int width, int height)
             : base(x, y, width, height) 
         {
-            _inventions = new List<Invention>();
-            _ladders = new List<Ladder>();
-            _stairs = new List<Stairs>();
+            this.Inventions = new List<Invention>();
+            this.Ladders = new List<Ladder>();
+            this.Stairs = new List<Stairs>();
+            this.Walls = new List<Wall>();
         }
 
         #endregion
@@ -98,8 +105,13 @@ namespace SleepyScientist
                 drawDest.Height = Image.Height;
             }
 
+            // Draw the ladders on the floor
             foreach (Ladder ladder in this.Ladders) { ladder.Draw(batch); }
+            // Draw the walls on the floor
+            foreach (Wall wall in this.Walls) { wall.Draw(batch); }
+            // Draw the stairs on the floor
             foreach (Stairs stair in this.Stairs) { stair.Draw(batch); }
+            // Draw the inventions on the floor
             foreach (Invention invention in this.Inventions) { invention.Draw(batch); }
         }
         #endregion

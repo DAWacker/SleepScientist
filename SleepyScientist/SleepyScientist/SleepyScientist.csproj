@@ -58,6 +58,7 @@
     <Compile Include="Scientist.cs" />
     <Compile Include="Stairs.cs" />
     <Compile Include="Time.cs" />
+    <Compile Include="Wall.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="OpenTK">
