@@ -126,13 +126,10 @@ namespace SleepyScientist
         /// <param name="objects">The objects to draw.</param>
         public void DrawGameObjects(SpriteBatch spriteBatch, List<GameObject> objects)
         {
-            Rectangle drawPos = new Rectangle();
+            Rectangle drawPos;
             foreach (GameObject g in objects)
             {
-                drawPos.X = (int)(g.X * _zoomFactor - _cameraView.X);
-                drawPos.Y = (int)(g.Y * _zoomFactor - _cameraView.Y);
-                drawPos.Width = (int)(g.Width * _zoomFactor);
-                drawPos.Height = (int)(g.Height * _zoomFactor);
+                drawPos = ToLocal(g.RectPosition);
                 g.Draw(spriteBatch, drawPos);
             }
         }
@@ -145,6 +142,46 @@ namespace SleepyScientist
             if ( _followTarget != null && _shouldFollowTarget ) {
                 ZoomToLocation(_followTarget.X, _followTarget.Y);
             }
+        }
+
+        /// <summary>
+        /// Create a locally coordinated Rectangle from a globally coordinated one.
+        /// </summary>
+        /// <param name="globalRect">The globally coordinated Rectangle.</param>
+        /// <returns>A locally coordinated version of globalRect.</returns>
+        public Rectangle ToLocal(Rectangle globalRect)
+        {
+            Rectangle localRect = new Rectangle(
+                globalRect.X,
+                globalRect.Y,
+                globalRect.Width,
+                globalRect.Height
+            );
+
+            localRect.X = (int)(globalRect.X * _zoomFactor) - _cameraView.X;
+            localRect.Y = (int)(globalRect.Y * _zoomFactor) - _cameraView.Y;
+            localRect.Width = (int)(globalRect.Width * _zoomFactor);
+            localRect.Height = (int)(globalRect.Height * _zoomFactor);
+
+            return localRect;
+        }
+
+        /// <summary>
+        /// Create a globally coordinated Point from a locally coordinated one.
+        /// </summary>
+        /// <param name="localPoint">The locally coordinated Point.</param>
+        /// <returns>A globally coordinated version of localPoint.</returns>
+        public Point ToGlobal(Point localPoint)
+        {
+            Point globalPoint = new Point(
+                localPoint.X,
+                localPoint.Y
+            );
+
+            globalPoint.X = (int)(localPoint.X / _zoomFactor) + _cameraView.X;
+            globalPoint.Y = (int)(localPoint.Y / _zoomFactor) + _cameraView.Y;
+
+            return globalPoint;
         }
 
         #endregion
