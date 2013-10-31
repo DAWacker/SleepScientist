@@ -22,6 +22,15 @@ namespace SleepyScientist
         private Rectangle _cameraView;          // Where the camera is currently looking.
         private float _zoomFactor;              // The zoom level to view the level with.
                                                 // i.e. If value is 2 then level is shown at twice its size.
+        private GameObject _followTarget;       // The target, if any, the camera should follow.
+        private bool _shouldFollowTarget;       // Should the camera follow its target?
+        
+        #endregion
+
+        #region Properties
+
+        public GameObject FollowTarget { get { return _followTarget; } set { _followTarget = value; } }
+        public bool ShouldFollowTarget { get { return _shouldFollowTarget; } set { _shouldFollowTarget = value; } }
 
         #endregion
 
@@ -35,6 +44,8 @@ namespace SleepyScientist
         {
             _zoomFactor = initialZoom;
             _cameraView = new Rectangle(0, 0, GameConstants.SCREEN_WIDTH / initialZoom, GameConstants.SCREEN_HEIGHT / initialZoom);
+            _followTarget = null;
+            _shouldFollowTarget = true;
         }
 
         #endregion
@@ -123,6 +134,16 @@ namespace SleepyScientist
                 drawPos.Width = (int)(g.Width * _zoomFactor);
                 drawPos.Height = (int)(g.Height * _zoomFactor);
                 g.Draw(spriteBatch, drawPos);
+            }
+        }
+
+        /// <summary>
+        /// Update the camera position if necessary.
+        /// </summary>
+        public void Update()
+        {
+            if ( _followTarget != null && _shouldFollowTarget ) {
+                ZoomToLocation(_followTarget.X, _followTarget.Y);
             }
         }
 
