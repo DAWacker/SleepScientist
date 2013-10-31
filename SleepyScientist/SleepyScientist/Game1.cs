@@ -66,6 +66,10 @@ namespace SleepyScientist
         private MouseState _prevMouseState;
         private MouseState _curMouseState;
 
+        // Keyboard Input
+        private KeyboardState _prevKeyboardState;
+        private KeyboardState _curKeyboardState;
+
         // Debug Messages
 
         // Camera
@@ -269,6 +273,14 @@ namespace SleepyScientist
 
             _prevMouseState = _curMouseState;
             _curMouseState = Mouse.GetState();
+            _prevKeyboardState = _curKeyboardState;
+            _curKeyboardState = Keyboard.GetState();
+
+            if (state == STATE.PLAY || state == STATE.PAUSE)
+            {
+                if (_prevKeyboardState.IsKeyDown(Keys.P) && _curKeyboardState.IsKeyUp(Keys.P))
+                    state = (state == STATE.PLAY) ? STATE.PAUSE : STATE.PLAY;
+            }
 
             #region Play
             if (state == STATE.PLAY)
@@ -352,6 +364,7 @@ namespace SleepyScientist
                 }
             }
             #endregion
+            #region Options
             else if (state == STATE.OPTIONS)
             {
                 if (_prevMouseState.LeftButton == ButtonState.Pressed &&
@@ -362,6 +375,8 @@ namespace SleepyScientist
                     state = STATE.MAIN_MENU;
                 }
             }
+            #endregion
+            #region Level Select
             else if (state == STATE.LEVEL_SELECT)
             {
                 if (_prevMouseState.LeftButton == ButtonState.Pressed &&
@@ -372,6 +387,7 @@ namespace SleepyScientist
                     state = STATE.MAIN_MENU;
                 }
             }
+            #endregion
 
             base.Update(gameTime);
         }
@@ -399,7 +415,7 @@ namespace SleepyScientist
             // Draw the messages.
             MessageLayer.Draw(spriteBatch);
             */
-            if(state == STATE.PLAY)
+            if(state == STATE.PLAY || state == STATE.PAUSE)
                 _camera.DrawGameObjects(spriteBatch, _allGameObjects);
             else if (state == STATE.MAIN_MENU)
             {
