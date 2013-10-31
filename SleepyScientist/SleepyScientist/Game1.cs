@@ -294,7 +294,6 @@ namespace SleepyScientist
                 if (Keyboard.GetState().IsKeyDown(Keys.NumPad0))
                     _camera.Zoom(1);
 
-
                 // Update mouse
                 _deltaScrollWheel = Mouse.GetState().ScrollWheelValue - _curScrollWheel;
 
