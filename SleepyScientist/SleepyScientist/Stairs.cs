@@ -24,6 +24,7 @@ namespace SleepyScientist
 
         public override void Draw(SpriteBatch batch, Rectangle? pos = null)
         {
+            batch.Draw(this.Image, this.RectPosition, Color.Red);
             // Only draw this much of the _image. Prevents overdraw.
             Rectangle drawClip = new Rectangle(0, 0, Image.Width, Image.Height);
             // Where to draw the current tile. Include offset.

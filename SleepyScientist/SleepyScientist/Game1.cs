@@ -129,10 +129,6 @@ namespace SleepyScientist
             _rocketSkateboardTexture = this.Content.Load<Texture2D>("Image/skateboard");
             _eggBeaterTexture = this.Content.Load<Texture2D>("Image/beater");
             _jackintheboxTexture = this.Content.Load<Texture2D>("Image/jack");
-
-            // Create the scientist and set his image
-            _sleepy = new Scientist("Sleepy", 0, 0, 50, 50);
-            _sleepy.Image = _scientistTexture;
             
             // Add some test messages.
             MessageLayer.AddMessage(new Message("Test", 0, 0));
@@ -140,7 +136,7 @@ namespace SleepyScientist
 
             // Set up the test "Level".
             // SetupLevel(4, true);
-            SetupLevel(GameConstants.NUMBER_OF_FLOORS, 1, true);
+            SetupLevel(GameConstants.NUMBER_OF_FLOORS, 1, true, true);
 
             // Set up inventions.
             /*
@@ -293,7 +289,7 @@ namespace SleepyScientist
         {
             Random rand = new Random();
             Room room = new Room(numFloors, startFloor-1);
-            int x = 0;
+            int x;
             int y;
             int width = screenWidth;
             int distanceBetweenFloors = screenHeight / numFloors;
@@ -301,24 +297,25 @@ namespace SleepyScientist
             // Add Floors.
             for (int i = 0; i < numFloors; i++)
             {
+                x = 0;
                 y = screenHeight - distanceBetweenFloors * i - GameConstants.FLOOR_HEIGHT;
                 Floor floor = new Floor(x, y, width, GameConstants.FLOOR_HEIGHT);
                 floor.Image = _floorTexture;
                 room.Floors.Add(floor);
 
                 // Add ladder
-                if (createLadders)
+                if (createLadders && i != numFloors - 1)
                 {
-                    x = rand.Next(screenWidth);
-                    y = screenHeight - distanceBetweenFloors * i - GameConstants.FLOOR_HEIGHT;
-                    Ladder ladderToAdd = new Ladder(x, y, GameConstants.LADDER_WIDTH, distanceBetweenFloors);
+                    x = rand.Next(screenWidth - GameConstants.TILE_WIDTH);
+                    y = floor.Y - distanceBetweenFloors - GameConstants.TILE_HEIGHT;
+                    Ladder ladderToAdd = new Ladder(x, y, GameConstants.LADDER_WIDTH, distanceBetweenFloors + GameConstants.TILE_HEIGHT);
                     ladderToAdd.Image = _ladderTexture;
                     floor.Ladders.Add(ladderToAdd);
                 }
 
                 if (createStairs && i != 0)
                 {
-                    x = rand.Next(screenWidth);
+                    x = rand.Next(screenWidth - GameConstants.TILE_WIDTH);
                     y = screenHeight - distanceBetweenFloors * i - GameConstants.FLOOR_HEIGHT;
                     Stairs stair = new Stairs(x, y, GameConstants.LADDER_WIDTH, distanceBetweenFloors);
                     stair.Image = _stairsTexture;
@@ -326,14 +323,14 @@ namespace SleepyScientist
                 }
             }
 
-            Invention box = new JackInTheBox("JackInTheBox", screenWidth / 2, room.Floors[0].Y - _sleepy.Height, 50, 50);
+            Invention box = new JackInTheBox("JackInTheBox", screenWidth / 2, room.Floors[0].Y - GameConstants.TILE_HEIGHT, 50, 50, room);
             box.Image = _jackintheboxTexture;
             room.Floors[0].Inventions.Add(box);
+            _inventions.Add(box);
 
-            _sleepy.X = 100;
-            _sleepy.Y = room.Floors[0].Y - _sleepy.Height;
-            _sleepy.PrevY = _sleepy.Y;
-            _sleepy.Room = room;
+            // Create the scientist and set his image
+            _sleepy = new Scientist("Sleepy", 100, room.Floors[startFloor - 1].Y - GameConstants.TILE_HEIGHT, 50, 50, room);
+            _sleepy.Image = _scientistTexture;
         }
 
         /// <summary>

@@ -89,12 +89,16 @@ namespace SleepyScientist
         /// <param name="x">Starting x-coordinate</param>
         /// <param name="y">Starting y-coordinate</param>
         /// <param name="image">The image</param>
-        public Scientist(string name, int x, int y, int width, int height)
+        public Scientist(string name, int x, int y, int width, int height, Room room)
             : base(name, x, y, width, height)
         {
-            _curState = ScientistState.Walking;
-            _prevState = ScientistState.Walking;
-            _currentTile = null;
+            this.Room = room;
+            this.CurrentState = ScientistState.Walking;
+            this.PreviousState = ScientistState.Walking;
+            this.CurrentFloor = room.Floors[room.StartFloor];
+            this.CurrentTile = room.Floors[room.StartFloor];
+            this.FloorNumber = room.StartFloor;
+            this.PrevY = this.Y;
 
             // Get a copy of the Scientist Animation
             Animations = AnimationLoader.GetSetCopy("Scientist");
@@ -111,24 +115,19 @@ namespace SleepyScientist
         public override void Update() 
         {
 
-            /*
-            // Check if the scientist is on the ground
-            foreach (Floor floor in this.Floors)
+            // Check if the scientist is on the ground or just landing
+            if (this.RectPosition.Bottom == this.CurrentFloor.RectPosition.Top ||
+                (this.RectPosition.Intersects(this.CurrentFloor.RectPosition) &&
+                    this.CurrentState == ScientistState.JackInTheBox))
             {
-                // Check if the scientist is on the ground or just landing
-                if (this.RectPosition.Bottom == floor.RectPosition.Top ||
-                    (this.RectPosition.Intersects(floor.RectPosition) &&
-                      this.CurrentState == ScientistState.JackInTheBox))
-                {
-                    // If the scientist is in the floor, slowly move him up to the top
-                    while (this.RectPosition.Bottom > floor.RectPosition.Top) { this.Y--; }
-                    this.CurrentTile = floor;
-                    this.CurrentState = ScientistState.Walking;
-                }
+                // If the scientist is in the floor, slowly move him up to the top
+                while (this.RectPosition.Bottom > this.CurrentFloor.RectPosition.Top) { this.Y--; }
+                this.CurrentTile = this.CurrentFloor;
+                this.CurrentState = ScientistState.Walking;
             }
 
             // Check if the scientist is using an invention.
-            foreach (Invention invention in this.Inventions)
+            foreach (Invention invention in this.CurrentFloor.Inventions)
             {
                 // Check if the scientist is colliding with an invention
                 if (this.RectPosition.Intersects(invention.RectPosition) 
@@ -140,7 +139,7 @@ namespace SleepyScientist
             }
 
             // Check if the scientist is colliding with a ladder
-            foreach (Ladder piece in this.Ladders)
+            foreach (Ladder piece in this.CurrentFloor.Ladders)
             {
                 // Check if the scientist is moving left or right
                 switch (this.Direction)
@@ -174,7 +173,7 @@ namespace SleepyScientist
             }
 
             // Check if the scientist is colliding with stairs
-            foreach (Stairs stair in this.Stairs)
+            foreach (Stairs stair in this.CurrentFloor.Stairs)
             {
                 // Check if the scientist is moving left or right
                 switch (this.Direction)
@@ -215,12 +214,14 @@ namespace SleepyScientist
                     this.VeloY = GameConstants.LADDER_Y_VELOCITY;
 
                     // Check if the scientist has reached the top of the ladder
-                    if (this.RectPosition.Bottom <= this.CurrentTile.RectPosition.Top)
+                    if (this.RectPosition.Top <= this.CurrentTile.RectPosition.Top)
                     {
                         this.VeloY = 0;
-                        this.Y = this.CurrentTile.Y - this.Height;
+                        this.Y = this.CurrentTile.Y;
                         this.CurrentState = ScientistState.Walking;
-                        this.CurrentTile = null;
+                        this.CurrentFloor = this.Room.Floors[this.FloorNumber + 1];
+                        this.CurrentTile = this.Room.Floors[this.FloorNumber + 1];
+                        this.FloorNumber++;
                     }
                     break;
 
@@ -231,8 +232,12 @@ namespace SleepyScientist
                     // Check if the scientist has reached the bottom of the stairs
                     if (this.RectPosition.Bottom >= this.CurrentTile.RectPosition.Bottom)
                     {
+                        this.VeloY = 0;
                         this.CurrentState = ScientistState.Walking;
-                        this.CurrentTile = null;
+                        this.CurrentFloor = this.Room.Floors[this.FloorNumber - 1];
+                        this.CurrentTile = this.Room.Floors[this.FloorNumber - 1];
+                        this.Y = this.CurrentTile.Y - GameConstants.TILE_HEIGHT;
+                        this.FloorNumber--;
                     }
                     break;
 
@@ -255,7 +260,6 @@ namespace SleepyScientist
                 default:
                     break;
             }
-            */
             base.Update();
         }
 
