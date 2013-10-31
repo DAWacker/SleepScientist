@@ -76,6 +76,12 @@ namespace SleepyScientist
             _animations = null;
         }
 
+        public GameObject(int x, int y, int width, int height, Texture2D image)
+            : this(x, y, width, height)
+        {
+            this._image = image;
+        }
+
         #endregion
 
         #region Methods
