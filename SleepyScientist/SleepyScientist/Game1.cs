@@ -260,10 +260,11 @@ namespace SleepyScientist
             foreach (Invention invention in _inventions) 
             {
                 invention.Update();
+                Rectangle convertedInventionPos = _camera.ToLocal(invention.RectPosition);
+
                 if (_prevMouseState.LeftButton == ButtonState.Pressed && 
                     _curMouseState.LeftButton == ButtonState.Released &&
-                    _curMouseState.X > invention.X && _curMouseState.X < invention.X + invention.Width &&
-                    _curMouseState.Y > invention.Y && _curMouseState.Y < invention.Y + invention.Height)
+                    convertedInventionPos.Contains(new Point(_curMouseState.X, _curMouseState.Y)))
                 {
                     invention.Clicked = true;
                     GameConstants.MOVING_INVENTION = true;
@@ -276,10 +277,12 @@ namespace SleepyScientist
                 if (invention.Clicked && _prevMouseState.LeftButton == ButtonState.Pressed &&
                     _curMouseState.LeftButton == ButtonState.Released)
                 {
+                    Point convertedMousePos = _camera.ToGlobal(new Point(_curMouseState.X, _curMouseState.Y));
+
                     invention.HasTarget = true;
                     invention.Clicked = false;
-                    invention.TargetX = _curMouseState.X;
-                    invention.TargetY = _curMouseState.Y;
+                    invention.TargetX = convertedMousePos.X;
+                    invention.TargetY = convertedMousePos.Y;
                     invention.VeloX = GameConstants.DEFAULT_INVENTION_X_VELO;
                     Console.WriteLine(invention.TargetX + " : " + (invention.Y + invention.Height - invention.TargetY));
                     invention.DeterminePath();
