@@ -22,6 +22,15 @@ namespace SleepyScientist
         private Rectangle _cameraView;          // Where the camera is currently looking.
         private float _zoomFactor;              // The zoom level to view the level with.
                                                 // i.e. If value is 2 then level is shown at twice its size.
+        private GameObject _followTarget;       // The target, if any, the camera should follow.
+        private bool _shouldFollowTarget;       // Should the camera follow its target?
+        
+        #endregion
+
+        #region Properties
+
+        public GameObject FollowTarget { get { return _followTarget; } set { _followTarget = value; } }
+        public bool ShouldFollowTarget { get { return _shouldFollowTarget; } set { _shouldFollowTarget = value; } }
 
         #endregion
 
@@ -35,6 +44,8 @@ namespace SleepyScientist
         {
             _zoomFactor = initialZoom;
             _cameraView = new Rectangle(0, 0, GameConstants.SCREEN_WIDTH / initialZoom, GameConstants.SCREEN_HEIGHT / initialZoom);
+            _followTarget = null;
+            _shouldFollowTarget = true;
         }
 
         #endregion
@@ -51,6 +62,12 @@ namespace SleepyScientist
                 _zoomFactor = zoomFactor;
             else
                 _zoomFactor = GameConstants.MINIMUM_ZOOM;
+
+            _cameraView.Width = GameConstants.SCREEN_WIDTH;
+            _cameraView.Height = GameConstants.SCREEN_HEIGHT;
+            _cameraView.X = 0;
+            _cameraView.Y = 0;
+            FixOffset();
         }
 
         /// <summary>
@@ -62,6 +79,7 @@ namespace SleepyScientist
             _zoomFactor += zoomFactorMod;
             if (_zoomFactor < GameConstants.MINIMUM_ZOOM)
                 _zoomFactor = GameConstants.MINIMUM_ZOOM;
+            FixOffset();
         }
 
         /// <summary>
@@ -71,11 +89,32 @@ namespace SleepyScientist
         /// <param name="y">Y coordinate.</param>
         public void ZoomToLocation(int x, int y)
         {
-            _zoomFactor = GameConstants.ZOOM_LEVEL_1;
-            _cameraView.Width = (int)(GameConstants.SCREEN_WIDTH / _zoomFactor);
-            _cameraView.Height = (int)(GameConstants.SCREEN_HEIGHT / _zoomFactor);
+            Zoom(GameConstants.ZOOM_INVENTION_VIEW);
+            // Convert coords to zoomed-scale coords
+            x = (int)(x * _zoomFactor);
+            y = (int)(y * _zoomFactor);
+            // Update camera coords.
             _cameraView.X = (int)(x - _cameraView.Width / 2);
             _cameraView.Y = (int)(y - _cameraView.Height / 2);
+            FixOffset();
+        }
+
+        /// <summary>
+        /// Called after camera is zoomed to fix any view clipping.
+        /// </summary>
+        private void FixOffset()
+        {
+            // Fix x if needed.
+            if (_cameraView.X < 0)
+                _cameraView.X = 0;
+            else if (_cameraView.X + _cameraView.Width > GameConstants.SCREEN_WIDTH * _zoomFactor)
+                _cameraView.X = (int)(GameConstants.SCREEN_WIDTH * _zoomFactor - _cameraView.Width);
+
+            // Fix y if needed.
+            if (_cameraView.Y < 0)
+                _cameraView.Y = 0;
+            else if (_cameraView.Y + _cameraView.Height > GameConstants.SCREEN_HEIGHT * _zoomFactor)
+                _cameraView.Y = (int)(GameConstants.SCREEN_HEIGHT * _zoomFactor - _cameraView.Height);
         }
 
         /// <summary>
@@ -87,15 +126,62 @@ namespace SleepyScientist
         /// <param name="objects">The objects to draw.</param>
         public void DrawGameObjects(SpriteBatch spriteBatch, List<GameObject> objects)
         {
-            Rectangle drawPos = new Rectangle();
+            Rectangle drawPos;
             foreach (GameObject g in objects)
             {
-                drawPos.X = (int)(g.X * _zoomFactor - _cameraView.X);
-                drawPos.Y = (int)(g.Y * _zoomFactor - _cameraView.Y);
-                drawPos.Width = (int)(g.Width * _zoomFactor);
-                drawPos.Height = (int)(g.Height * _zoomFactor);
+                drawPos = ToLocal(g.RectPosition);
                 g.Draw(spriteBatch, drawPos);
             }
+        }
+
+        /// <summary>
+        /// Update the camera position if necessary.
+        /// </summary>
+        public void Update()
+        {
+            if ( _followTarget != null && _shouldFollowTarget ) {
+                ZoomToLocation(_followTarget.X, _followTarget.Y);
+            }
+        }
+
+        /// <summary>
+        /// Create a locally coordinated Rectangle from a globally coordinated one.
+        /// </summary>
+        /// <param name="globalRect">The globally coordinated Rectangle.</param>
+        /// <returns>A locally coordinated version of globalRect.</returns>
+        public Rectangle ToLocal(Rectangle globalRect)
+        {
+            Rectangle localRect = new Rectangle(
+                globalRect.X,
+                globalRect.Y,
+                globalRect.Width,
+                globalRect.Height
+            );
+
+            localRect.X = (int)(globalRect.X * _zoomFactor) - _cameraView.X;
+            localRect.Y = (int)(globalRect.Y * _zoomFactor) - _cameraView.Y;
+            localRect.Width = (int)(globalRect.Width * _zoomFactor);
+            localRect.Height = (int)(globalRect.Height * _zoomFactor);
+
+            return localRect;
+        }
+
+        /// <summary>
+        /// Create a globally coordinated Point from a locally coordinated one.
+        /// </summary>
+        /// <param name="localPoint">The locally coordinated Point.</param>
+        /// <returns>A globally coordinated version of localPoint.</returns>
+        public Point ToGlobal(Point localPoint)
+        {
+            Point globalPoint = new Point(
+                localPoint.X,
+                localPoint.Y
+            );
+
+            globalPoint.X = (int)(localPoint.X / _zoomFactor) + _cameraView.X;
+            globalPoint.Y = (int)(localPoint.Y / _zoomFactor) + _cameraView.Y;
+
+            return globalPoint;
         }
 
         #endregion

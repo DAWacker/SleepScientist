@@ -24,7 +24,7 @@ namespace SleepyScientist
 
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-		SpriteFont _spriteFont;
+        SpriteFont _spriteFont;
 
         // Screen dimensions
         private int screenWidth;
@@ -150,9 +150,6 @@ namespace SleepyScientist
             // Load animation sets.
             AnimationLoader.Load("ScientistAnimationSet.xml", Content);
 
-            // Load in the scientist placeholder
-            _scientistTexture = this.Content.Load<Texture2D>("Image/scientist");
-
             // Load content of other GameObjects.
             _floorTexture = this.Content.Load<Texture2D>("Image/floor");
             _stairsTexture = this.Content.Load<Texture2D>("Image/stairs");
@@ -176,8 +173,7 @@ namespace SleepyScientist
 
             // Create the scientist and set his image
             _sleepy = new Scientist("Sleepy", 0, 0, 50, 50);
-            _sleepy.Image = _scientistTexture;
-            
+
             // Add some test messages.
             MessageLayer.AddMessage(new Message("Test", 0, 0));
             MessageLayer.AddMessage(new Message("Test 5 Seconds", 0, 30, 5));
@@ -205,14 +201,14 @@ namespace SleepyScientist
             _inventions.Add(beater);
             */
 
-            
+
             Invention box = new JackInTheBox("JackInTheBox", screenWidth / 2, _floors[0].Y - _sleepy.Height, 50, 50);
             box.Image = _jackintheboxTexture;
             box.Stairs = _stairs;
             box.Ladders = _ladders;
             box.Floors = _floors;
             _inventions.Add(box);
-            
+
 
             // Set up the Scientist.
             _sleepy.X = 100;
@@ -243,10 +239,11 @@ namespace SleepyScientist
             _allGameObjects.AddRange(_stairs);
             _allGameObjects.AddRange(_inventions);
             _allGameObjects.Add(_sleepy);
+            _camera.FollowTarget = _sleepy;
 
             // Set up Main Menu
             _mainMenuButtons.Add(new Button((screenWidth / 2) - (_newGameButtonTexture.Width / 2), screenHeight / 2 - _newGameButtonTexture.Height, _newGameButtonTexture.Width, _newGameButtonTexture.Height, _newGameButtonTexture));
-            _mainMenuButtons.Add(new Button((screenWidth / 2) + (_levelNumButtonTexture.Width/2), screenHeight / 2 - _levelSelectButtonTexture.Height, _levelSelectButtonTexture.Width, _levelSelectButtonTexture.Height, _levelSelectButtonTexture));
+            _mainMenuButtons.Add(new Button((screenWidth / 2) + (_levelNumButtonTexture.Width / 2), screenHeight / 2 - _levelSelectButtonTexture.Height, _levelSelectButtonTexture.Width, _levelSelectButtonTexture.Height, _levelSelectButtonTexture));
             _mainMenuButtons.Add(new Button((screenWidth / 2), screenHeight / 2 + _optionsButtonTexture.Height, _optionsButtonTexture.Width, _optionsButtonTexture.Height, _optionsButtonTexture));
             _mainMenuButtons.Add(new Button((screenWidth / 2), (screenHeight / 2) + 2 * _instructionsButtonTexture.Height, _instructionsButtonTexture.Width, _instructionsButtonTexture.Height, _instructionsButtonTexture));
 
@@ -262,7 +259,7 @@ namespace SleepyScientist
             // Set up Level Select Menu
             for (int j = 0; j < 3; j++)
             {
-                for(int k = 0; k < 3; k++)
+                for (int k = 0; k < 3; k++)
                     _levelSelectMenuButtons.Add(new Button(_levelSelectButtonTexture.Width * j, _levelNumButtonTexture.Height * k, _levelNumButtonTexture.Width, _levelNumButtonTexture.Height, _levelNumButtonTexture));
             }
             _levelSelectMenuButtons.Add(new Button((screenWidth / 2), screenHeight / 2 + _mainMenuButtonTexture.Height, _mainMenuButtonTexture.Width, _mainMenuButtonTexture.Height, _mainMenuButtonTexture));
@@ -298,11 +295,25 @@ namespace SleepyScientist
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
+            if (Keyboard.GetState().IsKeyDown(Keys.OemPlus))
+                _camera.ModZoom(GameConstants.ZOOM_STEP);
+
+            if (Keyboard.GetState().IsKeyDown(Keys.OemMinus))
+                _camera.ModZoom(-GameConstants.ZOOM_STEP);
+
+            if (Keyboard.GetState().IsKeyDown(Keys.NumPad0))
+                _camera.Zoom(1);
+
             _prevMouseState = _curMouseState;
             _curMouseState = Mouse.GetState();
             _prevKeyboardState = _curKeyboardState;
             _curKeyboardState = Keyboard.GetState();
 
+            if (Keyboard.GetState().IsKeyDown(Keys.OemMinus))
+                _camera.ModZoom(-GameConstants.ZOOM_STEP);
+
+            if (Keyboard.GetState().IsKeyDown(Keys.NumPad0))
+                _camera.Zoom(1);
             if (state == STATE.PLAY || state == STATE.PAUSE)
             {
                 if (_prevKeyboardState.IsKeyDown(Keys.P) && _curKeyboardState.IsKeyUp(Keys.P))
@@ -338,8 +349,22 @@ namespace SleepyScientist
                 if (_deltaScrollWheel != 0)
                 {
                     _curScrollWheel = Mouse.GetState().ScrollWheelValue;
+                    // If scroll up.
                     if (_deltaScrollWheel > 0)
+                    {
+                        // Zoom in.
                         _camera.ZoomToLocation(Mouse.GetState().X, Mouse.GetState().Y);
+                        // Camera resumes following target if player is not moving an invention.
+                        if (GameConstants.MOVING_INVENTION == false)
+                            _camera.ShouldFollowTarget = true;
+                    }
+                    // If scroll down.
+                    else
+                    {
+                        // Zoom out and camera stops following its target.
+                        _camera.Zoom(GameConstants.ZOOM_ROOM_VIEW);
+                        _camera.ShouldFollowTarget = false;
+                    }
                 }
 
                 // Update global Time class.
@@ -374,10 +399,11 @@ namespace SleepyScientist
                 _sleepy.Update();
                 MessageLayer.Update(gameTime.ElapsedGameTime.TotalSeconds);
             }
-            #endregion 
+            #endregion
             #region Main Menu
             else if (state == STATE.MAIN_MENU)
             {
+
                 if (_prevMouseState.LeftButton == ButtonState.Pressed &&
                     _curMouseState.LeftButton == ButtonState.Released &&
                     _curMouseState.X > _mainMenuButtons[0].X && _curMouseState.X < _mainMenuButtons[0].X + _mainMenuButtons[0].Width &&
@@ -420,6 +446,10 @@ namespace SleepyScientist
                 }
             }
             #endregion
+            //    _sleepy.Update();
+            //MessageLayer.Update(gameTime.ElapsedGameTime.TotalSeconds);
+            //_camera.Update();
+            //state = STATE.MAIN_MENU;
             #region Level Select
             else if (state == STATE.LEVEL_SELECT)
             {
@@ -596,7 +626,7 @@ namespace SleepyScientist
 
             foreach (Ladder ladder in _ladders)
             {
-                if ( ladder.RectPosition.Contains( ai.RectPosition.Center ) )
+                if (ladder.RectPosition.Contains(ai.RectPosition.Center))
                 {
                     //hasCollided = ai.InteractWith(ladder);                    
                 }
