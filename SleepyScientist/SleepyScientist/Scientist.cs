@@ -95,9 +95,9 @@ namespace SleepyScientist
             this.Room = room;
             this.CurrentState = ScientistState.Walking;
             this.PreviousState = ScientistState.Walking;
-            this.CurrentFloor = room.Floors[room.StartFloor];
-            this.CurrentTile = room.Floors[room.StartFloor];
-            this.FloorNumber = room.StartFloor;
+            this.CurrentFloor = room.Floors[room.StartFloor - 1];
+            this.CurrentTile = room.Floors[room.StartFloor - 1];
+            this.FloorNumber = room.StartFloor - 1;
             this.PrevY = this.Y;
 
             // Get a copy of the Scientist Animation
@@ -114,6 +114,11 @@ namespace SleepyScientist
         /// </summary>
         public override void Update() 
         {
+
+            /*
+            try { MessageLayer.AddMessage(new Message(this.FloorNumber + " : " + this.CurrentFloor.Ladders[0].X, this.X - 10, this.Y - 30, GameConstants.MESSAGE_TIME)); }
+            catch { MessageLayer.AddMessage(new Message((this.CurrentFloor.Ladders == null).ToString(), this.X - 10, this.Y - 30, GameConstants.MESSAGE_TIME)); }
+            */
 
             // Check if the scientist is on the ground or just landing
             if (this.RectPosition.Bottom == this.CurrentFloor.RectPosition.Top ||

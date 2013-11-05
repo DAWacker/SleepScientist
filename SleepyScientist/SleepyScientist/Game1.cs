@@ -130,13 +130,21 @@ namespace SleepyScientist
             _eggBeaterTexture = this.Content.Load<Texture2D>("Image/beater");
             _jackintheboxTexture = this.Content.Load<Texture2D>("Image/jack");
             
+            // Make these textures static
+            GameConstants.FLOOR_TEXTURE = _floorTexture;
+            GameConstants.STAIR_TEXTURE = _stairsTexture;
+            GameConstants.LADDER_TEXTURE = _ladderTexture;
+            GameConstants.ROCKETBOARD_TEXTURE = _rocketSkateboardTexture;
+            GameConstants.EGG_TEXTURE = _eggBeaterTexture;
+            GameConstants.JACK_TEXTURE = _jackintheboxTexture;
+            
             // Add some test messages.
             MessageLayer.AddMessage(new Message("Test", 0, 0));
             MessageLayer.AddMessage(new Message("Test 5 Seconds", 0, 30, 5));
 
             // Set up the test "Level".
             // SetupLevel(4, true);
-            SetupLevel(GameConstants.NUMBER_OF_FLOORS, 1, true, true);
+            //SetupLevel(GameConstants.NUMBER_OF_FLOORS, 1, true, true);
 
             // Set up inventions.
             /*
@@ -170,12 +178,23 @@ namespace SleepyScientist
                 _scientistTexture
             };*/
 
+            Room level = LevelLoader.Load("Level01");
+            int startx = level.StartX;
+
+            // Create the scientist and set his image
+            _sleepy = new Scientist("Sleepy", level.StartX, level.StartY, 50, 50, level);
+            _sleepy.Image = _scientistTexture;
+
             // Store all the GameObjects.
             // This should be inside of the Level Class when we get to it.
-            _allGameObjects.AddRange(_floors);
-            _allGameObjects.AddRange(_ladders);
-            _allGameObjects.AddRange(_stairs);
-            _allGameObjects.AddRange(_inventions);
+            foreach (Floor floor in level.Floors)
+            {
+                _allGameObjects.Add(floor);
+                _allGameObjects.AddRange(floor.Ladders);
+                _allGameObjects.AddRange(floor.Stairs);
+                _allGameObjects.AddRange(floor.Inventions);
+                _inventions.AddRange(floor.Inventions);
+            }
             _allGameObjects.Add(_sleepy);
 
         }
@@ -245,11 +264,17 @@ namespace SleepyScientist
                     invention.TargetX = _curMouseState.X;
                     invention.TargetY = _curMouseState.Y;
                     invention.VeloX = GameConstants.DEFAULT_INVENTION_X_VELO;
-                    Console.WriteLine(invention.TargetX + " : " + (invention.Y + invention.Height - invention.TargetY));
                     invention.DeterminePath();
                     GameConstants.MOVING_INVENTION = false;
                 }
             }
+            /*
+            foreach (Floor floor in _sleepy.Room.Floors)
+            {
+                try { MessageLayer.AddMessage(new Message(floor.Ladders[0].X.ToString(), floor.Ladders[0].X, floor.Ladders[0].Y, GameConstants.MESSAGE_TIME)); }
+                catch { }
+            }
+            */
             _sleepy.Update();
 			MessageLayer.Update(gameTime.ElapsedGameTime.TotalSeconds);
 
@@ -288,7 +313,7 @@ namespace SleepyScientist
         private void SetupLevel(int numFloors, int startFloor, bool createLadders = false, bool createStairs = false)
         {
             Random rand = new Random();
-            Room room = new Room(numFloors, startFloor-1);
+            Room room = new Room(numFloors, startFloor-1, 0, 0);
             int x;
             int y;
             int width = screenWidth;

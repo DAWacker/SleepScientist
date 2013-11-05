@@ -17,6 +17,8 @@ namespace SleepyScientist
 
         private int _numFloors;
         private int _startFloor;
+        private int _startX;
+        private int _startY;
         private List<Floor> _floors;
 
         #endregion
@@ -28,6 +30,10 @@ namespace SleepyScientist
 
         // Get or set the starting floor of the room
         public int StartFloor { get { return _startFloor; } set { _startFloor = value; } }
+
+        // Get or set the starting coordinates of the scientist in the room
+        public int StartX { get { return _startX; } set { _startX = value; } }
+        public int StartY { get { return _startY; } set { _startY = value; } }
 
         // Get or set the floors that are in the room
         public List<Floor> Floors { get { return _floors; } set { _floors = value; } }
@@ -43,11 +49,13 @@ namespace SleepyScientist
         /// <param name="ladders">The ladders in the room</param>
         /// <param name="stairs">The stairs in the room</param>
         /// <param name="floors">The floors in the room</param>
-        public Room(int numFloors, int startFloor)
+        public Room(int numFloors, int startFloor, int startX, int startY)
         {
-            _numFloors = numFloors;
-            _startFloor = startFloor;
-            _floors = new List<Floor>();
+            this.NumberFloors = numFloors;
+            this.StartFloor = startFloor;
+            this.StartX = startX;
+            this.StartY = startY;
+            this.Floors = new List<Floor>();
         }
 
         #endregion

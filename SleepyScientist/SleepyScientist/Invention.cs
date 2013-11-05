@@ -114,9 +114,9 @@ namespace SleepyScientist
             this.StairsNeeded = 0;
             this.Activated = false;
             this.Room = room;
-            this.CurrentFloor = room.Floors[room.StartFloor];
-            this.CurrentTile = room.Floors[room.StartFloor];
-            this.FloorNumber = room.StartFloor;
+            this.CurrentFloor = room.Floors[room.StartFloor-1];
+            this.CurrentTile = room.Floors[room.StartFloor-1];
+            this.FloorNumber = room.StartFloor - 1;
         }
 
         #endregion
@@ -287,6 +287,7 @@ namespace SleepyScientist
                     case InventionState.Walking:
 
                         // Check if the invention is on the floor it needs to be
+                        Console.WriteLine(LaddersNeeded);
                         if (this.LaddersHit == this.LaddersNeeded && this.StairsHit == this.StairsNeeded)
                         {
                             switch (this.Direction)
@@ -313,8 +314,6 @@ namespace SleepyScientist
                     default:
                         break;
                 }
-
-                // MessageLayer.AddMessage(new Message(this.LaddersHit.ToString(), X - 10, Y - 30, GameConstants.MESSAGE_TIME));
                 base.Update();
             }
         }
