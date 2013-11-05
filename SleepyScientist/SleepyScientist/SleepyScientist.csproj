@@ -52,6 +52,7 @@
     <Compile Include="LincolnLogs.cs" />
     <Compile Include="Message.cs" />
     <Compile Include="MessageLayer.cs" />
+    <Compile Include="Pit.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RocketSkateboard.cs" />
@@ -130,6 +131,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Image\pauseOverlay.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Image\pit.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Image\scientist.png">

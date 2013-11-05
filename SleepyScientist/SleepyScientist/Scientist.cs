@@ -18,15 +18,20 @@ namespace SleepyScientist
         #region Attributes
 
         // Current and previous states of the scientist
+        public Game1 game;
         private ScientistState _curState;
         private ScientistState _prevState;
 
         private List<Ladder> _ladders;
         private List<Stairs> _stairs;
         private List<Floor> _floors;
+        private List<Pit> _pits;
         private List<Invention> _inventions;
         private GameObject _currentTile;
         private Invention _prevInvention;
+
+        private int _initialX;
+        private int _initialY;
 
         #endregion
 
@@ -54,6 +59,7 @@ namespace SleepyScientist
         public List<Ladder> Ladders { get { return _ladders; } set { _ladders = value; } }
         public List<Stairs> Stairs { get { return _stairs; } set { _stairs = value; } }
         public List<Floor> Floors { get { return _floors; } set { _floors = value; } }
+        public List<Pit> Pits { get { return _pits; } set { _pits = value; } }
         public List<Invention> Inventions { get { return _inventions; } set { _inventions = value; } }
         public GameObject CurrentTile { get { return _currentTile; } set { _currentTile = value; } }
         public Invention PreviousInvention { get { return _prevInvention; } set { _prevInvention = value; } }
@@ -75,6 +81,9 @@ namespace SleepyScientist
             _curState = ScientistState.Walking;
             _prevState = ScientistState.Walking;
             _currentTile = null;
+
+            _initialX = x;
+            _initialY = y;
 
             // Get a copy of the Scientist Animation
             Animations = AnimationLoader.GetSetCopy("Scientist");
@@ -183,6 +192,17 @@ namespace SleepyScientist
                     // Something is horribly wrong
                     default:
                         break;
+                }
+            }
+             
+            // Check if the scientist is colliding with stairs
+            foreach (Pit pit in this.Pits)
+            {
+                if (this.RectPosition.Intersects(pit.RectPosition))
+                {
+                    this.X = _initialX;
+                    this.Y = _initialY;
+                    this.game.state = STATE.PAUSE;
                 }
             }
 

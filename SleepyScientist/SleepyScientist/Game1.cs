@@ -11,7 +11,7 @@ using Microsoft.Xna.Framework.GamerServices;
 
 namespace SleepyScientist
 {
-    enum STATE { MAIN_MENU, LEVEL_SELECT, OPTIONS, PLAY, PAUSE, INSTRUCTIONS }
+    public enum STATE { MAIN_MENU, LEVEL_SELECT, OPTIONS, PLAY, PAUSE, INSTRUCTIONS }
 
     /// <summary>
     /// This is the main type for your game
@@ -20,7 +20,7 @@ namespace SleepyScientist
     {
         #region Attributes
 
-        STATE state = STATE.MAIN_MENU;
+        public STATE state = STATE.MAIN_MENU;
 
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
@@ -39,6 +39,7 @@ namespace SleepyScientist
         private List<Floor> _floors;
         private List<Ladder> _ladders;
         private List<Stairs> _stairs;
+        private List<Pit> _pits;
         private List<Invention> _inventions;
         private List<GameObject> _allGameObjects;
         private List<Button> _mainMenuButtons;
@@ -48,13 +49,13 @@ namespace SleepyScientist
         private List<Button> _instructionsButtons;
 
         // Textures
-        private Texture2D _scientistTexture;
         private Texture2D _stairsTexture;
         private Texture2D _ladderTexture;
         private Texture2D _floorTexture;
         private Texture2D _rocketSkateboardTexture;
         private Texture2D _eggBeaterTexture;
         private Texture2D _jackintheboxTexture;
+        private Texture2D _pitTexture;
 
         private Texture2D _mainMenuButtonTexture;
         private Texture2D _newGameButtonTexture;
@@ -68,7 +69,6 @@ namespace SleepyScientist
 
         private Texture2D _pauseOverlayTexture;
         private Texture2D _instructionsTexture1;
-        private Texture2D _instructionsTexture2;
 
         // Mouse Input
         private MouseState _prevMouseState;
@@ -118,6 +118,7 @@ namespace SleepyScientist
             _floors = new List<Floor>();
             _ladders = new List<Ladder>();
             _stairs = new List<Stairs>();
+            _pits = new List<Pit>();
             _inventions = new List<Invention>();
             _mainMenuButtons = new List<Button>();
             _optionsMenuButtons = new List<Button>();
@@ -157,6 +158,7 @@ namespace SleepyScientist
             _rocketSkateboardTexture = this.Content.Load<Texture2D>("Image/rocketSkateboard");
             _eggBeaterTexture = this.Content.Load<Texture2D>("Image/eggBeater");
             _jackintheboxTexture = this.Content.Load<Texture2D>("Image/jackInTheBox");
+            _pitTexture = this.Content.Load<Texture2D>("Image/pit");
 
             _mainMenuButtonTexture = this.Content.Load<Texture2D>("Image/button_MainMenu");
             _newGameButtonTexture = this.Content.Load<Texture2D>("Image/button_NewGame");
@@ -168,7 +170,7 @@ namespace SleepyScientist
             _instructionsButtonTexture = this.Content.Load<Texture2D>("Image/button_Instructions");
             _pauseOverlayTexture = this.Content.Load<Texture2D>("Image/pauseOverlay");
             _instructionsTexture1 = this.Content.Load<Texture2D>("Image/test_Instructions1");
-            _instructionsTexture2 = this.Content.Load<Texture2D>("Image/test_Instructions2");
+            //_instructionsTexture2 = this.Content.Load<Texture2D>("Image/test_Instructions2");
             _resumeButtonTexture = this.Content.Load<Texture2D>("Image/button_Resume");
 
             // Create the scientist and set his image
@@ -182,26 +184,6 @@ namespace SleepyScientist
             // SetupLevel(4, true);
             SetupLevel(GameConstants.NUMBER_OF_FLOORS, true);
 
-            // Set up inventions.
-            /*
-            Invention toAdd = new RocketSkateboard("RocketSkateboard", screenWidth / 2, _floors[0].Y - _sleepy.Height, 50, 50);
-            toAdd.VeloX *= -1;
-            toAdd.Image = _rocketSkateboardTexture;
-            _inventions.Add(toAdd);
-            toAdd = new RocketSkateboard("RocketSkateboard", screenWidth / 2, _floors[1].Y - _sleepy.Height, 50, 50);
-            toAdd.Image = _rocketSkateboardTexture;
-            _inventions.Add(toAdd);
-            toAdd = new RocketSkateboard("RocketSkateboard", screenWidth / 2, _floors[3].Y - _sleepy.Height, 50, 50);
-            toAdd.Image = _rocketSkateboardTexture;
-            _inventions.Add(toAdd);
-             */
-            /*
-            Invention beater = new EggBeater("EggBeater", screenWidth / 2, _floors[1].Y - _sleepy.Height, 50, 50);
-            beater.Image = _eggBeaterTexture;
-            _inventions.Add(beater);
-            */
-
-
             Invention box = new JackInTheBox("JackInTheBox", screenWidth / 2, _floors[0].Y - _sleepy.Height, 50, 50);
             box.Image = _jackintheboxTexture;
             box.Stairs = _stairs;
@@ -209,8 +191,12 @@ namespace SleepyScientist
             box.Floors = _floors;
             _inventions.Add(box);
 
+            // Add a pit
+            Pit pit = new Pit(50, 50, _pitTexture.Width, _pitTexture.Height, _pitTexture);
+            _pits.Add(pit);
 
             // Set up the Scientist.
+            _sleepy = new Scientist("Sleepy", 100, _floors[0].Y - _sleepy.Height, 50, 50);
             _sleepy.X = 100;
             _sleepy.Y = _floors[0].Y - _sleepy.Height;
             _sleepy.PrevY = _sleepy.Y;
@@ -218,19 +204,8 @@ namespace SleepyScientist
             _sleepy.Stairs = _stairs;
             _sleepy.Floors = _floors;
             _sleepy.Inventions = _inventions;
-
-            // Setup test animations.
-            //_sleepy.Animations = AnimationLoader.GetSetCopy("Scientist");
-            //_sleepy.Animations.ChangeAnimation("Walk");
-            //_sleepy.Animations.CurAnimation.Pause();
-            /*_testAnimation = new Animation("Test");
-            _testAnimation.TimePerFrame = .25F;    // Second/Frame
-            _testAnimation.Images = new List<Texture2D>() {
-                _floorTexture,
-                _ladderTexture,
-                _rocketSkateboardTexture,
-                _scientistTexture
-            };*/
+            _sleepy.Pits = _pits;
+            _sleepy.game = this;
 
             // Store all the GameObjects.
             // This should be inside of the Level Class when we get to it.
@@ -240,6 +215,8 @@ namespace SleepyScientist
             _allGameObjects.AddRange(_inventions);
             _allGameObjects.Add(_sleepy);
             _camera.FollowTarget = _sleepy;
+
+            _allGameObjects.Add(pit);
 
             // Set up Main Menu
             _mainMenuButtons.Add(new Button((screenWidth / 2) - (_newGameButtonTexture.Width / 2), screenHeight / 2 - _newGameButtonTexture.Height, _newGameButtonTexture.Width, _newGameButtonTexture.Height, _newGameButtonTexture));
@@ -267,12 +244,13 @@ namespace SleepyScientist
             // Set up the Pause Menu
             _pauseMenuButtons.Add(new Button(0, 0, _pauseOverlayTexture.Width, _pauseOverlayTexture.Height, _pauseOverlayTexture));
             _pauseMenuButtons.Add(new Button((screenWidth / 2), (screenHeight / 2) + _instructionsButtonTexture.Height, _instructionsButtonTexture.Width, _instructionsButtonTexture.Height, _instructionsButtonTexture));
+            _pauseMenuButtons.Add(new Button((screenWidth / 2), (screenHeight / 2) - _mainMenuButtonTexture.Height, _resumeButtonTexture.Width, _resumeButtonTexture.Height, _resumeButtonTexture));
             _pauseMenuButtons.Add(new Button((screenWidth / 2), screenHeight / 2, _mainMenuButtonTexture.Width, _mainMenuButtonTexture.Height, _mainMenuButtonTexture));
 
             // Instructions
             _instructionsButtons.Add(new Button((screenWidth / 2), screenHeight / 2, _resumeButtonTexture.Width, _resumeButtonTexture.Height, _resumeButtonTexture));
             _instructionsButtons.Add(new Button(0, 0, _instructionsTexture1.Width, _instructionsTexture1.Height, _instructionsTexture1));
-            _instructionsButtons.Add(new Button(_instructionsTexture1.Width, 0, _instructionsTexture2.Width, _instructionsTexture2.Height, _instructionsTexture2));
+            //_instructionsButtons.Add(new Button(_instructionsTexture1.Width, 0, _instructionsTexture2.Width, _instructionsTexture2.Height, _instructionsTexture2));
             _instructionsButtons.Add(new Button((screenWidth / 2), (screenHeight / 2) + _mainMenuButtonTexture.Height, _mainMenuButtonTexture.Width, _mainMenuButtonTexture.Height, _mainMenuButtonTexture));
         }
 
@@ -318,17 +296,6 @@ namespace SleepyScientist
             {
                 if (_prevKeyboardState.IsKeyDown(Keys.P) && _curKeyboardState.IsKeyUp(Keys.P))
                     state = (state == STATE.PLAY) ? STATE.PAUSE : STATE.PLAY;
-
-                if (state == STATE.PAUSE)
-                {
-                    if (_prevMouseState.LeftButton == ButtonState.Pressed &&
-                   _curMouseState.LeftButton == ButtonState.Released &&
-                   _curMouseState.X > _pauseMenuButtons[_pauseMenuButtons.Count - 1].X && _curMouseState.X < _pauseMenuButtons[_pauseMenuButtons.Count - 1].X + _pauseMenuButtons[_pauseMenuButtons.Count - 1].Width &&
-                   _curMouseState.Y > _pauseMenuButtons[_pauseMenuButtons.Count - 1].Y && _curMouseState.Y < _pauseMenuButtons[_pauseMenuButtons.Count - 1].Y + _pauseMenuButtons[_pauseMenuButtons.Count - 1].Height)
-                    {
-                        state = STATE.MAIN_MENU;
-                    }
-                }
             }
 
             #region Play
@@ -476,17 +443,24 @@ namespace SleepyScientist
             {
                 if (_prevMouseState.LeftButton == ButtonState.Pressed &&
                     _curMouseState.LeftButton == ButtonState.Released &&
-                    _curMouseState.X > _pauseMenuButtons[0].X && _curMouseState.X < _pauseMenuButtons[0].X + _pauseMenuButtons[0].Width &&
-                    _curMouseState.Y > _pauseMenuButtons[0].Y && _curMouseState.Y < _pauseMenuButtons[0].Y + _pauseMenuButtons[0].Height)
+                    _curMouseState.X > _pauseMenuButtons[1].X && _curMouseState.X < _pauseMenuButtons[1].X + _pauseMenuButtons[1].Width &&
+                    _curMouseState.Y > _pauseMenuButtons[1].Y && _curMouseState.Y < _pauseMenuButtons[1].Y + _pauseMenuButtons[1].Height)
                 {
                     state = STATE.INSTRUCTIONS;
                 }
                 else if (_prevMouseState.LeftButton == ButtonState.Pressed &&
                     _curMouseState.LeftButton == ButtonState.Released &&
-                    _curMouseState.X > _pauseMenuButtons[1].X && _curMouseState.X < _pauseMenuButtons[1].X + _pauseMenuButtons[1].Width &&
-                    _curMouseState.Y > _pauseMenuButtons[1].Y && _curMouseState.Y < _pauseMenuButtons[1].Y + _pauseMenuButtons[1].Height)
+                    _curMouseState.X > _pauseMenuButtons[_pauseMenuButtons.Count - 1].X && _curMouseState.X < _pauseMenuButtons[_pauseMenuButtons.Count - 1].X + _pauseMenuButtons[_pauseMenuButtons.Count - 1].Width &&
+                    _curMouseState.Y > _pauseMenuButtons[_pauseMenuButtons.Count - 1].Y && _curMouseState.Y < _pauseMenuButtons[_pauseMenuButtons.Count - 1].Y + _pauseMenuButtons[_pauseMenuButtons.Count - 1].Height)
                 {
                     state = STATE.MAIN_MENU;
+                }
+                else if (_prevMouseState.LeftButton == ButtonState.Pressed &&
+                    _curMouseState.LeftButton == ButtonState.Released &&
+                    _curMouseState.X > _pauseMenuButtons[2].X && _curMouseState.X < _pauseMenuButtons[2].X + _pauseMenuButtons[2].Width &&
+                    _curMouseState.Y > _pauseMenuButtons[2].Y && _curMouseState.Y < _pauseMenuButtons[2].Y + _pauseMenuButtons[2].Height)
+                {
+                    state = STATE.PLAY;
                 }
             }
             #endregion
