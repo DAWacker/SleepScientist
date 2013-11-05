@@ -152,19 +152,28 @@ namespace SleepyScientist
         }
 
         /// <summary>
-        /// Draw the given GameObjects with given modifications to scale and position
+        /// Draw the given GameObject with given modifications to scale and position
         /// due to Camera zoomFactor.
+        /// Note: The given SpriteBatch should have previously called its Begin method.
+        /// </summary>
+        /// <param name="spriteBatch">The SpriteBatch to use.</param>
+        /// <param name="gObject"></param>
+        public void DrawGameObject(SpriteBatch spriteBatch, GameObject gObject ) {
+            Rectangle drawPos = ToLocal(gObject.RectPosition);
+            gObject.Draw(spriteBatch, drawPos);
+        }
+
+        /// <summary>
+        /// Draw multiple GameObjects. Uses DrawGameObject().
         /// Note: The given SpriteBatch should have previously called its Begin method.
         /// </summary>
         /// <param name="spriteBatch">The SpriteBatch to use.</param>
         /// <param name="objects">The objects to draw.</param>
         public void DrawGameObjects(SpriteBatch spriteBatch, List<GameObject> objects)
         {
-            Rectangle drawPos;
             foreach (GameObject g in objects)
             {
-                drawPos = ToLocal(g.RectPosition);
-                g.Draw(spriteBatch, drawPos);
+                DrawGameObject(spriteBatch, g);
             }
         }
 
