@@ -335,19 +335,25 @@ namespace SleepyScientist
                 foreach (Invention invention in _inventions)
                 {
                     invention.Update();
-                    if (_prevMouseState.LeftButton == ButtonState.Pressed &&
-                        _curMouseState.LeftButton == ButtonState.Released &&
-                        _curMouseState.X > invention.X && _curMouseState.X < invention.X + invention.Width &&
-                        _curMouseState.Y > invention.Y && _curMouseState.Y < invention.Y + invention.Height)
-                    {
+                    Rectangle convertedInventionPos = _camera.ToLocal(invention.RectPosition);
+					
+                    if (_prevMouseState.LeftButton == ButtonState.Pressed && 
+                    _curMouseState.LeftButton == ButtonState.Released &&
+                    convertedInventionPos.Contains(new Point(_curMouseState.X, _curMouseState.Y)))
+	                {
                         invention.Clicked = true;
                         GameConstants.MOVING_INVENTION = true;
+						
+                        _camera.ShouldFollowTarget = false;
+                        _camera.Zoom(GameConstants.ZOOM_ROOM_VIEW);
                         break;
                     }
 
                     if (invention.Clicked && _prevMouseState.LeftButton == ButtonState.Pressed &&
                         _curMouseState.LeftButton == ButtonState.Released)
                     {
+                        Point convertedMousePos = _camera.ToGlobal(new Point(_curMouseState.X, _curMouseState.Y));
+					
                         invention.HasTarget = true;
                         invention.Clicked = false;
                         invention.TargetX = _curMouseState.X;
@@ -356,10 +362,14 @@ namespace SleepyScientist
                         Console.WriteLine(invention.TargetX + " : " + (invention.Y + invention.Height - invention.TargetY));
                         invention.DeterminePath();
                         GameConstants.MOVING_INVENTION = false;
+
+                        _camera.ShouldFollowTarget = true;
+                        _camera.Zoom(GameConstants.ZOOM_INVENTION_VIEW);
                     }
                 }
                 _sleepy.Update();
                 MessageLayer.Update(gameTime.ElapsedGameTime.TotalSeconds);
+                _camera.Update();
             }
             #endregion
             #region Main Menu
@@ -401,10 +411,7 @@ namespace SleepyScientist
                 }
             }
             #endregion
-            //    _sleepy.Update();
-            //MessageLayer.Update(gameTime.ElapsedGameTime.TotalSeconds);
-            //_camera.Update();
-            //state = STATE.MAIN_MENU;
+            
             #region Level Select
             else if (state == STATE.LEVEL_SELECT)
             {
