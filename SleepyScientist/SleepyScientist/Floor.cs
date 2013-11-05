@@ -67,22 +67,20 @@ namespace SleepyScientist
         #endregion
 
         #region Methods
+
         /// <summary>
-        /// Override of the draw method for tileable objects.
+        /// Grab and return all GameObjects on this Floor (includes self).
         /// </summary>
-        public override void Draw(SpriteBatch batch, Rectangle? pos = null)
+        /// <returns>Every GameObject on this Floor.</returns>
+        public List<GameObject> GetGameObjects()
         {
-            base.Draw(batch, pos);
-            /*
-            // Draw the ladders on the floor
-            foreach (Ladder ladder in this.Ladders) { ladder.Draw(batch, pos); }
-            // Draw the walls on the floor
-            foreach (Wall wall in this.Walls) { wall.Draw(batch, pos); }
-            // Draw the stairs on the floor
-            foreach (Stairs stair in this.Stairs) { stair.Draw(batch, pos); }
-            // Draw the inventions on the floor
-            foreach (Invention invention in this.Inventions) { invention.Draw(batch, pos); }
-             */
+            List<GameObject> floorObjects = new List<GameObject>();
+            floorObjects.Add(this);
+            floorObjects.AddRange(Ladders);
+            floorObjects.AddRange(Stairs);
+            floorObjects.AddRange(Inventions);
+
+            return floorObjects;
         }
         #endregion
     }
