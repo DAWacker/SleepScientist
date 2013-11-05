@@ -13,7 +13,6 @@ namespace SleepyScientist
 {
     class Floor : GameObject
     {
-
         #region Attributes
 
         // The inventions on the floor
@@ -27,6 +26,9 @@ namespace SleepyScientist
 
         // The walls on the floor
         public List<Wall> _walls;
+
+        // The pits on the floor
+        public List<Pit> _pits;
 
         #endregion
 
@@ -43,6 +45,9 @@ namespace SleepyScientist
 
         // Gets or sets the walls on the floor
         public List<Wall> Walls { get { return _walls; } set { _walls = value; } }
+
+        // Gets or sets the pits on the floor
+        public List<Pit> Pits { get { return _pits; } set { _pits = value; } }
 
         #endregion
 
@@ -62,6 +67,7 @@ namespace SleepyScientist
             this.Ladders = new List<Ladder>();
             this.Stairs = new List<Stairs>();
             this.Walls = new List<Wall>();
+            this.Pits = new List<Pit>();
         }
 
         #endregion
@@ -113,6 +119,8 @@ namespace SleepyScientist
             foreach (Stairs stair in this.Stairs) { stair.Draw(batch); }
             // Draw the inventions on the floor
             foreach (Invention invention in this.Inventions) { invention.Draw(batch); }
+            // Draw the pits on the floor
+            foreach (Pit pit in this.Pits) { pit.Draw(batch); }
         }
         #endregion
     }

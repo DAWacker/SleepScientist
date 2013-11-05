@@ -20,6 +20,7 @@ namespace SleepyScientist
         private int _startX;
         private int _startY;
         private List<Floor> _floors;
+        private Bed _bed;
 
         #endregion
 
@@ -38,6 +39,9 @@ namespace SleepyScientist
         // Get or set the floors that are in the room
         public List<Floor> Floors { get { return _floors; } set { _floors = value; } }
 
+        // Get or set the bed in the room
+        public Bed Bed { get { return _bed; } set { _bed = value; } }
+
         #endregion
 
         #region Constructor
@@ -49,20 +53,25 @@ namespace SleepyScientist
         /// <param name="ladders">The ladders in the room</param>
         /// <param name="stairs">The stairs in the room</param>
         /// <param name="floors">The floors in the room</param>
-        public Room(int numFloors, int startFloor, int startX, int startY)
+        public Room(int numFloors, int startFloor, int startX, int startY, Bed bed)
         {
             this.NumberFloors = numFloors;
             this.StartFloor = startFloor;
             this.StartX = startX;
             this.StartY = startY;
             this.Floors = new List<Floor>();
+            this.Bed = bed;
         }
 
         #endregion
 
         #region Methods
 
-        public void Draw(SpriteBatch batch) { foreach (Floor floor in this.Floors) { floor.Draw(batch); } }
+        public void Draw(SpriteBatch batch) 
+        { 
+            foreach (Floor floor in this.Floors) { floor.Draw(batch); }
+            this.Bed.Draw(batch);
+        }
 
         #endregion
     }

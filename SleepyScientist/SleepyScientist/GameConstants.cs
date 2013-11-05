@@ -45,6 +45,7 @@ namespace SleepyScientist
 
         // Ladder constants
         public static int LADDER_WIDTH = TILE_WIDTH;
+        public static int LADDER_HEIGHT = 200;
 
         // Message layer constants
         public static double MESSAGE_TIME = 2;
@@ -73,6 +74,8 @@ namespace SleepyScientist
         public static Texture2D LADDER_TEXTURE;
         public static Texture2D FLOOR_TEXTURE;
         public static Texture2D STAIR_TEXTURE;
+        public static Texture2D BED_TEXTURE;
+        public static Texture2D PIT_TEXTURE;
 
         #endregion
     }

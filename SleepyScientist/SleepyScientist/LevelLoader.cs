@@ -31,7 +31,7 @@ namespace SleepyScientist
   
                 
                 // Load in any of the levels
-                XmlTextReader reader = new XmlTextReader("Content/Levels/Level01.xml");
+                XmlTextReader reader = new XmlTextReader("Content/Levels/" + levelName + ".xml");
                 reader.WhitespaceHandling = WhitespaceHandling.None;
 
                 while (reader.Read())
@@ -41,7 +41,7 @@ namespace SleepyScientist
                         case XmlNodeType.Element:
                             switch (reader.Name)
                             {
-                                case "StartingFloor":
+                                case "Info":
                                     reader.Read();
                                     reader.Read();
                                     numFloors = Int32.Parse(reader.Value);
@@ -57,7 +57,18 @@ namespace SleepyScientist
                                     reader.Read();
                                     reader.Read();
                                     int startY = Int32.Parse(reader.Value);
-                                    room = new Room(numFloors, startFloor, startX, startY);
+                                    reader.Read();
+                                    reader.Read();
+                                    reader.Read();
+                                    reader.Read();
+                                    int bedX = Int32.Parse(reader.Value);
+                                    reader.Read();
+                                    reader.Read();
+                                    reader.Read();
+                                    int bedY = Int32.Parse(reader.Value);
+                                    Bed bed = new Bed(bedX, bedY, 100, 50);
+                                    bed.Image = GameConstants.BED_TEXTURE;
+                                    room = new Room(numFloors, startFloor, startX, startY, bed);
                                     break;
                                 case "Floor":
                                     reader.Read();
@@ -70,7 +81,6 @@ namespace SleepyScientist
                                     Floor floor = new Floor(xcoor, ycoor, GameConstants.SCREEN_WIDTH, GameConstants.FLOOR_HEIGHT);
                                     floor.Image = GameConstants.FLOOR_TEXTURE;
                                     room.Floors.Add(floor);
-                                    Console.WriteLine("added a floor");
                                     while (reader.Name != "Floor" && reader.Read())
                                     {
                                         switch (reader.NodeType)
@@ -87,7 +97,7 @@ namespace SleepyScientist
                                                         reader.Read();
                                                         reader.Read();
                                                         int ladderYcoor = Int32.Parse(reader.Value);
-                                                        Ladder ladder = new Ladder(ladderXcoor, ladderYcoor, GameConstants.LADDER_WIDTH, (GameConstants.SCREEN_HEIGHT / numFloors) + GameConstants.TILE_HEIGHT);
+                                                        Ladder ladder = new Ladder(ladderXcoor, ladderYcoor, GameConstants.LADDER_WIDTH, GameConstants.LADDER_HEIGHT + GameConstants.TILE_HEIGHT);
                                                         ladder.Image = GameConstants.LADDER_TEXTURE;
                                                         floor.Ladders.Add(ladder);
                                                         break;
@@ -103,6 +113,23 @@ namespace SleepyScientist
                                                         Stairs stairs = new Stairs(stairXcoor, stairYcoor, GameConstants.LADDER_WIDTH, GameConstants.SCREEN_HEIGHT / numFloors);
                                                         stairs.Image = GameConstants.STAIR_TEXTURE;
                                                         floor.Stairs.Add(stairs);
+                                                        break;
+
+                                                    case "Pit":
+                                                        reader.Read();
+                                                        reader.Read();
+                                                        int pitXcoor = Int32.Parse(reader.Value);
+                                                        reader.Read();
+                                                        reader.Read();
+                                                        reader.Read();
+                                                        int pitYcoor = Int32.Parse(reader.Value);
+                                                        reader.Read();
+                                                        reader.Read();
+                                                        reader.Read();
+                                                        int length = Int32.Parse(reader.Value);
+                                                        Pit pit = new Pit(pitXcoor, pitYcoor, GameConstants.TILE_WIDTH * length, GameConstants.TILE_HEIGHT + 5);
+                                                        pit.Image = GameConstants.PIT_TEXTURE;
+                                                        floor.Pits.Add(pit);
                                                         break;
 
                                                     case "Invention":

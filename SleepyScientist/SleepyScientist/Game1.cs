@@ -47,6 +47,8 @@ namespace SleepyScientist
         private Texture2D _rocketSkateboardTexture;
         private Texture2D _eggBeaterTexture;
         private Texture2D _jackintheboxTexture;
+        private Texture2D _bedTexture;
+        private Texture2D _pitTexture;
 
         // Mouse Input
         private MouseState _prevMouseState;
@@ -129,6 +131,8 @@ namespace SleepyScientist
             _rocketSkateboardTexture = this.Content.Load<Texture2D>("Image/skateboard");
             _eggBeaterTexture = this.Content.Load<Texture2D>("Image/beater");
             _jackintheboxTexture = this.Content.Load<Texture2D>("Image/jack");
+            _bedTexture = this.Content.Load<Texture2D>("Image/bed");
+            _pitTexture = this.Content.Load<Texture2D>("Image/pit");
             
             // Make these textures static
             GameConstants.FLOOR_TEXTURE = _floorTexture;
@@ -137,7 +141,9 @@ namespace SleepyScientist
             GameConstants.ROCKETBOARD_TEXTURE = _rocketSkateboardTexture;
             GameConstants.EGG_TEXTURE = _eggBeaterTexture;
             GameConstants.JACK_TEXTURE = _jackintheboxTexture;
-            
+            GameConstants.BED_TEXTURE = _bedTexture;
+            GameConstants.PIT_TEXTURE = _pitTexture;
+
             // Add some test messages.
             MessageLayer.AddMessage(new Message("Test", 0, 0));
             MessageLayer.AddMessage(new Message("Test 5 Seconds", 0, 30, 5));
@@ -178,7 +184,9 @@ namespace SleepyScientist
                 _scientistTexture
             };*/
 
-            Room level = LevelLoader.Load("Level01");
+            Room level = LevelLoader.Load("Level02");
+
+            // This startx is a test to see if the loader broke
             int startx = level.StartX;
 
             // Create the scientist and set his image
@@ -275,7 +283,7 @@ namespace SleepyScientist
                 catch { }
             }
             */
-            _sleepy.Update();
+            if (!_sleepy.Winner && !_sleepy.Loser) _sleepy.Update();
 			MessageLayer.Update(gameTime.ElapsedGameTime.TotalSeconds);
 
             base.Update(gameTime);
@@ -312,8 +320,9 @@ namespace SleepyScientist
         /// <param name="createLadders">Should Ladders be added to the test environment?</param>
         private void SetupLevel(int numFloors, int startFloor, bool createLadders = false, bool createStairs = false)
         {
+            Bed bed = null;
             Random rand = new Random();
-            Room room = new Room(numFloors, startFloor-1, 0, 0);
+            Room room = new Room(numFloors, startFloor-1, 0, 0, bed);
             int x;
             int y;
             int width = screenWidth;

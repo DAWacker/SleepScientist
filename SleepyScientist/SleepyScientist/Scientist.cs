@@ -36,6 +36,12 @@ namespace SleepyScientist
         // The previous invention the scientist used
         private Invention _prevInvention;
 
+        // Has the player won
+        private bool _winner;
+
+        // Has the player lost
+        private bool _loser;
+
         #endregion
 
         #region States
@@ -50,6 +56,8 @@ namespace SleepyScientist
             LincolnLogs,
             Ladder,
             Stairs,
+            Bed,
+            Pit,
             NULL
         }
 
@@ -78,6 +86,12 @@ namespace SleepyScientist
         // Get or set the previous invention the scientist used
         public Invention PreviousInvention { get { return _prevInvention; } set { _prevInvention = value; } }
 
+        // Get or set if the player has won the level
+        public bool Winner { get { return _winner; } set { _winner = value; } }
+
+        // Get or set if the player has lost the level
+        public bool Loser { get { return _loser; } set { _loser = value; } }
+
         #endregion
 
         #region Constructor
@@ -99,6 +113,8 @@ namespace SleepyScientist
             this.CurrentTile = room.Floors[room.StartFloor - 1];
             this.FloorNumber = room.StartFloor - 1;
             this.PrevY = this.Y;
+            this.Winner = false;
+            this.Loser = false;
 
             // Get a copy of the Scientist Animation
             Animations = AnimationLoader.GetSetCopy("Scientist");
@@ -214,6 +230,20 @@ namespace SleepyScientist
                 }
             }
 
+            // Check if the scientist has fallen into a pit
+            foreach (Pit pit in this.CurrentFloor.Pits)
+            {
+                // Check if the scientist is touching the pit
+                if (this.RectPosition.Intersects(pit.RectPosition))
+                {
+                    this.CurrentTile = pit;
+                    this.CurrentState = ScientistState.Pit;
+                }
+            }
+
+            // Check if the scientist has reached the bed
+            if (this.RectPosition.Intersects(this.Room.Bed.RectPosition)) { this.CurrentState = ScientistState.Bed; }
+
             // Update scientist based on current state.
             switch (this.CurrentState)
             {
@@ -257,6 +287,14 @@ namespace SleepyScientist
 
                 case ScientistState.JackInTheBox:
                     this.VeloY++;
+                    break;
+
+                case ScientistState.Bed:
+                    this.Winner = true;
+                    break;
+
+                case ScientistState.Pit:
+                    this.Loser = true;
                     break;
 
                 case ScientistState.Walking:

@@ -3,30 +3,39 @@
   <Info>
     <NumberOfFloors>2</NumberOfFloors>
     <FloorNumber>1</FloorNumber>
-    <X>100</X>
-    <Y>430</Y>
+    <X>50</X>
+    <Y>550</Y>
     <Bed>
-      <X>1150</X>
-      <Y>430</Y>
+      <X>50</X>
+      <Y>350</Y>
     </Bed>
   </Info>
   <Floor>
     <X>0</X>
-    <Y>480</Y>
+    <Y>600</Y>
     <Pit>
-      <X>600</X>
-      <Y>475</Y>
+      <X>450</X>
+      <Y>595</Y>
       <Length>2</Length>
     </Pit>
     <Invention>
       <Name>JackInTheBox</Name>
-      <X>20</X>
-      <Y>430</Y>
+      <X>400</X>
+      <Y>550</Y>
     </Invention>
+    <Ladder>
+      <X>900</X>
+      <Y>350</Y>
+    </Ladder>
   </Floor>
   <Floor>
     <X>0</X>
-    <Y>240</Y>
+    <Y>400</Y>
+    <Pit>
+      <X>250</X>
+      <Y>395</Y>
+      <Length>2</Length>
+    </Pit>
   </Floor>
 
 </Level01>
