@@ -370,34 +370,46 @@ namespace SleepyScientist
                 // Update global Time class.
                 Time.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
 
+                Point convertedMousePos = _camera.ToGlobal(new Point(_curMouseState.X, _curMouseState.Y));
                 foreach (Invention invention in _inventions)
                 {
                     invention.Update();
-                    if (_prevMouseState.LeftButton == ButtonState.Pressed &&
-                        _curMouseState.LeftButton == ButtonState.Released &&
-                        _curMouseState.X > invention.X && _curMouseState.X < invention.X + invention.Width &&
-                        _curMouseState.Y > invention.Y && _curMouseState.Y < invention.Y + invention.Height)
-                    {
+                    Rectangle convertedInventionPos = _camera.ToLocal(invention.RectPosition);
+					
+                    if (_prevMouseState.LeftButton == ButtonState.Pressed && 
+                    _curMouseState.LeftButton == ButtonState.Released &&
+                    convertedInventionPos.Contains(new Point(_curMouseState.X, _curMouseState.Y)))
+	                {
                         invention.Clicked = true;
                         GameConstants.MOVING_INVENTION = true;
+						
+                        _camera.ShouldFollowTarget = false;
+                        _camera.Zoom(GameConstants.ZOOM_ROOM_VIEW);
                         break;
                     }
 
                     if (invention.Clicked && _prevMouseState.LeftButton == ButtonState.Pressed &&
                         _curMouseState.LeftButton == ButtonState.Released)
-                    {
+                    {   
                         invention.HasTarget = true;
                         invention.Clicked = false;
-                        invention.TargetX = _curMouseState.X;
-                        invention.TargetY = _curMouseState.Y;
+                        invention.TargetX = convertedMousePos.X;
+                        invention.TargetY = convertedMousePos.Y;
                         invention.VeloX = GameConstants.DEFAULT_INVENTION_X_VELO;
                         Console.WriteLine(invention.TargetX + " : " + (invention.Y + invention.Height - invention.TargetY));
                         invention.DeterminePath();
                         GameConstants.MOVING_INVENTION = false;
+
+                        _camera.ShouldFollowTarget = true;
+                        _camera.Zoom(GameConstants.ZOOM_INVENTION_VIEW);
                     }
                 }
                 _sleepy.Update();
                 MessageLayer.Update(gameTime.ElapsedGameTime.TotalSeconds);
+                if (_camera.ShouldFollowTarget == false)
+                    _camera.UpdateCameraScroll(_curMouseState.X, _curMouseState.Y);
+
+                _camera.Update();
             }
             #endregion
             #region Main Menu
@@ -446,10 +458,7 @@ namespace SleepyScientist
                 }
             }
             #endregion
-            //    _sleepy.Update();
-            //MessageLayer.Update(gameTime.ElapsedGameTime.TotalSeconds);
-            //_camera.Update();
-            //state = STATE.MAIN_MENU;
+            
             #region Level Select
             else if (state == STATE.LEVEL_SELECT)
             {
