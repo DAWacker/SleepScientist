@@ -2,6 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Storage;
+using Microsoft.Xna.Framework.GamerServices;
 
 namespace SleepyScientist
 {
@@ -62,6 +68,14 @@ namespace SleepyScientist
         public static float CAMERA_X_VELO = 5.0F;
         public static float SCROLL_BOUND_LEFT = 0.1F;
         public static float SCROLL_BOUND_RIGHT = 1 - SCROLL_BOUND_LEFT;
+
+        // Game Textures
+        public static Texture2D JACK_TEXTURE;
+        public static Texture2D EGG_TEXTURE;
+        public static Texture2D ROCKETBOARD_TEXTURE;
+        public static Texture2D LADDER_TEXTURE;
+        public static Texture2D FLOOR_TEXTURE;
+        public static Texture2D STAIR_TEXTURE;
 
         #endregion
     }

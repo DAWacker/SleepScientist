@@ -18,8 +18,8 @@ namespace SleepyScientist
         /// <param name="y">Initial Y position for invention</param>
         /// <param name="width">Width of invention</param>
         /// <param name="height">Height of invention</param>
-        public LincolnLogs(string name, int x, int y, int width, int height)
-            : base(name, x, y, width, height) { }
+        public LincolnLogs(string name, int x, int y, int width, int height, Room room)
+            : base(name, x, y, width, height, room) { }
 
         /// <summary>
         /// Method that executes the functionality of a Lincoln Log

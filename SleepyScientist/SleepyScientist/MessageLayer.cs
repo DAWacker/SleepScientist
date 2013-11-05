@@ -97,6 +97,6 @@ namespace SleepyScientist
 
         // Getters and Setters
         public static IEnumerable<Message> Messages { get { return _messages.Values; } }
-        public static SpriteFont Font { set { _spriteFont = value; } }
+        public static SpriteFont Font { get { return _spriteFont; } set { _spriteFont = value; } }
     }
 }

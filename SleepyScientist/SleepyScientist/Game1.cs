@@ -159,6 +159,14 @@ namespace SleepyScientist
             _eggBeaterTexture = this.Content.Load<Texture2D>("Image/eggBeater");
             _jackintheboxTexture = this.Content.Load<Texture2D>("Image/jackInTheBox");
             _pitTexture = this.Content.Load<Texture2D>("Image/pit");
+			
+            // Make these textures static
+            GameConstants.FLOOR_TEXTURE = _floorTexture;
+            GameConstants.STAIR_TEXTURE = _stairsTexture;
+            GameConstants.LADDER_TEXTURE = _ladderTexture;
+            GameConstants.ROCKETBOARD_TEXTURE = _rocketSkateboardTexture;
+            GameConstants.EGG_TEXTURE = _eggBeaterTexture;
+            GameConstants.JACK_TEXTURE = _jackintheboxTexture;
 
             _mainMenuButtonTexture = this.Content.Load<Texture2D>("Image/button_MainMenu");
             _newGameButtonTexture = this.Content.Load<Texture2D>("Image/button_NewGame");
@@ -173,50 +181,30 @@ namespace SleepyScientist
             //_instructionsTexture2 = this.Content.Load<Texture2D>("Image/test_Instructions2");
             _resumeButtonTexture = this.Content.Load<Texture2D>("Image/button_Resume");
 
-            // Create the scientist and set his image
-            _sleepy = new Scientist("Sleepy", 0, 0, 50, 50);
-
             // Add some test messages.
             MessageLayer.AddMessage(new Message("Test", 0, 0));
             MessageLayer.AddMessage(new Message("Test 5 Seconds", 0, 30, 5));
 
-            // Set up the test "Level".
-            // SetupLevel(4, true);
-            SetupLevel(GameConstants.NUMBER_OF_FLOORS, true);
+            Room level = LevelLoader.Load("Level01");
+            int startx = level.StartX;
 
-            Invention box = new JackInTheBox("JackInTheBox", screenWidth / 2, _floors[0].Y - _sleepy.Height, 50, 50);
-            box.Image = _jackintheboxTexture;
-            box.Stairs = _stairs;
-            box.Ladders = _ladders;
-            box.Floors = _floors;
-            _inventions.Add(box);
-
-            // Add a pit
-            Pit pit = new Pit(50, 50, _pitTexture.Width, _pitTexture.Height, _pitTexture);
-            _pits.Add(pit);
-
-            // Set up the Scientist.
-            _sleepy = new Scientist("Sleepy", 100, _floors[0].Y - _sleepy.Height, 50, 50);
-            _sleepy.X = 100;
-            _sleepy.Y = _floors[0].Y - _sleepy.Height;
-            _sleepy.PrevY = _sleepy.Y;
-            _sleepy.Ladders = _ladders;
-            _sleepy.Stairs = _stairs;
-            _sleepy.Floors = _floors;
-            _sleepy.Inventions = _inventions;
-            _sleepy.Pits = _pits;
-            _sleepy.game = this;
+            // Create the scientist and set his image
+            _sleepy = new Scientist("Sleepy", level.StartX, level.StartY, 50, 50, level);
 
             // Store all the GameObjects.
             // This should be inside of the Level Class when we get to it.
-            _allGameObjects.AddRange(_floors);
-            _allGameObjects.AddRange(_ladders);
-            _allGameObjects.AddRange(_stairs);
-            _allGameObjects.AddRange(_inventions);
+            foreach (Floor floor in level.Floors)
+            {
+                _allGameObjects.Add(floor);
+                _allGameObjects.AddRange(floor.Ladders);
+                _allGameObjects.AddRange(floor.Stairs);
+                _allGameObjects.AddRange(floor.Inventions);
+                _inventions.AddRange(floor.Inventions);
+            }
             _allGameObjects.Add(_sleepy);
             _camera.FollowTarget = _sleepy;
 
-            _allGameObjects.Add(pit);
+            //_allGameObjects.Add(pit);
 
             // Set up Main Menu
             _mainMenuButtons.Add(new Button((screenWidth / 2) - (_newGameButtonTexture.Width / 2), screenHeight / 2 - _newGameButtonTexture.Height, _newGameButtonTexture.Width, _newGameButtonTexture.Height, _newGameButtonTexture));
@@ -286,9 +274,6 @@ namespace SleepyScientist
             _curMouseState = Mouse.GetState();
             _prevKeyboardState = _curKeyboardState;
             _curKeyboardState = Keyboard.GetState();
-
-            if (Keyboard.GetState().IsKeyDown(Keys.OemMinus))
-                _camera.ModZoom(-GameConstants.ZOOM_STEP);
 
             if (Keyboard.GetState().IsKeyDown(Keys.NumPad0))
                 _camera.Zoom(1);
@@ -371,6 +356,14 @@ namespace SleepyScientist
                         _camera.Zoom(GameConstants.ZOOM_INVENTION_VIEW);
                     }
                 }
+				/*
+		        foreach (Floor floor in _sleepy.Room.Floors)
+		        {
+		            try { MessageLayer.AddMessage(new Message(floor.Ladders[0].X.ToString(), floor.Ladders[0].X, floor.Ladders[0].Y, GameConstants.MESSAGE_TIME)); }
+		            catch { }
+		        }
+		        */
+
                 _sleepy.Update();
                 MessageLayer.Update(gameTime.ElapsedGameTime.TotalSeconds);
                 if (_camera.ShouldFollowTarget == false)
@@ -498,21 +491,17 @@ namespace SleepyScientist
             spriteBatch.Begin();
 
             /*
-            // Draw the level.
-            foreach (Floor tile in _floors) { tile.Draw(spriteBatch); }
-            foreach (Ladder piece in _ladders) { piece.Draw(spriteBatch); }
-            foreach (Stairs piece in _stairs) { piece.Draw(spriteBatch); }
-            foreach (Invention invention in _inventions) { invention.Draw(spriteBatch); }
-
-            // Draw the scientist.
-            _sleepy.Draw(spriteBatch);
-
             // Draw the messages.
             MessageLayer.Draw(spriteBatch);
             */
             if (state == STATE.PLAY || state == STATE.PAUSE)
             {
                 _camera.DrawGameObjects(spriteBatch, _allGameObjects);
+                // Draw the level.
+                //_sleepy.Room.Draw(spriteBatch);
+
+                // Draw the scientist.
+                //_sleepy.Draw(spriteBatch);
                 
                 if (state == STATE.PAUSE)
 
@@ -556,10 +545,11 @@ namespace SleepyScientist
         /// </summary>
         /// <param name="numFloors">The number of floors to create for the test environment.</param>
         /// <param name="createLadders">Should Ladders be added to the test environment?</param>
-        private void SetupLevel(int numFloors, bool createLadders = false, bool createStairs = false)
+        private void SetupLevel(int numFloors, int startFloor, bool createLadders = false, bool createStairs = false)
         {
             Random rand = new Random();
-            int x = 0;
+            Room room = new Room(numFloors, startFloor-1, 0, 0);
+            int x;
             int y;
             int width = screenWidth;
             int distanceBetweenFloors = screenHeight / numFloors;
@@ -567,37 +557,39 @@ namespace SleepyScientist
             // Add Floors.
             for (int i = 0; i < numFloors; i++)
             {
+                x = 0;
                 y = screenHeight - distanceBetweenFloors * i - GameConstants.FLOOR_HEIGHT;
-                Floor toAdd = new Floor(x, y, width, GameConstants.FLOOR_HEIGHT);
-                toAdd.Image = _floorTexture;
-                _floors.Add(toAdd);
-            }
+                Floor floor = new Floor(x, y, width, GameConstants.FLOOR_HEIGHT);
+                floor.Image = _floorTexture;
+                room.Floors.Add(floor);
 
-            // Add Ladders.
-            if (createLadders)
-            {
-                for (int i = 1; i < numFloors; i++)
+                // Add ladder
+                if (createLadders && i != numFloors - 1)
                 {
-                    x = rand.Next(screenWidth);
+                    x = rand.Next(screenWidth - GameConstants.TILE_WIDTH);
+                    y = floor.Y - distanceBetweenFloors - GameConstants.TILE_HEIGHT;
+                    Ladder ladderToAdd = new Ladder(x, y, GameConstants.LADDER_WIDTH, distanceBetweenFloors + GameConstants.TILE_HEIGHT);
+                    ladderToAdd.Image = _ladderTexture;
+                    floor.Ladders.Add(ladderToAdd);
+                }
+
+                if (createStairs && i != 0)
+                {
+                    x = rand.Next(screenWidth - GameConstants.TILE_WIDTH);
                     y = screenHeight - distanceBetweenFloors * i - GameConstants.FLOOR_HEIGHT;
-                    Ladder toAdd = new Ladder(x, y, GameConstants.LADDER_WIDTH, distanceBetweenFloors);
-                    toAdd.Image = _ladderTexture;
-                    _ladders.Add(toAdd);
+                    Stairs stair = new Stairs(x, y, GameConstants.LADDER_WIDTH, distanceBetweenFloors);
+                    stair.Image = _stairsTexture;
+                    floor.Stairs.Add(stair);
                 }
             }
 
-            // Add Stairs.
-            if (createStairs)
-            {
-                for (int i = 1; i < numFloors; i++)
-                {
-                    x = rand.Next(screenWidth);
-                    y = screenHeight - distanceBetweenFloors * i - GameConstants.FLOOR_HEIGHT;
-                    Stairs toAdd = new Stairs(x, y, GameConstants.LADDER_WIDTH, distanceBetweenFloors);
-                    toAdd.Image = _stairsTexture;
-                    _stairs.Add(toAdd);
-                }
-            }
+            Invention box = new JackInTheBox("JackInTheBox", screenWidth / 2, room.Floors[0].Y - GameConstants.TILE_HEIGHT, 50, 50, room);
+            box.Image = _jackintheboxTexture;
+            room.Floors[0].Inventions.Add(box);
+            _inventions.Add(box);
+
+            // Create the scientist and set his image
+            _sleepy = new Scientist("Sleepy", 100, room.Floors[startFloor - 1].Y - GameConstants.TILE_HEIGHT, 50, 50, room);
         }
 
         /// <summary>
@@ -610,7 +602,7 @@ namespace SleepyScientist
 
             foreach (Ladder ladder in _ladders)
             {
-                if (ladder.RectPosition.Contains(ai.RectPosition.Center))
+                if ( ladder.RectPosition.Contains( ai.RectPosition.Center ) )
                 {
                     //hasCollided = ai.InteractWith(ladder);                    
                 }
