@@ -332,6 +332,7 @@ namespace SleepyScientist
                 // Update global Time class.
                 Time.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
 
+                Point convertedMousePos = _camera.ToGlobal(new Point(_curMouseState.X, _curMouseState.Y));
                 foreach (Invention invention in _inventions)
                 {
                     invention.Update();
@@ -351,9 +352,7 @@ namespace SleepyScientist
 
                     if (invention.Clicked && _prevMouseState.LeftButton == ButtonState.Pressed &&
                         _curMouseState.LeftButton == ButtonState.Released)
-                    {
-                        Point convertedMousePos = _camera.ToGlobal(new Point(_curMouseState.X, _curMouseState.Y));
-				        
+                    {   
                         invention.HasTarget = true;
                         invention.Clicked = false;
                         invention.TargetX = convertedMousePos.X;
@@ -369,6 +368,9 @@ namespace SleepyScientist
                 }
                 _sleepy.Update();
                 MessageLayer.Update(gameTime.ElapsedGameTime.TotalSeconds);
+                if (_camera.ShouldFollowTarget == false)
+                    _camera.UpdateCameraScroll(_curMouseState.X, _curMouseState.Y);
+
                 _camera.Update();
             }
             #endregion
