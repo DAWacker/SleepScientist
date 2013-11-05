@@ -39,7 +39,6 @@ namespace SleepyScientist
         private List<Floor> _floors;
         private List<Ladder> _ladders;
         private List<Stairs> _stairs;
-        private List<Pit> _pits;
         private List<Invention> _inventions;
         private List<GameObject> _allGameObjects;
         private List<Button> _mainMenuButtons;
@@ -55,7 +54,6 @@ namespace SleepyScientist
         private Texture2D _rocketSkateboardTexture;
         private Texture2D _eggBeaterTexture;
         private Texture2D _jackintheboxTexture;
-        private Texture2D _pitTexture;
 
         private Texture2D _mainMenuButtonTexture;
         private Texture2D _newGameButtonTexture;
@@ -118,7 +116,6 @@ namespace SleepyScientist
             _floors = new List<Floor>();
             _ladders = new List<Ladder>();
             _stairs = new List<Stairs>();
-            _pits = new List<Pit>();
             _inventions = new List<Invention>();
             _mainMenuButtons = new List<Button>();
             _optionsMenuButtons = new List<Button>();
@@ -158,7 +155,6 @@ namespace SleepyScientist
             _rocketSkateboardTexture = this.Content.Load<Texture2D>("Image/rocketSkateboard");
             _eggBeaterTexture = this.Content.Load<Texture2D>("Image/eggBeater");
             _jackintheboxTexture = this.Content.Load<Texture2D>("Image/jackInTheBox");
-            _pitTexture = this.Content.Load<Texture2D>("Image/pit");
 			
             // Make these textures static
             GameConstants.FLOOR_TEXTURE = _floorTexture;
@@ -203,8 +199,6 @@ namespace SleepyScientist
             }
             _allGameObjects.Add(_sleepy);
             _camera.FollowTarget = _sleepy;
-
-            //_allGameObjects.Add(pit);
 
             // Set up Main Menu
             _mainMenuButtons.Add(new Button((screenWidth / 2) - (_newGameButtonTexture.Width / 2), screenHeight / 2 - _newGameButtonTexture.Height, _newGameButtonTexture.Width, _newGameButtonTexture.Height, _newGameButtonTexture));

@@ -18,7 +18,6 @@ namespace SleepyScientist
         #region Attributes
 
         // Current and previous states of the scientist
-        public Game1 game;
         private ScientistState _curState;
         private ScientistState _prevState;
 
@@ -220,17 +219,6 @@ namespace SleepyScientist
                         break;
                 }
             }
-             
-            //// Check if the scientist is colliding with stairs
-            //foreach (Pit pit in this.Pits)
-            //{
-            //    if (this.RectPosition.Intersects(pit.RectPosition))
-            //    {
-            //        this.X = _initialX;
-            //        this.Y = _initialY;
-            //        this.game.state = STATE.PAUSE;
-            //    }
-            //}
 
             // Update scientist based on current state.
             switch (this.CurrentState)
