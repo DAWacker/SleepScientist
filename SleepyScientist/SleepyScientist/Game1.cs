@@ -40,7 +40,6 @@ namespace SleepyScientist
         private List<Ladder> _ladders;
         private List<Stairs> _stairs;
         private List<Invention> _inventions;
-        private List<GameObject> _allGameObjects;
         private List<Button> _mainMenuButtons;
         private List<Button> _optionsMenuButtons;
         private List<Button> _levelSelectMenuButtons;
@@ -126,9 +125,6 @@ namespace SleepyScientist
             // Initialize Camera.
             _camera = new Camera();
 
-            // Initialize what the Camera will be drawing.
-            _allGameObjects = new List<GameObject>();
-
             base.Initialize();
         }
 
@@ -191,13 +187,8 @@ namespace SleepyScientist
             // This should be inside of the Level Class when we get to it.
             foreach (Floor floor in level.Floors)
             {
-                _allGameObjects.Add(floor);
-                _allGameObjects.AddRange(floor.Ladders);
-                _allGameObjects.AddRange(floor.Stairs);
-                _allGameObjects.AddRange(floor.Inventions);
                 _inventions.AddRange(floor.Inventions);
             }
-            _allGameObjects.Add(_sleepy);
             _camera.FollowTarget = _sleepy;
 
             // Set up Main Menu
@@ -490,12 +481,8 @@ namespace SleepyScientist
             */
             if (state == STATE.PLAY || state == STATE.PAUSE)
             {
-                _camera.DrawGameObjects(spriteBatch, _allGameObjects);
-                // Draw the level.
-                //_sleepy.Room.Draw(spriteBatch);
-
-                // Draw the scientist.
-                //_sleepy.Draw(spriteBatch);
+                _camera.DrawGameObjects(spriteBatch, _sleepy.Room.GetGameObjects());
+                _camera.DrawGameObject(spriteBatch, _sleepy );
                 
                 if (state == STATE.PAUSE)
 
