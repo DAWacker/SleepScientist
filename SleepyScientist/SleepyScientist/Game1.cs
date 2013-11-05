@@ -353,11 +353,11 @@ namespace SleepyScientist
                         _curMouseState.LeftButton == ButtonState.Released)
                     {
                         Point convertedMousePos = _camera.ToGlobal(new Point(_curMouseState.X, _curMouseState.Y));
-					
+				        
                         invention.HasTarget = true;
                         invention.Clicked = false;
-                        invention.TargetX = _curMouseState.X;
-                        invention.TargetY = _curMouseState.Y;
+                        invention.TargetX = convertedMousePos.X;
+                        invention.TargetY = convertedMousePos.Y;
                         invention.VeloX = GameConstants.DEFAULT_INVENTION_X_VELO;
                         Console.WriteLine(invention.TargetX + " : " + (invention.Y + invention.Height - invention.TargetY));
                         invention.DeterminePath();
