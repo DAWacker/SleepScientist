@@ -139,7 +139,7 @@ namespace SleepyScientist
             // Check if the scientist is on the ground or just landing
             if (this.RectPosition.Bottom == this.CurrentFloor.RectPosition.Top ||
                 (this.RectPosition.Intersects(this.CurrentFloor.RectPosition) &&
-                    this.CurrentState == ScientistState.JackInTheBox))
+                    this.CurrentState == ScientistState.JackInTheBox && this.VeloY > 0))
             {
                 // If the scientist is in the floor, slowly move him up to the top
                 while (this.RectPosition.Bottom > this.CurrentFloor.RectPosition.Top) { this.Y--; }
@@ -154,14 +154,60 @@ namespace SleepyScientist
             foreach (Invention invention in this.CurrentFloor.Inventions)
             {
                 // Check if the scientist is colliding with an invention
-                if (this.RectPosition.Intersects(invention.RectPosition) 
+                if (this.RectPosition.Intersects(invention.RectPosition)
                     && !invention.Activated && !invention.HasTarget && !invention.Clicked)
                 {
-                    InteractWith(invention);
+                    // Check if the invention is a jack in the box
+                    if (invention.GetType() == typeof(JackInTheBox))
+                    {
+                        // Make sure you are not on the top floor
+                        if (this.FloorNumber != Room.NumberFloors)
+                        {
+                            // Loop through all of the stairs on the floor above you
+                            foreach (Stairs stair in this.Room.Floors[invention.FloorNumber + 1].Stairs)
+                            {
+                                // Check which way the staircase is facing
+                                switch (stair.Direction)
+                                {
+                                    case 1:
+                                        // Check if the jack in the box is placed at the bottom of the stairs
+                                        if (((stair.RectPosition.Intersects(invention.RectPosition) && invention.X > stair.X + stair.Width - 25) ||
+                                            invention.X > stair.X + stair.Width && invention.X < stair.X + stair.Width + 25) && this.Direction == -stair.Direction)
+                                        {
+                                            this.Jump(true);
+                                            this.CurrentFloor = this.Room.Floors[this.FloorNumber + 1];
+                                            this.CurrentTile = this.Room.Floors[this.FloorNumber + 1];
+                                            this.FloorNumber++;
+                                        }
+
+                                        // If the jack in the box isn't at the bottom of the stairs, do a normal jump
+                                        else { this.InteractWith(invention); }
+                                        break;
+
+                                    case -1:
+                                        // Check if the jack in the box is placed at the bottom of the stairs
+                                        if (((stair.RectPosition.Intersects(invention.RectPosition) && invention.X < stair.X + 25) ||
+                                            invention.X > stair.X - invention.Width - 25 && invention.X < stair.X - invention.Width) && this.Direction == -stair.Direction)
+                                        {
+                                            this.Jump(true);
+                                            this.CurrentFloor = this.Room.Floors[this.FloorNumber + 1];
+                                            this.CurrentTile = this.Room.Floors[this.FloorNumber + 1];
+                                            this.FloorNumber++;
+                                        }
+
+                                        // If the jack in the box isn't at the bottom of the stairs, do a normal jump
+                                        else { this.InteractWith(invention); }
+                                        break;
+                                }
+                            }
+                        }
+                    }
+
+                    // Interact normally with other inventions
+                    else { this.InteractWith(invention); }
                     break;
                 }
             }
-
             // Check if the scientist is colliding with a ladder
             foreach (Ladder piece in this.CurrentFloor.Ladders)
             {
@@ -204,9 +250,9 @@ namespace SleepyScientist
                 {
                     // Moving right
                     case 1:
-                        if (this.RectPosition.Bottom == stair.RectPosition.Top &&
-                            this.RectPosition.X > stair.RectPosition.X - GameConstants.BUFFER &&
-                            this.RectPosition.X < stair.RectPosition.X + stair.RectPosition.Width)
+                        if (this.RectPosition.Intersects(stair.RectPosition) &&
+                            this.RectPosition.X > stair.RectPosition.X &&
+                            this.Direction == stair.Direction)
                         {
                             this.CurrentTile = stair;
                             this.CurrentState = ScientistState.Stairs;
@@ -215,9 +261,10 @@ namespace SleepyScientist
 
                     // Moving left
                     case -1:
-                        if (this.RectPosition.Bottom == stair.RectPosition.Top &&
-                            this.RectPosition.X < stair.RectPosition.X &&
-                            this.RectPosition.X > stair.RectPosition.X - stair.RectPosition.Width)
+                        if (this.RectPosition.Intersects(stair.RectPosition) &&
+                            this.RectPosition.X < stair.RectPosition.X + stair.Width - this.Width &&
+
+                            this.Direction == stair.Direction)
                         {
                             this.CurrentTile = stair;
                             this.CurrentState = ScientistState.Stairs;
@@ -264,8 +311,8 @@ namespace SleepyScientist
                     break;
 
                 case ScientistState.Stairs:
-                    this.VeloX = 0;
-                    this.VeloY = -GameConstants.LADDER_Y_VELOCITY;
+                    this.VeloX = GameConstants.STAIR_X_VELOCITY * this.Direction;
+                    this.VeloY = GameConstants.STAIR_Y_VELOCITY;
 
                     // Check if the scientist has reached the bottom of the stairs
                     if (this.RectPosition.Bottom >= this.CurrentTile.RectPosition.Bottom)
@@ -309,10 +356,24 @@ namespace SleepyScientist
             base.Update();
         }
 
-        public void Jump() 
-        { 
-            this.VeloY = GameConstants.DEFAULT_JUMP_VELOCITY_Y;
-            this.VeloX = GameConstants.DEFAULT_JUMP_VELOCITY_X * this.Direction;
+        /// <summary>
+        /// Makes the scientist perform a jump
+        /// </summary>
+        /// <param name="upstairs">Is the jump going to send the scientist upstairs</param>
+        public void Jump(bool upstairs=false) 
+        {
+            // Check if the jump is going to send the scientist upstairs
+            if (upstairs)
+            {
+                this.VeloX = GameConstants.JUMP_UPSTAIRS_VELOCITY_X * this.Direction;
+                this.VeloY = GameConstants.JUMP_UPSTAIRS_VELOCITY_Y;
+            }
+            // If not, do a normal jump
+            else
+            {
+                this.VeloY = GameConstants.DEFAULT_JUMP_VELOCITY_Y;
+                this.VeloX = GameConstants.DEFAULT_JUMP_VELOCITY_X * this.Direction;
+            }
             this.CurrentState = ScientistState.JackInTheBox;
         }
 
@@ -341,6 +402,9 @@ namespace SleepyScientist
             return newState != ScientistState.NULL;
         }
 
+        /// <summary>
+        /// Refreshes inventions that were previously used so they can be used again
+        /// </summary>
         public void RefreshInventions()
         {
             if (this.PreviousInvention != null) this.PreviousInvention.UnUse();

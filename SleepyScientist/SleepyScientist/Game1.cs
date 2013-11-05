@@ -59,6 +59,9 @@ namespace SleepyScientist
         // Camera
         private Camera _camera;
 
+        // Test
+        private bool _begin = false;
+
         #endregion
 
         public Game1()
@@ -184,7 +187,7 @@ namespace SleepyScientist
                 _scientistTexture
             };*/
 
-            Room level = LevelLoader.Load("Level02");
+            Room level = LevelLoader.Load("Level03");
 
             // This startx is a test to see if the loader broke
             int startx = level.StartX;
@@ -251,40 +254,40 @@ namespace SleepyScientist
 
             _prevMouseState = _curMouseState;
             _curMouseState = Mouse.GetState();
-            foreach (Invention invention in _inventions) 
+
+            if (_begin)
             {
-                invention.Update();
-                if (_prevMouseState.LeftButton == ButtonState.Pressed && 
-                    _curMouseState.LeftButton == ButtonState.Released &&
-                    _curMouseState.X > invention.X && _curMouseState.X < invention.X + invention.Width &&
-                    _curMouseState.Y > invention.Y && _curMouseState.Y < invention.Y + invention.Height)
+                foreach (Invention invention in _inventions)
                 {
-                    invention.Clicked = true;
-                    GameConstants.MOVING_INVENTION = true;
-                    break;
+                    invention.Update();
+                    if (_prevMouseState.LeftButton == ButtonState.Pressed &&
+                        _curMouseState.LeftButton == ButtonState.Released &&
+                        _curMouseState.X > invention.X && _curMouseState.X < invention.X + invention.Width &&
+                        _curMouseState.Y > invention.Y && _curMouseState.Y < invention.Y + invention.Height)
+                    {
+                        invention.Clicked = true;
+                        GameConstants.MOVING_INVENTION = true;
+                        break;
+                    }
+
+                    if (invention.Clicked && _prevMouseState.LeftButton == ButtonState.Pressed &&
+                        _curMouseState.LeftButton == ButtonState.Released)
+                    {
+                        invention.HasTarget = true;
+                        invention.Clicked = false;
+                        invention.TargetX = _curMouseState.X;
+                        invention.TargetY = _curMouseState.Y;
+                        invention.VeloX = GameConstants.DEFAULT_INVENTION_X_VELO;
+                        invention.DeterminePath();
+                        GameConstants.MOVING_INVENTION = false;
+                    }
                 }
 
-                if (invention.Clicked && _prevMouseState.LeftButton == ButtonState.Pressed &&
-                    _curMouseState.LeftButton == ButtonState.Released)
-                {
-                    invention.HasTarget = true;
-                    invention.Clicked = false;
-                    invention.TargetX = _curMouseState.X;
-                    invention.TargetY = _curMouseState.Y;
-                    invention.VeloX = GameConstants.DEFAULT_INVENTION_X_VELO;
-                    invention.DeterminePath();
-                    GameConstants.MOVING_INVENTION = false;
-                }
+                if (!_sleepy.Winner && !_sleepy.Loser) _sleepy.Update();
+                MessageLayer.Update(gameTime.ElapsedGameTime.TotalSeconds);
             }
-            /*
-            foreach (Floor floor in _sleepy.Room.Floors)
-            {
-                try { MessageLayer.AddMessage(new Message(floor.Ladders[0].X.ToString(), floor.Ladders[0].X, floor.Ladders[0].Y, GameConstants.MESSAGE_TIME)); }
-                catch { }
-            }
-            */
-            if (!_sleepy.Winner && !_sleepy.Loser) _sleepy.Update();
-			MessageLayer.Update(gameTime.ElapsedGameTime.TotalSeconds);
+            else if (_curMouseState.LeftButton == ButtonState.Released &&
+                _prevMouseState.LeftButton == ButtonState.Pressed) { _begin = true; }
 
             base.Update(gameTime);
         }
@@ -351,7 +354,7 @@ namespace SleepyScientist
                 {
                     x = rand.Next(screenWidth - GameConstants.TILE_WIDTH);
                     y = screenHeight - distanceBetweenFloors * i - GameConstants.FLOOR_HEIGHT;
-                    Stairs stair = new Stairs(x, y, GameConstants.LADDER_WIDTH, distanceBetweenFloors);
+                    Stairs stair = new Stairs(x, y, GameConstants.LADDER_WIDTH, distanceBetweenFloors, 1);
                     stair.Image = _stairsTexture;
                     floor.Stairs.Add(stair);
                 }

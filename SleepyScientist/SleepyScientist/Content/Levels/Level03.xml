@@ -1,41 +1,44 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<Level01>
+<Level03>
   <Info>
-    <NumberOfFloors>2</NumberOfFloors>
+    <NumberOfFloors>3</NumberOfFloors>
     <FloorNumber>1</FloorNumber>
     <X>50</X>
     <Y>550</Y>
     <Bed>
-      <X>50</X>
-      <Y>350</Y>
+      <X>1000</X>
+      <Y>150</Y>
     </Bed>
   </Info>
   <Floor>
     <X>0</X>
     <Y>600</Y>
-    <Pit>
-      <X>450</X>
-      <Y>595</Y>
-      <Length>2</Length>
-    </Pit>
-    <Invention>
-      <Name>JackInTheBox</Name>
-      <X>400</X>
-      <Y>550</Y>
-    </Invention>
     <Ladder>
-      <X>900</X>
+      <X>100</X>
       <Y>350</Y>
     </Ladder>
+    <Invention>
+      <Name>JackInTheBox</Name>
+      <X>900</X>
+      <Y>550</Y>
+    </Invention>
   </Floor>
   <Floor>
     <X>0</X>
     <Y>400</Y>
-    <Pit>
-      <X>250</X>
-      <Y>395</Y>
-      <Length>2</Length>
-    </Pit>
+    <Stairs>
+      <X>600</X>
+      <Y>350</Y>
+      <Direction>-1</Direction>
+    </Stairs>
   </Floor>
-
-</Level01>
+  <Floor>
+    <X>0</X>
+    <Y>200</Y>
+    <Invention>
+      <Name>EggBeater</Name>
+      <X>200</X>
+      <Y>150</Y>
+    </Invention>
+  </Floor>
+</Level03>

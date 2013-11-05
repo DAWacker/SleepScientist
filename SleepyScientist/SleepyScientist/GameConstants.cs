@@ -26,10 +26,11 @@ namespace SleepyScientist
         // Default movement speeds for the scientist
         public static int DEFAULT_X_VELOCITY = 4;
         public static int DEFAULT_Y_VELOCITY = 0;
-        public static int LADDER_Y_VELOCITY = -4;
         public static int DEFAULT_DIRECTION = 1;
         public static int DEFAULT_JUMP_VELOCITY_Y = -12;
         public static int DEFAULT_JUMP_VELOCITY_X = 10;
+        public static int JUMP_UPSTAIRS_VELOCITY_Y = -20;
+        public static int JUMP_UPSTAIRS_VELOCITY_X = 12;
         
         // User input related
         public static bool MOVING_INVENTION = false;
@@ -44,8 +45,16 @@ namespace SleepyScientist
         public static int FLOOR_HEIGHT = TILE_HEIGHT;
 
         // Ladder constants
-        public static int LADDER_WIDTH = TILE_WIDTH;
+        public static int LADDER_WIDTH = 50;
         public static int LADDER_HEIGHT = 200;
+        public static int LADDER_X_VELOCITY = 0;
+        public static int LADDER_Y_VELOCITY = -5;
+
+        // Stair constants
+        public static int STAIR_WIDTH = 200;
+        public static int STAIR_HEIGHT = 250;
+        public static int STAIR_X_VELOCITY = 4;
+        public static int STAIR_Y_VELOCITY = 5;
 
         // Message layer constants
         public static double MESSAGE_TIME = 2;
@@ -58,8 +67,8 @@ namespace SleepyScientist
         public static int BUFFER = 5;
 
         // Floor info
-        public static int NUMBER_OF_FLOORS = 4;
-        public static int DISTANCE_BETWEEN_FLOORS = SCREEN_HEIGHT / NUMBER_OF_FLOORS;
+        public static int NUMBER_OF_FLOORS = 3;
+        public static int DISTANCE_BETWEEN_FLOORS = 200;
 
         // Camera constants.
         public static float MINIMUM_ZOOM = 1F;

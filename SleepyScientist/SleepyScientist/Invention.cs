@@ -287,7 +287,6 @@ namespace SleepyScientist
                     case InventionState.Walking:
 
                         // Check if the invention is on the floor it needs to be
-                        Console.WriteLine(LaddersNeeded);
                         if (this.LaddersHit == this.LaddersNeeded && this.StairsHit == this.StairsNeeded)
                         {
                             switch (this.Direction)
@@ -318,14 +317,24 @@ namespace SleepyScientist
             }
         }
 
+        /// <summary>
+        /// Logic behind how the invention determines where he should go
+        /// </summary>
         public void DeterminePath()
         {
+            // Compute the difference in y location
             int verticalChange = this.Y + this.Height - this.TargetY;
-            if (verticalChange > 0) this.LaddersNeeded = verticalChange / GameConstants.DISTANCE_BETWEEN_FLOORS;
-            else this.StairsNeeded = Math.Abs(verticalChange) / GameConstants.DISTANCE_BETWEEN_FLOORS;
+            // Check if the invention needs to go up
+            if (verticalChange > 0) { this.LaddersNeeded = verticalChange / GameConstants.DISTANCE_BETWEEN_FLOORS; }
+            // Check if the invetion needs to go down
+            else { this.StairsNeeded = (Math.Abs(verticalChange) + 100) / GameConstants.DISTANCE_BETWEEN_FLOORS; }
+            Console.WriteLine(this.StairsNeeded);
             if (this.X > this.TargetX) { this.Direction = -1; } else { this.Direction = 1; }
         }
-
+        
+        /// <summary>
+        /// Once the invention has reached its target, his attributes are reset accordingly
+        /// </summary>
         public void ReachedTarget()
         {
             this.HasTarget = false;

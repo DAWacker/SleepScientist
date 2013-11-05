@@ -110,7 +110,11 @@ namespace SleepyScientist
                                                         reader.Read();
                                                         reader.Read();
                                                         int stairYcoor = Int32.Parse(reader.Value);
-                                                        Stairs stairs = new Stairs(stairXcoor, stairYcoor, GameConstants.LADDER_WIDTH, GameConstants.SCREEN_HEIGHT / numFloors);
+                                                        reader.Read();
+                                                        reader.Read();
+                                                        reader.Read();
+                                                        int stairDirection = Int32.Parse(reader.Value);
+                                                        Stairs stairs = new Stairs(stairXcoor, stairYcoor, GameConstants.STAIR_WIDTH, GameConstants.STAIR_HEIGHT, stairDirection);
                                                         stairs.Image = GameConstants.STAIR_TEXTURE;
                                                         floor.Stairs.Add(stairs);
                                                         break;

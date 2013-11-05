@@ -1,32 +1,35 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Level01>
   <Info>
-    <NumberOfFloors>2</NumberOfFloors>
-    <FloorNumber>1</FloorNumber>
+    <NumberOfFloors>3</NumberOfFloors>
+    <FloorNumber>2</FloorNumber>
     <X>100</X>
-    <Y>430</Y>
+    <Y>350</Y>
     <Bed>
       <X>1150</X>
-      <Y>430</Y>
+      <Y>350</Y>
     </Bed>
   </Info>
   <Floor>
     <X>0</X>
-    <Y>480</Y>
+    <Y>600</Y>
+  </Floor>
+  <Floor>
+    <X>0</X>
+    <Y>400</Y>
     <Pit>
       <X>600</X>
-      <Y>475</Y>
+      <Y>395</Y>
       <Length>2</Length>
     </Pit>
     <Invention>
       <Name>JackInTheBox</Name>
       <X>20</X>
-      <Y>430</Y>
+      <Y>350</Y>
     </Invention>
   </Floor>
   <Floor>
     <X>0</X>
-    <Y>240</Y>
+    <Y>200</Y>
   </Floor>
-
 </Level01>

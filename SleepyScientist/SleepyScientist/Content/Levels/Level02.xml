@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<Level01>
+<Level02>
   <Info>
-    <NumberOfFloors>2</NumberOfFloors>
+    <NumberOfFloors>3</NumberOfFloors>
     <FloorNumber>1</FloorNumber>
     <X>50</X>
     <Y>550</Y>
@@ -37,5 +37,8 @@
       <Length>2</Length>
     </Pit>
   </Floor>
-
-</Level01>
+  <Floor>
+    <X>0</X>
+    <Y>200</Y>
+  </Floor>
+</Level02>
