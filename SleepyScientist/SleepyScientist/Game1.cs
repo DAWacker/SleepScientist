@@ -64,8 +64,11 @@ namespace SleepyScientist
         private Texture2D _yesButtonTexture;
         private Texture2D _noButtonTexture;
         private Texture2D _instructionsButtonTexture;
+        private Texture2D _resumeButtonTexture;
 
         private Texture2D _pauseOverlayTexture;
+        private Texture2D _instructionsTexture1;
+        private Texture2D _instructionsTexture2;
 
         // Mouse Input
         private MouseState _prevMouseState;
@@ -167,6 +170,9 @@ namespace SleepyScientist
             _noButtonTexture = this.Content.Load<Texture2D>("Image/button_No");
             _instructionsButtonTexture = this.Content.Load<Texture2D>("Image/button_Instructions");
             _pauseOverlayTexture = this.Content.Load<Texture2D>("Image/pauseOverlay");
+            _instructionsTexture1 = this.Content.Load<Texture2D>("Image/test_Instructions1");
+            _instructionsTexture2 = this.Content.Load<Texture2D>("Image/test_Instructions2");
+            _resumeButtonTexture = this.Content.Load<Texture2D>("Image/button_Resume");
 
             // Create the scientist and set his image
             _sleepy = new Scientist("Sleepy", 0, 0, 50, 50);
@@ -267,7 +273,10 @@ namespace SleepyScientist
             _pauseMenuButtons.Add(new Button((screenWidth / 2), screenHeight / 2, _mainMenuButtonTexture.Width, _mainMenuButtonTexture.Height, _mainMenuButtonTexture));
 
             // Instructions
-            _instructionsButtons.Add(new Button((screenWidth / 2), screenHeight / 2, _mainMenuButtonTexture.Width, _mainMenuButtonTexture.Height, _mainMenuButtonTexture));
+            _instructionsButtons.Add(new Button((screenWidth / 2), screenHeight / 2, _resumeButtonTexture.Width, _resumeButtonTexture.Height, _resumeButtonTexture));
+            _instructionsButtons.Add(new Button(0, 0, _instructionsTexture1.Width, _instructionsTexture1.Height, _instructionsTexture1));
+            _instructionsButtons.Add(new Button(_instructionsTexture1.Width, 0, _instructionsTexture2.Width, _instructionsTexture2.Height, _instructionsTexture2));
+            _instructionsButtons.Add(new Button((screenWidth / 2), (screenHeight / 2) + _mainMenuButtonTexture.Height, _mainMenuButtonTexture.Width, _mainMenuButtonTexture.Height, _mainMenuButtonTexture));
         }
 
         /// <summary>
@@ -452,6 +461,13 @@ namespace SleepyScientist
                 {
                     state = STATE.MAIN_MENU;
                 }
+                else if (_prevMouseState.LeftButton == ButtonState.Pressed &&
+                   _curMouseState.LeftButton == ButtonState.Released &&
+                   _curMouseState.X > _instructionsButtons[0].X && _curMouseState.X < _instructionsButtons[0].X + _instructionsButtons[0].Width &&
+                   _curMouseState.Y > _instructionsButtons[0].Y && _curMouseState.Y < _instructionsButtons[0].Y + _instructionsButtons[0].Height)
+                {
+                    state = STATE.PLAY;
+                }
             }
             #endregion
 
@@ -510,6 +526,10 @@ namespace SleepyScientist
             {
                 foreach (Button b in _instructionsButtons)
                     b.Draw(spriteBatch);
+
+                //MessageLayer.ClearMessages();
+                //MessageLayer.AddMessage(new Message("-The objective of the game is to get the scientist to his bed in each level.\n-You may pick up inventions by clicking on them, and move the inventions by clicking on the place you want to move them.", 0, 0));
+                //MessageLayer.Draw(spriteBatch);
             }
 
             spriteBatch.End();

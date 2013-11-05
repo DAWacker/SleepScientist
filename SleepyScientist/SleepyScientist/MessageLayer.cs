@@ -77,6 +77,14 @@ namespace SleepyScientist
             _messages.Remove(message.Text);
         }
 
+        /// <summary>
+        /// Clear all messages.
+        /// </summary>
+        public static void ClearMessages()
+        {
+            _messages.Clear();
+        }
+
         /**
          * Update all the Messages and remove those that expire.
          * @param time The time to update the Messages by.
