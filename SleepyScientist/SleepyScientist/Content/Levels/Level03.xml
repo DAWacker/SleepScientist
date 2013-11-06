@@ -29,7 +29,7 @@
     <Stairs>
       <X>600</X>
       <Y>350</Y>
-      <Direction>-1</Direction>
+      <Direction>1</Direction>
     </Stairs>
   </Floor>
   <Floor>

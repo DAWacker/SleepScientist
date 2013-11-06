@@ -37,9 +37,8 @@ namespace SleepyScientist
         public static int SLOW_MOTION = 3;
 
         // Default movement speeds for inventions
-        public static int DEFAULT_INVENTION_X_VELO = 8;
-        public static int DEFAULT_INVENTION_Y_VELO = 0;
-        public static int INVENTION_LADDER_Y_VELO = -8;
+        public static int DEFAULT_INVENTION_X_VELOCITY = 8;
+        public static int DEFAULT_INVENTION_Y_VELOCITY = 0;
 
         // Floor constants
         public static int FLOOR_HEIGHT = TILE_HEIGHT;
@@ -49,12 +48,16 @@ namespace SleepyScientist
         public static int LADDER_HEIGHT = 200;
         public static int LADDER_X_VELOCITY = 0;
         public static int LADDER_Y_VELOCITY = -5;
+        public static int INVENTION_LADDER_X_VELOCITY = 0;
+        public static int INVENTION_LADDER_Y_VELOCITY = -8;
 
         // Stair constants
         public static int STAIR_WIDTH = 200;
         public static int STAIR_HEIGHT = 250;
         public static int STAIR_X_VELOCITY = 4;
         public static int STAIR_Y_VELOCITY = 5;
+        public static int INVENTION_STAIR_X_VELOCITY = 8;
+        public static int INVENTION_STAIR_Y_VELOCITY = 10;
 
         // Message layer constants
         public static double MESSAGE_TIME = 2;

@@ -263,7 +263,6 @@ namespace SleepyScientist
                     case -1:
                         if (this.RectPosition.Intersects(stair.RectPosition) &&
                             this.RectPosition.X < stair.RectPosition.X + stair.Width - this.Width &&
-
                             this.Direction == stair.Direction)
                         {
                             this.CurrentTile = stair;

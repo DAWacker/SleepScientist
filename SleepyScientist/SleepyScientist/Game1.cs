@@ -277,7 +277,7 @@ namespace SleepyScientist
                         invention.Clicked = false;
                         invention.TargetX = _curMouseState.X;
                         invention.TargetY = _curMouseState.Y;
-                        invention.VeloX = GameConstants.DEFAULT_INVENTION_X_VELO;
+                        invention.VeloX = GameConstants.DEFAULT_INVENTION_X_VELOCITY;
                         invention.DeterminePath();
                         GameConstants.MOVING_INVENTION = false;
                     }
@@ -304,6 +304,8 @@ namespace SleepyScientist
  
             // Draw the level.
             _sleepy.Room.Draw(spriteBatch);
+
+            foreach (Invention invention in _inventions) { invention.Draw(spriteBatch); }
 
             // Draw the scientist.
             _sleepy.Draw(spriteBatch);

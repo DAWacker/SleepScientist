@@ -118,7 +118,7 @@ namespace SleepyScientist
             // Draw the stairs on the floor
             foreach (Stairs stair in this.Stairs) { stair.Draw(batch); }
             // Draw the inventions on the floor
-            foreach (Invention invention in this.Inventions) { invention.Draw(batch); }
+            //foreach (Invention invention in this.Inventions) { invention.Draw(batch); }
             // Draw the pits on the floor
             foreach (Pit pit in this.Pits) { pit.Draw(batch); }
         }
