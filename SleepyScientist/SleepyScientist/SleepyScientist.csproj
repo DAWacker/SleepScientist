@@ -49,7 +49,7 @@
     <Compile Include="Invention.cs" />
     <Compile Include="JackInTheBox.cs" />
     <Compile Include="Ladder.cs" />
-    <Compile Include="LincolnLogs.cs" />
+    <Compile Include="Batteries.cs" />
     <Compile Include="LevelLoader.cs" />
     <Compile Include="Message.cs" />
     <Compile Include="MessageLayer.cs" />
@@ -157,6 +157,14 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Image\stairs.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Levels\Level05.xml">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Levels\Level04.xml">
+      <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Levels\Level02.xml">

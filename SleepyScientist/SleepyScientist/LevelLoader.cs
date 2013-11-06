@@ -25,8 +25,7 @@ namespace SleepyScientist
                 Room room = null;
                 int numFloors = 0;
                 int startFloor = 0;
-                //int startX = 0;
-                //int startY = 0;
+                int curFloorNum = 0;
                 List<Floor> floors = new List<Floor>();
   
                 
@@ -60,6 +59,10 @@ namespace SleepyScientist
                                     reader.Read();
                                     reader.Read();
                                     reader.Read();
+                                    int startDirection = Int32.Parse(reader.Value);
+                                    reader.Read();
+                                    reader.Read();
+                                    reader.Read();
                                     reader.Read();
                                     int bedX = Int32.Parse(reader.Value);
                                     reader.Read();
@@ -68,7 +71,7 @@ namespace SleepyScientist
                                     int bedY = Int32.Parse(reader.Value);
                                     Bed bed = new Bed(bedX, bedY, 100, 50);
                                     bed.Image = GameConstants.BED_TEXTURE;
-                                    room = new Room(numFloors, startFloor, startX, startY, bed);
+                                    room = new Room(numFloors, startFloor, startX, startY, startDirection, bed);
                                     break;
                                 case "Floor":
                                     reader.Read();
@@ -81,12 +84,12 @@ namespace SleepyScientist
                                     Floor floor = new Floor(xcoor, ycoor, GameConstants.SCREEN_WIDTH, GameConstants.FLOOR_HEIGHT);
                                     floor.Image = GameConstants.FLOOR_TEXTURE;
                                     room.Floors.Add(floor);
+                                    curFloorNum++;
                                     while (reader.Name != "Floor" && reader.Read())
                                     {
                                         switch (reader.NodeType)
                                         {
                                             case XmlNodeType.Element:
-                                                Console.WriteLine(reader.Name);
                                                 switch (reader.Name)
                                                 {
                                                     case "Ladder":
@@ -131,7 +134,7 @@ namespace SleepyScientist
                                                         reader.Read();
                                                         reader.Read();
                                                         int length = Int32.Parse(reader.Value);
-                                                        Pit pit = new Pit(pitXcoor, pitYcoor, GameConstants.TILE_WIDTH * length, GameConstants.TILE_HEIGHT + 5);
+                                                        Pit pit = new Pit(pitXcoor, pitYcoor, GameConstants.TILE_WIDTH * length, GameConstants.TILE_HEIGHT);
                                                         pit.Image = GameConstants.PIT_TEXTURE;
                                                         floor.Pits.Add(pit);
                                                         break;
@@ -151,17 +154,17 @@ namespace SleepyScientist
                                                         switch (inventionType)
                                                         {
                                                             case "JackInTheBox":
-                                                                JackInTheBox box = new JackInTheBox("jackie", inventionXcoor, inventionYcoor, GameConstants.TILE_WIDTH, GameConstants.TILE_HEIGHT, room);
+                                                                JackInTheBox box = new JackInTheBox("jackie", inventionXcoor, inventionYcoor, GameConstants.TILE_WIDTH, GameConstants.TILE_HEIGHT, room, curFloorNum);
                                                                 box.Image = GameConstants.JACK_TEXTURE;
                                                                 floor.Inventions.Add(box);
                                                                 break;
                                                             case "EggBeater":
-                                                                EggBeater egg = new EggBeater("beatMe", inventionXcoor, inventionYcoor, GameConstants.TILE_WIDTH, GameConstants.TILE_HEIGHT, room);
+                                                                EggBeater egg = new EggBeater("beatMe", inventionXcoor, inventionYcoor, GameConstants.TILE_WIDTH, GameConstants.TILE_HEIGHT, room, curFloorNum);
                                                                 egg.Image = GameConstants.EGG_TEXTURE;
                                                                 floor.Inventions.Add(egg);
                                                                 break;
                                                             case "RocketSkateboard":
-                                                                RocketSkateboard board = new RocketSkateboard("board", inventionXcoor, inventionYcoor, GameConstants.TILE_WIDTH, GameConstants.TILE_HEIGHT, room);
+                                                                RocketSkateboard board = new RocketSkateboard("board", inventionXcoor, inventionYcoor, GameConstants.TILE_WIDTH, GameConstants.TILE_HEIGHT, room, curFloorNum);
                                                                 board.Image = GameConstants.ROCKETBOARD_TEXTURE;
                                                                 floor.Inventions.Add(board);
                                                                 break;

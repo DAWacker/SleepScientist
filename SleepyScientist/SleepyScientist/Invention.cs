@@ -107,7 +107,7 @@ namespace SleepyScientist
         /// <param name="y">Y position</param>
         /// <param name="width">Width of invention</param>
         /// <param name="height">Height of invention</param>
-        public Invention(string name, int x, int y, int width, int height, Room room)
+        public Invention(string name, int x, int y, int width, int height, Room room, int startFloor)
             : base(name, x, y, width, height)
         {
             this.CurrentState = InventionState.Idle;
@@ -119,9 +119,9 @@ namespace SleepyScientist
             this.StairsNeeded = 0;
             this.Activated = false;
             this.Room = room;
-            this.CurrentFloor = room.Floors[room.StartFloor-1];
-            this.CurrentTile = room.Floors[room.StartFloor-1];
-            this.FloorNumber = room.StartFloor - 1;
+            this.CurrentFloor = room.Floors[startFloor-1];
+            this.CurrentTile = room.Floors[startFloor-1];
+            this.FloorNumber = startFloor - 1;
             this.Path = new List<GameObject>();
         }
 
@@ -135,7 +135,7 @@ namespace SleepyScientist
         /// <param name="first">First invention of combo.</param>
         /// <param name="second">Second invention of combo.</param>
         /// <returns></returns>
-        public static Invention operator +(Invention first, Invention second) { return new Invention(first.Name + second.Name, first.X, first.Y, first.Width, first.Height, first.Room); }
+        public static Invention operator +(Invention first, Invention second) { return new Invention(first.Name + second.Name, first.X, first.Y, first.Width, first.Height, first.Room, first.FloorNumber); }
 
         /// <summary>
         /// Method that executes the default functionality of an invention
@@ -214,6 +214,7 @@ namespace SleepyScientist
                                                 // Check if the invention is hitting those stairs
                                                 if (this.RectPosition.Intersects(stairs.RectPosition) &&
                                                     this.X < stairs.X + stairs.Width - this.Width &&
+                                                    this.X > stairs.X + stairs.Width - this.Width - 10 &&
                                                     this.LaddersNeeded != this.LaddersHit)
                                                 {
                                                     this.CurrentTile = stairs;
@@ -483,8 +484,8 @@ namespace SleepyScientist
                 if (this.LaddersNeeded > 0)
                 {
                     // Pool together all of the potential routes the invention can take on this floor
-                    potentialRoutes.AddRange(this.CurrentFloor.Ladders);
-                    potentialRoutes.AddRange(this.Room.Floors[currentFloor + 1].Stairs);
+                    if (this.Room.Floors[currentFloor].Ladders.Count != 0) potentialRoutes.AddRange(this.Room.Floors[currentFloor].Ladders);
+                    if (this.Room.Floors[currentFloor + 1].Stairs.Count != 0) potentialRoutes.AddRange(this.Room.Floors[currentFloor + 1].Stairs);
 
                     // If the potential routes are not zero, find the closest
                     if (potentialRoutes.Count != 0)
@@ -501,14 +502,15 @@ namespace SleepyScientist
                             this.Path = path;
                             foundPath = true;
                         }
+                        else { currentFloor++; }
                     }
                 }
                 // Need to go down
                 if (this.StairsNeeded > 0)
                 {
                     // Pool together all of the potential routes the invention can take on this floor
-                    potentialRoutes.AddRange(this.CurrentFloor.Stairs);
-                    potentialRoutes.AddRange(this.Room.Floors[currentFloor - 1].Ladders);
+                    if (this.Room.Floors[currentFloor].Stairs.Count != 0) potentialRoutes.AddRange(this.Room.Floors[currentFloor].Stairs);
+                    if (this.Room.Floors[currentFloor - 1].Ladders.Count != 0) potentialRoutes.AddRange(this.Room.Floors[currentFloor - 1].Ladders);
 
                     // If the potential routes are not zero, find the closest
                     if (potentialRoutes.Count != 0)
@@ -525,6 +527,7 @@ namespace SleepyScientist
                             this.Path = path;
                             foundPath = true;
                         }
+                        else { currentFloor--; }
                     }
                 }
             }

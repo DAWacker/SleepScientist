@@ -2,24 +2,26 @@
 <Level03>
   <Info>
     <NumberOfFloors>3</NumberOfFloors>
-    <FloorNumber>1</FloorNumber>
-    <X>50</X>
-    <Y>550</Y>
+    <FloorNumber>2</FloorNumber>
+    <X>25</X>
+    <Y>350</Y>
+    <Direction>1</Direction>
     <Bed>
-      <X>1000</X>
-      <Y>150</Y>
+      <X>1150</X>
+      <Y>350</Y>
     </Bed>
   </Info>
   <Floor>
     <X>0</X>
     <Y>600</Y>
-    <Ladder>
-      <X>100</X>
-      <Y>350</Y>
-    </Ladder>
+    <Pit>
+      <X>1150</X>
+      <Y>600</Y>
+      <Length>3</Length>
+    </Pit>
     <Invention>
       <Name>JackInTheBox</Name>
-      <X>900</X>
+      <X>25</X>
       <Y>550</Y>
     </Invention>
   </Floor>
@@ -27,18 +29,18 @@
     <X>0</X>
     <Y>400</Y>
     <Stairs>
-      <X>600</X>
+      <X>150</X>
       <Y>350</Y>
       <Direction>1</Direction>
+    </Stairs>
+    <Stairs>
+      <X>900</X>
+      <Y>350</Y>
+      <Direction>-1</Direction>
     </Stairs>
   </Floor>
   <Floor>
     <X>0</X>
     <Y>200</Y>
-    <Invention>
-      <Name>EggBeater</Name>
-      <X>200</X>
-      <Y>150</Y>
-    </Invention>
   </Floor>
 </Level03>

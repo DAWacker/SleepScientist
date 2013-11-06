@@ -53,7 +53,7 @@ namespace SleepyScientist
             JackInTheBox,
             RocketSkates,
             EggBeater,
-            LincolnLogs,
+            Batteries,
             Ladder,
             Stairs,
             Bed,
@@ -107,6 +107,7 @@ namespace SleepyScientist
             : base(name, x, y, width, height)
         {
             this.Room = room;
+            this.Direction = this.Room.StartDirection;
             this.CurrentState = ScientistState.Walking;
             this.PreviousState = ScientistState.Walking;
             this.CurrentFloor = room.Floors[room.StartFloor - 1];
@@ -130,12 +131,6 @@ namespace SleepyScientist
         /// </summary>
         public override void Update() 
         {
-
-            /*
-            try { MessageLayer.AddMessage(new Message(this.FloorNumber + " : " + this.CurrentFloor.Ladders[0].X, this.X - 10, this.Y - 30, GameConstants.MESSAGE_TIME)); }
-            catch { MessageLayer.AddMessage(new Message((this.CurrentFloor.Ladders == null).ToString(), this.X - 10, this.Y - 30, GameConstants.MESSAGE_TIME)); }
-            */
-
             // Check if the scientist is on the ground or just landing
             if (this.RectPosition.Bottom == this.CurrentFloor.RectPosition.Top ||
                 (this.RectPosition.Intersects(this.CurrentFloor.RectPosition) &&
@@ -161,10 +156,10 @@ namespace SleepyScientist
                     if (invention.GetType() == typeof(JackInTheBox))
                     {
                         // Make sure you are not on the top floor
-                        if (this.FloorNumber != Room.NumberFloors)
+                        if (this.FloorNumber != Room.NumberFloors - 1)
                         {
                             // Loop through all of the stairs on the floor above you
-                            foreach (Stairs stair in this.Room.Floors[invention.FloorNumber + 1].Stairs)
+                            foreach (Stairs stair in this.Room.Floors[this.FloorNumber + 1].Stairs)
                             {
                                 // Check which way the staircase is facing
                                 switch (stair.Direction)
@@ -200,7 +195,11 @@ namespace SleepyScientist
                                         break;
                                 }
                             }
+                            // If the floor above has no stairs, interact with the invention normally
+                            if (this.CurrentState != ScientistState.JackInTheBox) { if (this.Room.Floors[this.FloorNumber + 1].Stairs.Count == 0) { this.InteractWith(invention); } }
                         }
+                        // If the jack in the box isn't at the bottom of the stairs, do a normal jump
+                        else { this.InteractWith(invention); }
                     }
 
                     // Interact normally with other inventions
@@ -280,7 +279,8 @@ namespace SleepyScientist
             foreach (Pit pit in this.CurrentFloor.Pits)
             {
                 // Check if the scientist is touching the pit
-                if (this.RectPosition.Intersects(pit.RectPosition))
+                if (this.RectPosition.Bottom == pit.RectPosition.Top &&
+                    this.X + this.Width > pit.X && this.X < pit.X + pit.Width)
                 {
                     this.CurrentTile = pit;
                     this.CurrentState = ScientistState.Pit;
@@ -386,7 +386,7 @@ namespace SleepyScientist
 
             // Check gameObject's type and change state accordingly.
             if (objType == typeof(RocketSkateboard)) { newState = ScientistState.RocketSkates; }
-            else if (objType == typeof(LincolnLogs)) { newState = ScientistState.LincolnLogs; }
+            else if (objType == typeof(Batteries)) { newState = ScientistState.Batteries; }
             else if (objType == typeof(EggBeater)) { newState = ScientistState.EggBeater; }
             else if (objType == typeof(JackInTheBox)) { newState = ScientistState.JackInTheBox; }
 
