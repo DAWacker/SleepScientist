@@ -17,7 +17,7 @@ namespace SleepyScientist
 
         #region Methods
 
-        public static Room Load(String levelName)
+        public static Room Load(int level)
         {
             try
             {
@@ -30,7 +30,7 @@ namespace SleepyScientist
   
                 
                 // Load in any of the levels
-                XmlTextReader reader = new XmlTextReader("Content/Levels/" + levelName + ".xml");
+                XmlTextReader reader = new XmlTextReader("Content/Levels/Level" + level + ".xml");
                 reader.WhitespaceHandling = WhitespaceHandling.None;
 
                 while (reader.Read())

@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<Level03>
+<Level3>
   <Info>
     <NumberOfFloors>3</NumberOfFloors>
     <FloorNumber>2</FloorNumber>
@@ -43,4 +43,4 @@
     <X>0</X>
     <Y>200</Y>
   </Floor>
-</Level03>
+</Level3>

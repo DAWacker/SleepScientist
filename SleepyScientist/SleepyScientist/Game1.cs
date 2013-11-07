@@ -64,6 +64,8 @@ namespace SleepyScientist
 
         // Test
         private bool _begin = false;
+        private int _levelNumber = 1;
+        private Room level = null;
 
         #endregion
 
@@ -194,7 +196,7 @@ namespace SleepyScientist
                 _scientistTexture
             };*/
 
-            Room level = LevelLoader.Load("Level03");
+            Room level = LevelLoader.Load(1);
 
             // This startx is a test to see if the loader broke
             int startx = level.StartX;
@@ -295,7 +297,42 @@ namespace SleepyScientist
                     }
                 }
 
-                if (!_sleepy.Winner && !_sleepy.Loser) _sleepy.Update();
+                _sleepy.Update();
+
+                // Check if the user won
+                if (_sleepy.Winner)
+                {
+                    _begin = false;
+                    if (_levelNumber == 5) { _levelNumber = 1; }
+                    else { _levelNumber++; }
+                    this.Reset();
+
+                    // Load the current level
+                    Room level = LevelLoader.Load(_levelNumber);
+                    this.level = level;
+
+                    // Create the scientist and set his image
+                    _sleepy = new Scientist("Sleepy", level.StartX, level.StartY, 50, 50, level);
+                    _sleepy.Image = _scientistTexture;
+                    this.Load();
+                }
+
+                // Check if the user lost
+                if (_sleepy.Loser)
+                {
+                    _begin = false;
+                    this.Reset();
+
+                    // Load the current level
+                    Room level = LevelLoader.Load(_levelNumber);
+                    this.level = level;
+
+                    //Create the scientist and set his image
+                    // Create the scientist and set his image
+                    _sleepy = new Scientist("Sleepy", level.StartX, level.StartY, 50, 50, level);
+                    _sleepy.Image = _scientistTexture;
+                    this.Load();
+                }
                 MessageLayer.Update(gameTime.ElapsedGameTime.TotalSeconds);
             }
             else if (_curMouseState.LeftButton == ButtonState.Released &&
@@ -375,6 +412,42 @@ namespace SleepyScientist
             }
 
             return hasCollided;
+        }
+
+        /// <summary>
+        /// Resets all of the drawable objects in the level
+        /// </summary>
+        public void Reset()
+        {
+            _allGameObjects.Clear();
+            _stairs.Clear();
+            _ladders.Clear();
+            _inventions.Clear();
+            _floors.Clear();
+            _pits.Clear();
+        }
+
+        /// <summary>
+        /// Loads all of the drawable objects in the level
+        /// </summary>
+        public void Load()
+        {
+            // Store all the GameObjects.
+            // This should be inside of the Level Class when we get to it.
+            foreach (Floor floor in this.level.Floors)
+            {
+                _allGameObjects.Add(floor);
+                _floors.Add(floor);
+                _allGameObjects.AddRange(floor.Ladders);
+                _ladders.AddRange(floor.Ladders);
+                _allGameObjects.AddRange(floor.Stairs);
+                _stairs.AddRange(floor.Stairs);
+                _allGameObjects.AddRange(floor.Pits);
+                _pits.AddRange(floor.Pits);
+                _allGameObjects.AddRange(floor.Inventions);
+                _inventions.AddRange(floor.Inventions);
+            }
+            _allGameObjects.Add(_sleepy);
         }
     }
 }

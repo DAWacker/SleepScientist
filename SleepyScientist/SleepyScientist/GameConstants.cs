@@ -28,7 +28,7 @@ namespace SleepyScientist
         public static int DEFAULT_Y_VELOCITY = 0;
         public static int DEFAULT_DIRECTION = 1;
         public static int DEFAULT_JUMP_VELOCITY_Y = -12;
-        public static int DEFAULT_JUMP_VELOCITY_X = 15;
+        public static int DEFAULT_JUMP_VELOCITY_X = 10;
         public static int JUMP_UPSTAIRS_VELOCITY_Y = -23;
         public static int JUMP_UPSTAIRS_VELOCITY_X = 12;
         
