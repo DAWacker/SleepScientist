@@ -29,12 +29,12 @@
     <X>0</X>
     <Y>400</Y>
     <Stairs>
-      <X>150</X>
+      <X>100</X>
       <Y>350</Y>
       <Direction>1</Direction>
     </Stairs>
     <Stairs>
-      <X>900</X>
+      <X>775</X>
       <Y>350</Y>
       <Direction>-1</Direction>
     </Stairs>

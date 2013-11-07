@@ -26,6 +26,9 @@ namespace SleepyScientist
         // The animations of the game object.
         private AnimationSet _animations;
 
+        // The direction of the game object
+        private int _direction;
+
         #endregion
 
         #region Properties
@@ -59,6 +62,9 @@ namespace SleepyScientist
         // Get or set the AnimationSet of the game object.
         public AnimationSet Animations { get { return _animations; } set { _animations = value; } }
 
+        // Get or set the direction of the game object
+        public int Direction { get { return _direction; } set { _direction = value; } }
+
         #endregion
 
         #region Constructor
@@ -70,9 +76,10 @@ namespace SleepyScientist
         /// <param name="y">Starting y-coordinate</param>
         /// <param name="width">Width</param>
         /// <param name="height">Height</param>
-        public GameObject(int x, int y, int width, int height) 
+        public GameObject(int x, int y, int width, int height, int direction) 
         { 
             _rectPosition = new Rectangle(x, y, width, height);
+            _direction = direction;
             _animations = null;
         }
 
@@ -86,9 +93,25 @@ namespace SleepyScientist
         /// <param name="batch">The sprite batch you want to draw on</param>
         public virtual void Draw(SpriteBatch batch, Rectangle? pos = null) {
             if (pos != null)
-                batch.Draw(this.Image, pos.Value, Color.White);
+                switch (this.Direction)
+                {
+                    case -1:
+                        batch.Draw(this.Image, this.RectPosition, null, Color.White, 0, Vector2.Zero, SpriteEffects.FlipHorizontally, 0);
+                        break;
+                    case 1:
+                        batch.Draw(this.Image, pos.Value, Color.White);
+                        break;
+                }
             else
-                batch.Draw(this.Image, this.RectPosition, Color.White);
+                switch (this.Direction)
+                {
+                    case -1:
+                        batch.Draw(this.Image, this.RectPosition, null, Color.White, 0, Vector2.Zero, SpriteEffects.FlipHorizontally, 0);
+                        break;
+                    case 1:
+                        batch.Draw(this.Image, this.RectPosition, Color.White);
+                        break;
+                }
         }
 
         /// <summary>

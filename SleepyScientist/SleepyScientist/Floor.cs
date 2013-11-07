@@ -61,7 +61,7 @@ namespace SleepyScientist
         /// <param name="width">The width of the floor</param>
         /// <param name="height">The height of the floor</param>
         public Floor(int x, int y, int width, int height)
-            : base(x, y, width, height) 
+            : base(x, y, width, height, 1) 
         {
             this.Inventions = new List<Invention>();
             this.Ladders = new List<Ladder>();
@@ -111,14 +111,6 @@ namespace SleepyScientist
                 drawDest.Height = Image.Height;
             }
 
-            // Draw the ladders on the floor
-            foreach (Ladder ladder in this.Ladders) { ladder.Draw(batch); }
-            // Draw the walls on the floor
-            foreach (Wall wall in this.Walls) { wall.Draw(batch); }
-            // Draw the stairs on the floor
-            foreach (Stairs stair in this.Stairs) { stair.Draw(batch); }
-            // Draw the inventions on the floor
-            //foreach (Invention invention in this.Inventions) { invention.Draw(batch); }
             // Draw the pits on the floor
             foreach (Pit pit in this.Pits) { pit.Draw(batch); }
         }

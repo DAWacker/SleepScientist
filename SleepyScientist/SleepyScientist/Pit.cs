@@ -8,6 +8,6 @@ namespace SleepyScientist
     class Pit : GameObject
     {
         public Pit(int x, int y, int width, int height)
-            : base(x, y, width, height) { }
+            : base(x, y, width, height, GameConstants.DEFAULT_DIRECTION) { }
     }
 }

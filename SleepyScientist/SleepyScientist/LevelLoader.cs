@@ -119,6 +119,7 @@ namespace SleepyScientist
                                                         int stairDirection = Int32.Parse(reader.Value);
                                                         Stairs stairs = new Stairs(stairXcoor, stairYcoor, GameConstants.STAIR_WIDTH, GameConstants.STAIR_HEIGHT, stairDirection);
                                                         stairs.Image = GameConstants.STAIR_TEXTURE;
+                                                        stairs.RailingTexture = GameConstants.RAILING_TEXTURE;
                                                         floor.Stairs.Add(stairs);
                                                         break;
 

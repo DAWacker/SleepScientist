@@ -69,15 +69,5 @@ namespace SleepyScientist
         }
 
         #endregion
-
-        #region Methods
-
-        public void Draw(SpriteBatch batch) 
-        { 
-            foreach (Floor floor in this.Floors) { floor.Draw(batch); }
-            this.Bed.Draw(batch);
-        }
-
-        #endregion
     }
 }

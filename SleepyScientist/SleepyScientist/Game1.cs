@@ -36,6 +36,7 @@ namespace SleepyScientist
         private List<Floor> _floors;
         private List<Ladder> _ladders;
         private List<Stairs> _stairs;
+        private List<Pit> _pits;
         private List<Invention> _inventions;
         private List<GameObject> _allGameObjects;
 
@@ -49,6 +50,8 @@ namespace SleepyScientist
         private Texture2D _jackintheboxTexture;
         private Texture2D _bedTexture;
         private Texture2D _pitTexture;
+        private Texture2D _wallTexture;
+        private Texture2D _railingTexture;
 
         // Mouse Input
         private MouseState _prevMouseState;
@@ -97,6 +100,7 @@ namespace SleepyScientist
             _floors = new List<Floor>();
             _ladders = new List<Ladder>();
             _stairs = new List<Stairs>();
+            _pits = new List<Pit>();
             _inventions = new List<Invention>();
 
             // Initialize Camera.
@@ -136,6 +140,8 @@ namespace SleepyScientist
             _jackintheboxTexture = this.Content.Load<Texture2D>("Image/jack");
             _bedTexture = this.Content.Load<Texture2D>("Image/bed");
             _pitTexture = this.Content.Load<Texture2D>("Image/pit");
+            _wallTexture = this.Content.Load<Texture2D>("Image/walltile");
+            _railingTexture = this.Content.Load<Texture2D>("Image/railing");
             
             // Make these textures static
             GameConstants.FLOOR_TEXTURE = _floorTexture;
@@ -146,6 +152,7 @@ namespace SleepyScientist
             GameConstants.JACK_TEXTURE = _jackintheboxTexture;
             GameConstants.BED_TEXTURE = _bedTexture;
             GameConstants.PIT_TEXTURE = _pitTexture;
+            GameConstants.RAILING_TEXTURE = _railingTexture;
 
             // Add some test messages.
             MessageLayer.AddMessage(new Message("Test", 0, 0));
@@ -187,7 +194,7 @@ namespace SleepyScientist
                 _scientistTexture
             };*/
 
-            Room level = LevelLoader.Load("Level01");
+            Room level = LevelLoader.Load("Level03");
 
             // This startx is a test to see if the loader broke
             int startx = level.StartX;
@@ -201,8 +208,13 @@ namespace SleepyScientist
             foreach (Floor floor in level.Floors)
             {
                 _allGameObjects.Add(floor);
+                _floors.Add(floor);
                 _allGameObjects.AddRange(floor.Ladders);
+                _ladders.AddRange(floor.Ladders);
                 _allGameObjects.AddRange(floor.Stairs);
+                _stairs.AddRange(floor.Stairs);
+                _allGameObjects.AddRange(floor.Pits);
+                _pits.AddRange(floor.Pits);
                 _allGameObjects.AddRange(floor.Inventions);
                 _inventions.AddRange(floor.Inventions);
             }
@@ -301,14 +313,42 @@ namespace SleepyScientist
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             spriteBatch.Begin();
- 
-            // Draw the level.
-            _sleepy.Room.Draw(spriteBatch);
 
+            // Draw the background
+            GameObject wallTile;
+            for (int x = 0; x < GameConstants.SCREEN_WIDTH; x += 50)
+            {
+                for (int y = 0; y < GameConstants.SCREEN_HEIGHT; y += 50)
+                {
+                    wallTile = new GameObject(x, y, 50, 50, GameConstants.DEFAULT_DIRECTION);
+                    wallTile.Image = _wallTexture;
+                    wallTile.Draw(spriteBatch);
+                }
+            }
+
+            // Draw the floors
+            foreach (Floor floor in _floors) { floor.Draw(spriteBatch); }
+
+            // Draw the ladders
+            foreach (Ladder ladder in _ladders) { ladder.Draw(spriteBatch); }
+
+            // Draw the stairs
+            foreach (Stairs stair in _stairs) { stair.Draw(spriteBatch); }
+
+            // Draw the inventions
             foreach (Invention invention in _inventions) { invention.Draw(spriteBatch); }
+
+            // Draw the pits
+            foreach (Pit pit in _pits) { pit.Draw(spriteBatch); }
+
+            // Draw the bed
+            _sleepy.Room.Bed.Draw(spriteBatch);
 
             // Draw the scientist.
             _sleepy.Draw(spriteBatch);
+
+            // Draw the stair railings
+            foreach (Stairs stair in _stairs) { stair.Railing.Draw(spriteBatch); }
 
             // Draw the messages.
             MessageLayer.Draw(spriteBatch);

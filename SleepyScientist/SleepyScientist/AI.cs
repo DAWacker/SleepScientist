@@ -27,9 +27,6 @@ namespace SleepyScientist
         private string _name;
         private AI _target;
 
-        // 1 implies moving to the right, -1 to the left
-        private int _direction;
-
         #endregion
 
         #region Properties
@@ -46,9 +43,6 @@ namespace SleepyScientist
         // Get or set target
         public AI Target { get { return _target; } set { _target = value; } }
 
-        // Get or set the AI's direction
-        public int Direction { get { return _direction; } set { _direction = value; if ( _target != null ) _target.Direction = value; } }
-
         #endregion
 
         #region Constructor
@@ -61,14 +55,13 @@ namespace SleepyScientist
         /// <param name="y">Starting y-coordinate</param>
         /// <param name="image">The image</param>
         public AI(string name, int x, int y, int width, int height)
-            : base(x, y, width, height)
+            : base(x, y, width, height, GameConstants.DEFAULT_DIRECTION)
         {
             // General
             _name = name;
-            _direction = GameConstants.DEFAULT_DIRECTION;
 
             // Movement
-            _veloX = GameConstants.DEFAULT_X_VELOCITY * _direction;
+            _veloX = GameConstants.DEFAULT_X_VELOCITY * this.Direction;
             _veloY = 0;
             _prevY = y;
         }

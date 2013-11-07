@@ -23,7 +23,7 @@ namespace SleepyScientist
         /// <param name="width">The width of the wall</param>
         /// <param name="height">The height of the wall</param>
         public Wall(int x, int y, int width, int height)
-            : base(x, y, width, height) { }
+            : base(x, y, width, height, GameConstants.DEFAULT_DIRECTION) { }
 
         #endregion
 

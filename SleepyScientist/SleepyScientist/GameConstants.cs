@@ -28,8 +28,8 @@ namespace SleepyScientist
         public static int DEFAULT_Y_VELOCITY = 0;
         public static int DEFAULT_DIRECTION = 1;
         public static int DEFAULT_JUMP_VELOCITY_Y = -12;
-        public static int DEFAULT_JUMP_VELOCITY_X = 10;
-        public static int JUMP_UPSTAIRS_VELOCITY_Y = -20;
+        public static int DEFAULT_JUMP_VELOCITY_X = 15;
+        public static int JUMP_UPSTAIRS_VELOCITY_Y = -23;
         public static int JUMP_UPSTAIRS_VELOCITY_X = 12;
         
         // User input related
@@ -52,12 +52,12 @@ namespace SleepyScientist
         public static int INVENTION_LADDER_Y_VELOCITY = -8;
 
         // Stair constants
-        public static int STAIR_WIDTH = 200;
+        public static int STAIR_WIDTH = 300;
         public static int STAIR_HEIGHT = 250;
         public static int STAIR_X_VELOCITY = 4;
-        public static int STAIR_Y_VELOCITY = 5;
+        public static int STAIR_Y_VELOCITY = 3;
         public static int INVENTION_STAIR_X_VELOCITY = 8;
-        public static int INVENTION_STAIR_Y_VELOCITY = 10;
+        public static int INVENTION_STAIR_Y_VELOCITY = 6;
 
         // Message layer constants
         public static double MESSAGE_TIME = 2;
@@ -88,6 +88,7 @@ namespace SleepyScientist
         public static Texture2D STAIR_TEXTURE;
         public static Texture2D BED_TEXTURE;
         public static Texture2D PIT_TEXTURE;
+        public static Texture2D RAILING_TEXTURE;
 
         #endregion
     }
