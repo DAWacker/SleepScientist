@@ -73,6 +73,22 @@ namespace SleepyScientist
         public static int NUMBER_OF_FLOORS = 3;
         public static int DISTANCE_BETWEEN_FLOORS = 200;
 
+        // Bed info
+        public static int BED_WIDTH = 150;
+        public static int BED_HEIGHT = 50;
+
+        // Skateboard info
+        public static int SKATEBOARD_WIDTH = 100;
+        public static int SKATEBOARD_HEIGHT = 25;
+
+        // JackInTheBox info
+        public static int JACK_WIDTH = 50;
+        public static int JACK_HEIGHT = 50;
+
+        // EggBeater info
+        public static int EGGBEATER_WIDTH = 12;
+        public static int EGGBEATER_HEIGHT = 25;
+
         // Camera constants.
         public static float MINIMUM_ZOOM = 1F;
         public static float ZOOM_STEP = 0.1F;

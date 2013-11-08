@@ -69,7 +69,7 @@ namespace SleepyScientist
                                     reader.Read();
                                     reader.Read();
                                     int bedY = Int32.Parse(reader.Value);
-                                    Bed bed = new Bed(bedX, bedY, 100, 50);
+                                    Bed bed = new Bed(bedX-50, bedY, GameConstants.BED_WIDTH, GameConstants.BED_HEIGHT);
                                     bed.Image = GameConstants.BED_TEXTURE;
                                     room = new Room(numFloors, startFloor, startX, startY, startDirection, bed);
                                     break;
@@ -160,7 +160,7 @@ namespace SleepyScientist
                                                                 floor.Inventions.Add(box);
                                                                 break;
                                                             case "EggBeater":
-                                                                EggBeater egg = new EggBeater("beatMe", inventionXcoor, inventionYcoor, GameConstants.TILE_WIDTH, GameConstants.TILE_HEIGHT, room, curFloorNum);
+                                                                EggBeater egg = new EggBeater("beatMe", inventionXcoor, inventionYcoor, 12, 25, room, curFloorNum);
                                                                 egg.Image = GameConstants.EGG_TEXTURE;
                                                                 floor.Inventions.Add(egg);
                                                                 break;
