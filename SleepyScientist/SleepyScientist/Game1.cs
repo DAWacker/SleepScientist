@@ -137,9 +137,9 @@ namespace SleepyScientist
             _floorTexture = this.Content.Load<Texture2D>("Image/floor");
             _stairsTexture = this.Content.Load<Texture2D>("Image/stairs");
             _ladderTexture = this.Content.Load<Texture2D>("Image/ladder");
-            _rocketSkateboardTexture = this.Content.Load<Texture2D>("Image/skateboard");
-            _eggBeaterTexture = this.Content.Load<Texture2D>("Image/beater");
-            _jackintheboxTexture = this.Content.Load<Texture2D>("Image/jack");
+            _rocketSkateboardTexture = this.Content.Load<Texture2D>("Image/rocketSkateboard");
+            _eggBeaterTexture = this.Content.Load<Texture2D>("Image/eggBeater");
+            _jackintheboxTexture = this.Content.Load<Texture2D>("Image/jackInTheBox");
             _bedTexture = this.Content.Load<Texture2D>("Image/bed");
             _pitTexture = this.Content.Load<Texture2D>("Image/pit");
             _wallTexture = this.Content.Load<Texture2D>("Image/walltile");
