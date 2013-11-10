@@ -185,7 +185,7 @@ namespace SleepyScientist
                                                                 floor.Inventions.Add(egg);
                                                                 break;
                                                             case "RocketSkateboard":
-                                                                RocketSkateboard board = new RocketSkateboard("board", inventionXcoor, inventionYcoor, GameConstants.SKATEBOARD_WIDTH, GameConstants.SKATEBOARD_HEIGHT, room, curFloorNum);
+                                                                RocketSkateboard board = new RocketSkateboard("board", inventionXcoor, inventionYcoor + GameConstants.SKATEBOARD_HEIGHT, GameConstants.SKATEBOARD_WIDTH, GameConstants.SKATEBOARD_HEIGHT, room, curFloorNum);
                                                                 board.Image = GameConstants.ROCKETBOARD_TEXTURE;
                                                                 floor.Inventions.Add(board);
                                                                 break;
