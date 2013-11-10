@@ -22,6 +22,7 @@ namespace SleepyScientist
         private int _startDirection;
         private List<Floor> _floors;
         private Bed _bed;
+        private Door _door;
 
         #endregion
 
@@ -46,6 +47,9 @@ namespace SleepyScientist
         // Get or set the bed in the room
         public Bed Bed { get { return _bed; } set { _bed = value; } }
 
+        // Get or set the door in the room
+        public Door Door { get { return _door; } set { _door = value; }}
+
         #endregion
 
         #region Constructor
@@ -66,6 +70,7 @@ namespace SleepyScientist
             this.StartDirection = startDirection;
             this.Floors = new List<Floor>();
             this.Bed = bed;
+            this.Door = null;
         }
 
         #endregion

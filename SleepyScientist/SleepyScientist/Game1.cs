@@ -55,6 +55,8 @@ namespace SleepyScientist
         private Texture2D _pitLaserRight;
         private Texture2D _pitLaserTile;
         private Texture2D _pitTerminal;
+        private Texture2D _doorOpenTexture;
+        private Texture2D _doorClosedTexture;
 
         // Mouse Input
         private MouseState _prevMouseState;
@@ -67,7 +69,7 @@ namespace SleepyScientist
 
         // Test
         private bool _begin = false;
-        private int _levelNumber = 1;
+        private int _levelNumber = 6;
         private Room level = null;
 
         #endregion
@@ -146,6 +148,8 @@ namespace SleepyScientist
             _bedTexture = this.Content.Load<Texture2D>("Image/bed");
             _wallTexture = this.Content.Load<Texture2D>("Image/walltile");
             _railingTexture = this.Content.Load<Texture2D>("Image/railing");
+            _doorOpenTexture = this.Content.Load<Texture2D>("Image/doorOpen");
+            _doorClosedTexture = this.Content.Load<Texture2D>("Image/doorClosed");
 
             // Load textures for the pits
             _pitLaserLeft = this.Content.Load<Texture2D>("Image/laserLeftEnd");
@@ -166,6 +170,8 @@ namespace SleepyScientist
             GameConstants.PIT_RIGHT_END_TEXTURE = _pitLaserRight;
             GameConstants.PIT_TERMINAL_TEXTURE = _pitTerminal;
             GameConstants.PIT_TILE_TEXTURE = _pitLaserTile;
+            GameConstants.DOOR_OPEN_TEXTURE = _doorOpenTexture;
+            GameConstants.DOOR_CLOSED_TEXTURE = _doorClosedTexture;
 
             // Add some test messages.
             MessageLayer.AddMessage(new Message("Test", 0, 0));
@@ -207,7 +213,7 @@ namespace SleepyScientist
                 _scientistTexture
             };*/
 
-            Room level = LevelLoader.Load(1);
+            Room level = LevelLoader.Load(_levelNumber);
 
             // This startx is a test to see if the loader broke
             int startx = level.StartX;
@@ -231,6 +237,7 @@ namespace SleepyScientist
                 _allGameObjects.AddRange(floor.Inventions);
                 _inventions.AddRange(floor.Inventions);
             }
+            if (level.Door != null) { _allGameObjects.Add(level.Door); }
             _allGameObjects.Add(_sleepy);
 
         }
@@ -274,9 +281,6 @@ namespace SleepyScientist
                     _camera.ZoomToLocation(Mouse.GetState().X, Mouse.GetState().Y);
             }
 
-            // Update global Time class.
-            Time.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
-
             _prevMouseState = _curMouseState;
             _curMouseState = Mouse.GetState();
 
@@ -308,7 +312,13 @@ namespace SleepyScientist
                     }
                 }
 
+                if (GameConstants.MOVING_INVENTION) { Time.Update((float)gameTime.ElapsedGameTime.TotalSeconds / 2); }
+                else { Time.Update((float)gameTime.ElapsedGameTime.TotalSeconds); }
+
                 _sleepy.Update();
+
+                // Check if the door closed
+                if (_sleepy.Room.Door != null) { if (Time.CurTime >= _sleepy.Room.Door.Time) { _sleepy.Loser = true; } }
 
                 // Check if the user won
                 if (_sleepy.Winner)
@@ -344,6 +354,7 @@ namespace SleepyScientist
                     _sleepy.Image = _scientistTexture;
                     this.Load();
                 }
+
                 MessageLayer.Update(gameTime.ElapsedGameTime.TotalSeconds);
             }
             else if (_curMouseState.LeftButton == ButtonState.Released &&
@@ -395,6 +406,9 @@ namespace SleepyScientist
             // Draw the scientist.
             _sleepy.Draw(spriteBatch);
 
+            // Draw the door
+            if (_sleepy.Room.Door != null) { _sleepy.Room.Door.Draw(spriteBatch); }
+
             // Draw the stair railings
             foreach (Stairs stair in _stairs) { stair.Railing.Draw(spriteBatch); }
 
@@ -404,25 +418,6 @@ namespace SleepyScientist
             spriteBatch.End();
 
             base.Draw(gameTime);
-        }
-
-        /// <summary>
-        /// !This should be inside of AI, but it requires AI to have a currentFloor and Floors to have a list of Inventions!
-        /// Updates the states of the objects.
-        /// </summary>
-        private bool handleCollisions(AI ai)
-        {
-            bool hasCollided = false;
-
-            foreach (Ladder ladder in _ladders)
-            {
-                if ( ladder.RectPosition.Contains( ai.RectPosition.Center ) )
-                {
-                    //hasCollided = ai.InteractWith(ladder);                    
-                }
-            }
-
-            return hasCollided;
         }
 
         /// <summary>

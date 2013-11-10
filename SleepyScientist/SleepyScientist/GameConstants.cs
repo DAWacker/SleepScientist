@@ -62,9 +62,6 @@ namespace SleepyScientist
         // Message layer constants
         public static double MESSAGE_TIME = 2;
 
-        // Invention constants
-        public static int SKATEBOARD_SPEEDUP = 2;
-
         // Others
         public static int GRAVITY = 1;
         public static int BUFFER = 5;
@@ -78,22 +75,34 @@ namespace SleepyScientist
         // Floor info
         public static int NUMBER_OF_FLOORS = 3;
         public static int DISTANCE_BETWEEN_FLOORS = 200;
+        public static Texture2D FLOOR_TEXTURE;
+
+        // Door info
+        public static int DOOR_WIDTH = 50;
+        public static int DOOR_HEIGHT = 150;
+        public static Texture2D DOOR_OPEN_TEXTURE;
+        public static Texture2D DOOR_CLOSED_TEXTURE;
 
         // Bed info
         public static int BED_WIDTH = 150;
         public static int BED_HEIGHT = 50;
+        public static Texture2D BED_TEXTURE;
 
         // Skateboard info
         public static int SKATEBOARD_WIDTH = 100;
         public static int SKATEBOARD_HEIGHT = 25;
+        public static int SKATEBOARD_SPEEDUP = 2;
+        public static Texture2D ROCKETBOARD_TEXTURE;
 
         // JackInTheBox info
         public static int JACK_WIDTH = 50;
         public static int JACK_HEIGHT = 50;
+        public static Texture2D JACK_TEXTURE;
 
         // EggBeater info
         public static int EGGBEATER_WIDTH = 12;
         public static int EGGBEATER_HEIGHT = 25;
+        public static Texture2D EGG_TEXTURE;
 
         // Camera constants.
         public static float MINIMUM_ZOOM = 1F;
@@ -102,15 +111,9 @@ namespace SleepyScientist
         public static float ZOOM_LEVEL_1 = 2F;
 
         // Game Textures
-        public static Texture2D JACK_TEXTURE;
-        public static Texture2D EGG_TEXTURE;
-        public static Texture2D ROCKETBOARD_TEXTURE;
         public static Texture2D LADDER_TEXTURE;
-        public static Texture2D FLOOR_TEXTURE;
         public static Texture2D STAIR_TEXTURE;
-        public static Texture2D BED_TEXTURE;
         public static Texture2D RAILING_TEXTURE;
-
 
         #endregion
     }

@@ -143,6 +143,23 @@ namespace SleepyScientist
                                                         floor.Pits.Add(pit);
                                                         break;
 
+                                                    case "Door":
+                                                        reader.Read();
+                                                        reader.Read();
+                                                        int doorXcoor = Int32.Parse(reader.Value);
+                                                        reader.Read();
+                                                        reader.Read();
+                                                        reader.Read();
+                                                        int doorYcoor = Int32.Parse(reader.Value);
+                                                        reader.Read();
+                                                        reader.Read();
+                                                        reader.Read();
+                                                        int doorTime = Int32.Parse(reader.Value);
+                                                        Door door = new Door(doorXcoor, doorYcoor, GameConstants.DOOR_WIDTH, GameConstants.DOOR_HEIGHT, doorTime);
+                                                        door.Image = GameConstants.DOOR_OPEN_TEXTURE;
+                                                        room.Door = door;
+                                                        break;
+
                                                     case "Invention":
                                                         reader.Read();
                                                         reader.Read();
@@ -168,7 +185,7 @@ namespace SleepyScientist
                                                                 floor.Inventions.Add(egg);
                                                                 break;
                                                             case "RocketSkateboard":
-                                                                RocketSkateboard board = new RocketSkateboard("board", inventionXcoor, inventionYcoor, GameConstants.TILE_WIDTH, GameConstants.TILE_HEIGHT, room, curFloorNum);
+                                                                RocketSkateboard board = new RocketSkateboard("board", inventionXcoor, inventionYcoor, GameConstants.SKATEBOARD_WIDTH, GameConstants.SKATEBOARD_HEIGHT, room, curFloorNum);
                                                                 board.Image = GameConstants.ROCKETBOARD_TEXTURE;
                                                                 floor.Inventions.Add(board);
                                                                 break;
