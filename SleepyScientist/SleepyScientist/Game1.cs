@@ -69,7 +69,8 @@ namespace SleepyScientist
 
         // Test
         private bool _begin = false;
-        private int _levelNumber = 6;
+        private int _levelNumber = 4;
+        private int _totalLevels = 6;
         private Room level = null;
 
         #endregion
@@ -176,42 +177,6 @@ namespace SleepyScientist
             // Add some test messages.
             MessageLayer.AddMessage(new Message("Test", 0, 0));
             MessageLayer.AddMessage(new Message("Test 5 Seconds", 0, 30, 5));
-
-            // Set up the test "Level".
-            // SetupLevel(4, true);
-            //SetupLevel(GameConstants.NUMBER_OF_FLOORS, 1, true, true);
-
-            // Set up inventions.
-            /*
-            Invention toAdd = new RocketSkateboard("RocketSkateboard", screenWidth / 2, _floors[0].Y - _sleepy.Height, 50, 50);
-            toAdd.VeloX *= -1;
-            toAdd.Image = _rocketSkateboardTexture;
-            _inventions.Add(toAdd);
-            toAdd = new RocketSkateboard("RocketSkateboard", screenWidth / 2, _floors[1].Y - _sleepy.Height, 50, 50);
-            toAdd.Image = _rocketSkateboardTexture;
-            _inventions.Add(toAdd);
-            toAdd = new RocketSkateboard("RocketSkateboard", screenWidth / 2, _floors[3].Y - _sleepy.Height, 50, 50);
-            toAdd.Image = _rocketSkateboardTexture;
-            _inventions.Add(toAdd);
-             */
-            /*
-            Invention beater = new EggBeater("EggBeater", screenWidth / 2, _floors[1].Y - _sleepy.Height, 50, 50);
-            beater.Image = _eggBeaterTexture;
-            _inventions.Add(beater);
-            */  
-
-            // Setup test animations.
-            //_sleepy.Animations = AnimationLoader.GetSetCopy("Scientist");
-            //_sleepy.Animations.ChangeAnimation("Walk");
-            //_sleepy.Animations.CurAnimation.Pause();
-            /*_testAnimation = new Animation("Test");
-            _testAnimation.TimePerFrame = .25F;    // Second/Frame
-            _testAnimation.Images = new List<Texture2D>() {
-                _floorTexture,
-                _ladderTexture,
-                _rocketSkateboardTexture,
-                _scientistTexture
-            };*/
 
             Room level = LevelLoader.Load(_levelNumber);
 
@@ -324,7 +289,7 @@ namespace SleepyScientist
                 if (_sleepy.Winner)
                 {
                     _begin = false;
-                    if (_levelNumber == 5) { _levelNumber = 1; }
+                    if (_levelNumber == _totalLevels) { _levelNumber = 1; }
                     else { _levelNumber++; }
                     this.Reset();
 

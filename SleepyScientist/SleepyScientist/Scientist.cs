@@ -42,6 +42,9 @@ namespace SleepyScientist
         // Has the player lost
         private bool _loser;
 
+        // Is the scientist on a skateboard
+        private RocketSkateboard _skateboard;
+
         #endregion
 
         #region States
@@ -92,6 +95,9 @@ namespace SleepyScientist
         // Get or set if the player has lost the level
         public bool Loser { get { return _loser; } set { _loser = value; } }
 
+        // Get or set the scientist's skateboard
+        public RocketSkateboard Skateboard { get { return _skateboard; } set { _skateboard = value; } }
+
         #endregion
 
         #region Constructor
@@ -116,6 +122,7 @@ namespace SleepyScientist
             this.PrevY = this.Y;
             this.Winner = false;
             this.Loser = false;
+            this.Skateboard = null;
 
             // Get a copy of the Scientist Animation
             Animations = AnimationLoader.GetSetCopy("Scientist");
@@ -131,6 +138,9 @@ namespace SleepyScientist
         /// </summary>
         public override void Update() 
         {
+            // Check if the skateboard needs to move with the scientist
+            if (this.Skateboard != null) { this.Skateboard.Move(this.VeloX); }
+
             // Check if the scientist is on the ground or just landing
             if (this.RectPosition.Bottom == this.CurrentFloor.RectPosition.Top ||
                 (this.RectPosition.Intersects(this.CurrentFloor.RectPosition) &&
@@ -152,6 +162,15 @@ namespace SleepyScientist
                 if (this.RectPosition.Intersects(invention.RectPosition)
                     && !invention.Activated && !invention.HasTarget && !invention.Clicked)
                 {
+                    // Check if the scientist isn't on a skateboard yet
+                    if (invention.GetType() == typeof(RocketSkateboard) && this.Skateboard == null)
+                    {
+                        this.X = invention.X + 25;
+                        this.Y = invention.Y - (this.Height / 2) - 5;
+                        this.Skateboard = (RocketSkateboard)invention;
+                        InteractWith(invention);
+                    }
+
                     // Check if the invention is a jack in the box
                     if (invention.GetType() == typeof(JackInTheBox))
                     {
@@ -207,6 +226,11 @@ namespace SleepyScientist
                     break;
                 }
             }
+
+            Rectangle positionCheck;
+            if (this.Skateboard != null) { positionCheck = this.Skateboard.RectPosition; }
+            else { positionCheck = this.RectPosition; }
+
             // Check if the scientist is colliding with a ladder
             foreach (Ladder piece in this.CurrentFloor.Ladders)
             {
@@ -215,23 +239,25 @@ namespace SleepyScientist
                 {
                     // Moving right
                     case 1:
-                        if (this.RectPosition.Bottom == piece.RectPosition.Bottom &&
+                        if (positionCheck.Bottom == piece.RectPosition.Bottom &&
                             this.RectPosition.X > piece.RectPosition.X - GameConstants.BUFFER &&
                             this.RectPosition.X < piece.RectPosition.X + piece.RectPosition.Width)
                         {
                             this.CurrentTile = piece;
                             this.CurrentState = ScientistState.Ladder;
+                            this.Skateboard = null;
                         }
                         break;
 
                     // Moving left
                     case -1:
-                        if (this.RectPosition.Bottom == piece.RectPosition.Bottom &&
+                        if (positionCheck.Bottom == piece.RectPosition.Bottom &&
                             this.RectPosition.X < piece.RectPosition.X &&
                             this.RectPosition.X > piece.RectPosition.X - piece.RectPosition.Width)
                         {
                             this.CurrentTile = piece;
                             this.CurrentState = ScientistState.Ladder;
+                            this.Skateboard = null;
                         }
                         break;
 
@@ -249,23 +275,25 @@ namespace SleepyScientist
                 {
                     // Moving right
                     case 1:
-                        if (this.RectPosition.Intersects(stair.RectPosition) &&
+                        if (positionCheck.Intersects(stair.RectPosition) &&
                             this.RectPosition.X > stair.RectPosition.X &&
                             this.Direction == stair.Direction)
                         {
                             this.CurrentTile = stair;
                             this.CurrentState = ScientistState.Stairs;
+                            this.Skateboard = null;
                         }
                         break;
 
                     // Moving left
                     case -1:
-                        if (this.RectPosition.Intersects(stair.RectPosition) &&
+                        if (positionCheck.Intersects(stair.RectPosition) &&
                             this.RectPosition.X < stair.RectPosition.X + stair.Width - this.Width &&
                             this.Direction == stair.Direction)
                         {
                             this.CurrentTile = stair;
                             this.CurrentState = ScientistState.Stairs;
+                            this.Skateboard = null;
                         }
                         break;
 
@@ -279,16 +307,17 @@ namespace SleepyScientist
             foreach (Pit pit in this.CurrentFloor.Pits)
             {
                 // Check if the scientist is touching the pit
-                if (this.RectPosition.Bottom == pit.RectPosition.Top &&
+                if (positionCheck.Bottom == pit.RectPosition.Top &&
                     this.X + this.Width > pit.X && this.X < pit.X + pit.Width)
                 {
                     this.CurrentTile = pit;
                     this.CurrentState = ScientistState.Pit;
+                    this.Skateboard = null;
                 }
             }
 
             // Check if the scientist has reached the bed
-            if (this.RectPosition.Intersects(this.Room.Bed.RectPosition)) { this.CurrentState = ScientistState.Bed; }
+            if (positionCheck.Intersects(this.Room.Bed.RectPosition)) { this.CurrentState = ScientistState.Bed; }
 
             // Update scientist based on current state.
             switch (this.CurrentState)

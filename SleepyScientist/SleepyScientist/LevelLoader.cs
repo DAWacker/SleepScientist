@@ -180,7 +180,7 @@ namespace SleepyScientist
                                                                 floor.Inventions.Add(box);
                                                                 break;
                                                             case "EggBeater":
-                                                                EggBeater egg = new EggBeater("beatMe", inventionXcoor, inventionYcoor, 12, 25, room, curFloorNum);
+                                                                EggBeater egg = new EggBeater("beatMe", inventionXcoor, inventionYcoor + GameConstants.EGGBEATER_HEIGHT, GameConstants.EGGBEATER_WIDTH, GameConstants.EGGBEATER_HEIGHT, room, curFloorNum);
                                                                 egg.Image = GameConstants.EGG_TEXTURE;
                                                                 floor.Inventions.Add(egg);
                                                                 break;

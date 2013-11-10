@@ -48,5 +48,12 @@ namespace SleepyScientist
                 this.VeloX /= GameConstants.SKATEBOARD_SPEEDUP;
             }
         }
+
+        public void Move(int veloX)
+        {
+            this.VeloX = veloX;
+            this.StayOnScreen();
+            this.Move();
+        }
     }
 }
