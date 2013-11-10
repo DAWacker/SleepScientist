@@ -136,7 +136,10 @@ namespace SleepyScientist
                                                         reader.Read();
                                                         int length = Int32.Parse(reader.Value);
                                                         Pit pit = new Pit(pitXcoor, pitYcoor, GameConstants.TILE_WIDTH * length, GameConstants.TILE_HEIGHT);
-                                                        pit.Image = GameConstants.PIT_TEXTURE;
+                                                        pit.LeftEnd = GameConstants.PIT_LEFT_END_TEXTURE;
+                                                        pit.RightEnd = GameConstants.PIT_RIGHT_END_TEXTURE;
+                                                        pit.Tile = GameConstants.PIT_TILE_TEXTURE;
+                                                        pit.Terminal = GameConstants.PIT_TERMINAL_TEXTURE;
                                                         floor.Pits.Add(pit);
                                                         break;
 

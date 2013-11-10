@@ -49,9 +49,12 @@ namespace SleepyScientist
         private Texture2D _eggBeaterTexture;
         private Texture2D _jackintheboxTexture;
         private Texture2D _bedTexture;
-        private Texture2D _pitTexture;
         private Texture2D _wallTexture;
         private Texture2D _railingTexture;
+        private Texture2D _pitLaserLeft;
+        private Texture2D _pitLaserRight;
+        private Texture2D _pitLaserTile;
+        private Texture2D _pitTerminal;
 
         // Mouse Input
         private MouseState _prevMouseState;
@@ -141,9 +144,14 @@ namespace SleepyScientist
             _eggBeaterTexture = this.Content.Load<Texture2D>("Image/eggBeater");
             _jackintheboxTexture = this.Content.Load<Texture2D>("Image/jackInTheBox");
             _bedTexture = this.Content.Load<Texture2D>("Image/bed");
-            _pitTexture = this.Content.Load<Texture2D>("Image/pit");
             _wallTexture = this.Content.Load<Texture2D>("Image/walltile");
             _railingTexture = this.Content.Load<Texture2D>("Image/railing");
+
+            // Load textures for the pits
+            _pitLaserLeft = this.Content.Load<Texture2D>("Image/laserLeftEnd");
+            _pitLaserRight = this.Content.Load<Texture2D>("Image/laserRightEnd");
+            _pitLaserTile = this.Content.Load<Texture2D>("Image/laserTile");
+            _pitTerminal = this.Content.Load<Texture2D>("Image/batteryHolder");
             
             // Make these textures static
             GameConstants.FLOOR_TEXTURE = _floorTexture;
@@ -153,8 +161,11 @@ namespace SleepyScientist
             GameConstants.EGG_TEXTURE = _eggBeaterTexture;
             GameConstants.JACK_TEXTURE = _jackintheboxTexture;
             GameConstants.BED_TEXTURE = _bedTexture;
-            GameConstants.PIT_TEXTURE = _pitTexture;
             GameConstants.RAILING_TEXTURE = _railingTexture;
+            GameConstants.PIT_LEFT_END_TEXTURE = _pitLaserLeft;
+            GameConstants.PIT_RIGHT_END_TEXTURE = _pitLaserRight;
+            GameConstants.PIT_TERMINAL_TEXTURE = _pitTerminal;
+            GameConstants.PIT_TILE_TEXTURE = _pitLaserTile;
 
             // Add some test messages.
             MessageLayer.AddMessage(new Message("Test", 0, 0));

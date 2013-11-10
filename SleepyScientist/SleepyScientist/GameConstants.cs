@@ -69,6 +69,12 @@ namespace SleepyScientist
         public static int GRAVITY = 1;
         public static int BUFFER = 5;
 
+        // Pit info
+        public static Texture2D PIT_LEFT_END_TEXTURE;
+        public static Texture2D PIT_RIGHT_END_TEXTURE;
+        public static Texture2D PIT_TILE_TEXTURE;
+        public static Texture2D PIT_TERMINAL_TEXTURE;
+
         // Floor info
         public static int NUMBER_OF_FLOORS = 3;
         public static int DISTANCE_BETWEEN_FLOORS = 200;
@@ -103,8 +109,8 @@ namespace SleepyScientist
         public static Texture2D FLOOR_TEXTURE;
         public static Texture2D STAIR_TEXTURE;
         public static Texture2D BED_TEXTURE;
-        public static Texture2D PIT_TEXTURE;
         public static Texture2D RAILING_TEXTURE;
+
 
         #endregion
     }
