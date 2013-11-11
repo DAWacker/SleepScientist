@@ -57,11 +57,13 @@
     <Compile Include="Pit.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RectangleVector.cs" />
     <Compile Include="RocketSkateboard.cs" />
     <Compile Include="Room.cs" />
     <Compile Include="Scientist.cs" />
     <Compile Include="Stairs.cs" />
     <Compile Include="Time.cs" />
+    <Compile Include="Util.cs" />
     <Compile Include="Wall.cs" />
   </ItemGroup>
   <ItemGroup>
