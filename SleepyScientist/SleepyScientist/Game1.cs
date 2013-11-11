@@ -174,10 +174,6 @@ namespace SleepyScientist
             GameConstants.DOOR_OPEN_TEXTURE = _doorOpenTexture;
             GameConstants.DOOR_CLOSED_TEXTURE = _doorClosedTexture;
 
-            // Add some test messages.
-            MessageLayer.AddMessage(new Message("Test", 0, 0));
-            MessageLayer.AddMessage(new Message("Test 5 Seconds", 0, 30, 5));
-
             Room level = LevelLoader.Load(_levelNumber);
 
             // This startx is a test to see if the loader broke
