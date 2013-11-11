@@ -107,7 +107,7 @@ namespace SleepyScientist
         /// <param name="y">Y position</param>
         /// <param name="width">Width of invention</param>
         /// <param name="height">Height of invention</param>
-        public Invention(string name, int x, int y, int width, int height, Room room, int startFloor)
+        public Invention(string name, float x, float y, float width, float height, Room room, int startFloor)
             : base(name, x, y, width, height)
         {
             this.CurrentState = InventionState.Idle;
@@ -456,7 +456,7 @@ namespace SleepyScientist
         public void DeterminePath()
         {
             // Compute the difference in y location
-            int verticalChange = this.Y + this.Height - this.TargetY;
+            int verticalChange = (int)(this.Y + this.Height - this.TargetY);
             // Check if the invention needs to go up
             if (verticalChange > 0) { this.LaddersNeeded = verticalChange / GameConstants.DISTANCE_BETWEEN_FLOORS; }
             // Check if the invetion needs to go down

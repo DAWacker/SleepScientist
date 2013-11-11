@@ -68,12 +68,12 @@ namespace SleepyScientist
         /// <param name="pos">The rectangle position of the pit</param>
         public override void Draw(SpriteBatch batch, Rectangle? pos = null)
         {
-            Rectangle terminal;
-            int length = this.Width / 50;
-            Rectangle currentPosition = new Rectangle(this.X - GameConstants.TILE_WIDTH, this.Y - GameConstants.TILE_HEIGHT, this.Tile.Width, this.Tile.Height);
+            RectangleVector terminal;
+            float length = this.Width / 50;
+            RectangleVector currentPosition = new RectangleVector(this.X - GameConstants.TILE_WIDTH, this.Y - GameConstants.TILE_HEIGHT, this.Tile.Width, this.Tile.Height);
 
             // Draw the left battery terminal
-            terminal = new Rectangle(this.X - this.Terminal.Width, this.Y - this.Terminal.Height, this.Terminal.Width, this.Terminal.Height);
+            terminal = new RectangleVector(this.X - this.Terminal.Width, this.Y - this.Terminal.Height, this.Terminal.Width, this.Terminal.Height);
             batch.Draw(this.Terminal, terminal, Color.White);
             currentPosition.X += GameConstants.TILE_WIDTH;
             currentPosition.Y += GameConstants.TILE_HEIGHT;

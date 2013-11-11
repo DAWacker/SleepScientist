@@ -82,25 +82,25 @@ namespace SleepyScientist
             // Only draw this much of the _image. Prevents overdraw.
             Rectangle drawClip = new Rectangle(0, 0, Image.Width, Image.Height);
             // Where to draw the current tile. Include offset.
-            Rectangle drawDest = new Rectangle(X, Y, Image.Width, Image.Height);
+            Rectangle drawDest = new Rectangle( (int)X, (int)Y, Image.Width, Image.Height);
 
             for (int xOff = 0; xOff < Width; xOff += Image.Width)
             {
-                drawDest.X = X + xOff;
+                drawDest.X = (int)X + xOff;
                 if (xOff + Image.Width > Width)
                 {
                     // Prevent overdraw.
-                    drawClip.Width = Width - xOff;
+                    drawClip.Width = (int)Width - xOff;
                     drawDest.Width = drawClip.Width;
                 }
 
                 for (int yOff = 0; yOff < Height; yOff += Image.Height)
                 {
-                    drawDest.Y = Y + yOff;
+                    drawDest.Y = (int)Y + yOff;
                     if (yOff + Image.Height > Height)
                     {
                         // Prevent overdraw.
-                        drawClip.Height = Height - yOff;
+                        drawClip.Height = (int)Height - yOff;
                         drawDest.Height = drawClip.Height;
                     }
                     if (pos != null)

@@ -21,7 +21,7 @@ namespace SleepyScientist
         private int _veloX;
         private int _veloY;
         private int _prevVeloX;
-        private int _prevY;
+        private float _prevY;
 
         // General
         private string _name;
@@ -35,7 +35,7 @@ namespace SleepyScientist
         public int VeloX { get { return _veloX; } set { _veloX = value; } }
         public int VeloY { get { return _veloY; } set { _veloY = value; } }
         public int PrevVeloX { get { return _prevVeloX; } set { _prevVeloX = value; } }
-        public int PrevY { get { return _prevY; } set { _prevY = value; } }
+        public float PrevY { get { return _prevY; } set { _prevY = value; } }
 
         // Get or set the AI's name
         public string Name { get { return _name; } set { _name = value; } }
@@ -54,7 +54,7 @@ namespace SleepyScientist
         /// <param name="x">Starting x-coordinate</param>
         /// <param name="y">Starting y-coordinate</param>
         /// <param name="image">The image</param>
-        public AI(string name, int x, int y, int width, int height)
+        public AI(string name, float x, float y, float width, float height)
             : base(x, y, width, height, GameConstants.DEFAULT_DIRECTION)
         {
             // General
@@ -108,7 +108,7 @@ namespace SleepyScientist
                 if (pos != null)
                     batch.Draw(this.Image, pos.Value, null, Color.White, 0, Vector2.Zero, SpriteEffects.FlipHorizontally, 0);
                 else
-                    batch.Draw(this.Image, RectPosition, null, Color.White, 0, Vector2.Zero, SpriteEffects.FlipHorizontally, 0);
+                    batch.Draw(this.Image, this.RectPosition, null, Color.White, 0, Vector2.Zero, SpriteEffects.FlipHorizontally, 0);
             }
             else
             {
