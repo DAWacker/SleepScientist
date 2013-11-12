@@ -169,20 +169,20 @@ namespace SleepyScientist
             _floorTexture = this.Content.Load<Texture2D>("Image/floor");
             _stairsTexture = this.Content.Load<Texture2D>("Image/stairs");
             _ladderTexture = this.Content.Load<Texture2D>("Image/ladder");
-            _rocketSkateboardTexture = this.Content.Load<Texture2D>("Image/rocketSkateboard");
-            _eggBeaterTexture = this.Content.Load<Texture2D>("Image/eggBeater");
-            _jackintheboxTexture = this.Content.Load<Texture2D>("Image/jackInTheBox");
+            _rocketSkateboardTexture = this.Content.Load<Texture2D>("Image/rocket_skateboard");
+            _eggBeaterTexture = this.Content.Load<Texture2D>("Image/egg_beater");
+            _jackintheboxTexture = this.Content.Load<Texture2D>("Image/jack_inthe_box");
             _bedTexture = this.Content.Load<Texture2D>("Image/bed");
             _wallTexture = this.Content.Load<Texture2D>("Image/walltile");
             _railingTexture = this.Content.Load<Texture2D>("Image/railing");
-            _doorOpenTexture = this.Content.Load<Texture2D>("Image/doorOpen");
-            _doorClosedTexture = this.Content.Load<Texture2D>("Image/doorClosed");
+            _doorOpenTexture = this.Content.Load<Texture2D>("Image/door_open");
+            _doorClosedTexture = this.Content.Load<Texture2D>("Image/door_closed");
 
             // Load textures for the pits
-            _pitLaserLeft = this.Content.Load<Texture2D>("Image/laserLeftEnd");
-            _pitLaserRight = this.Content.Load<Texture2D>("Image/laserRightEnd");
-            _pitLaserTile = this.Content.Load<Texture2D>("Image/laserTile");
-            _pitTerminal = this.Content.Load<Texture2D>("Image/batteryHolder");
+            _pitLaserLeft = this.Content.Load<Texture2D>("Image/laser_left_end");
+            _pitLaserRight = this.Content.Load<Texture2D>("Image/laser_right_end");
+            _pitLaserTile = this.Content.Load<Texture2D>("Image/laser_tile");
+            _pitTerminal = this.Content.Load<Texture2D>("Image/battery_holder");
             
             // Make these textures static
             GameConstants.FLOOR_TEXTURE = _floorTexture;
@@ -201,17 +201,17 @@ namespace SleepyScientist
             GameConstants.DOOR_CLOSED_TEXTURE = _doorClosedTexture;
 
 			// Load the menu textures.
-            _mainMenuButtonTexture = this.Content.Load<Texture2D>("Image/button_MainMenu");
-            _newGameButtonTexture = this.Content.Load<Texture2D>("Image/button_NewGame");
-            _optionsButtonTexture = this.Content.Load<Texture2D>("Image/button_Options");
-            _levelNumButtonTexture = this.Content.Load<Texture2D>("Image/button_Level");
-            _levelSelectButtonTexture = this.Content.Load<Texture2D>("Image/button_LevelSelect");
-            _yesButtonTexture = this.Content.Load<Texture2D>("Image/button_Yes");
-            _noButtonTexture = this.Content.Load<Texture2D>("Image/button_No");
-            _instructionsButtonTexture = this.Content.Load<Texture2D>("Image/button_Instructions");
-            _pauseOverlayTexture = this.Content.Load<Texture2D>("Image/pauseOverlay");
-            _instructionsTexture1 = this.Content.Load<Texture2D>("Image/test_Instructions1");
-            _resumeButtonTexture = this.Content.Load<Texture2D>("Image/button_Resume");
+            _mainMenuButtonTexture = this.Content.Load<Texture2D>("Image/button_main_menu");
+            _newGameButtonTexture = this.Content.Load<Texture2D>("Image/button_new_game");
+            _optionsButtonTexture = this.Content.Load<Texture2D>("Image/button_options");
+            _levelNumButtonTexture = this.Content.Load<Texture2D>("Image/button_level");
+            _levelSelectButtonTexture = this.Content.Load<Texture2D>("Image/button_level_select");
+            _yesButtonTexture = this.Content.Load<Texture2D>("Image/button_yes");
+            _noButtonTexture = this.Content.Load<Texture2D>("Image/button_no");
+            _instructionsButtonTexture = this.Content.Load<Texture2D>("Image/button_instructions");
+            _pauseOverlayTexture = this.Content.Load<Texture2D>("Image/pause_overlay");
+            _instructionsTexture1 = this.Content.Load<Texture2D>("Image/test_instructions1");
+            _resumeButtonTexture = this.Content.Load<Texture2D>("Image/button_resume");
             
             // Create the level.
             Room level = LevelLoader.Load(_levelNumber);
