@@ -68,21 +68,34 @@ namespace SleepyScientist
         /// <param name="pos">The rectangle position of the pit</param>
         public override void Draw(SpriteBatch batch, Rectangle? pos = null)
         {
+            float zoomFactor;           // Calculated zoomFactor based value of pos.
+            Rectangle prevRectPosition; // Contains the previous position of the game object.
+
+            prevRectPosition = this.RectPosition;
+            if (pos != null)
+            {
+                zoomFactor = (float)pos.Value.Width / this.RectPosition.Width;
+                this.RectPosition = pos.Value;    // Temporarily overwrite the position of the pit.
+            }
+            else
+                zoomFactor = 1.0F;
+
             RectangleVector terminal;
-            float length = this.Width / 50;
-            RectangleVector currentPosition = new RectangleVector(this.X - GameConstants.TILE_WIDTH, this.Y - GameConstants.TILE_HEIGHT, this.Tile.Width, this.Tile.Height);
+            float length = this.Width / 50 / zoomFactor;
+            RectangleVector currentPosition = new RectangleVector(this.X - GameConstants.TILE_WIDTH * zoomFactor, this.Y - GameConstants.TILE_HEIGHT * zoomFactor, this.Tile.Width * zoomFactor, this.Tile.Height * zoomFactor);
 
             // Draw the left battery terminal
-            terminal = new RectangleVector(this.X - this.Terminal.Width, this.Y - this.Terminal.Height, this.Terminal.Width, this.Terminal.Height);
+            terminal = new RectangleVector(this.X - this.Terminal.Width * zoomFactor, this.Y - this.Terminal.Height * zoomFactor, this.Terminal.Width * zoomFactor, this.Terminal.Height * zoomFactor);
+
             batch.Draw(this.Terminal, terminal, Color.White);
-            currentPosition.X += GameConstants.TILE_WIDTH;
-            currentPosition.Y += GameConstants.TILE_HEIGHT;
+            currentPosition.X += GameConstants.TILE_WIDTH * zoomFactor;
+            currentPosition.Y += GameConstants.TILE_HEIGHT * zoomFactor;
 
             // Check if the pit doesn't not need to be tileable
             if (length == 2)
             {
                 batch.Draw(this.LeftEnd, currentPosition, Color.White);
-                currentPosition.X += GameConstants.TILE_WIDTH;
+                currentPosition.X += GameConstants.TILE_WIDTH * zoomFactor;
                 batch.Draw(this.RightEnd, currentPosition, Color.White);
             }
 
@@ -91,7 +104,7 @@ namespace SleepyScientist
             {
                 // Draw the left end of the pit lasers
                 batch.Draw(this.LeftEnd, currentPosition, Color.White);
-                currentPosition.X += GameConstants.TILE_WIDTH;
+                currentPosition.X += GameConstants.TILE_WIDTH * zoomFactor;
                 length -= 2;
 
                 // Draw a center piece until you have reached the end of the pit
@@ -99,7 +112,7 @@ namespace SleepyScientist
                 {
                     // Draw the tileable center piece
                     batch.Draw(this.Tile, currentPosition, Color.White);
-                    currentPosition.X += GameConstants.TILE_WIDTH;
+                    currentPosition.X += GameConstants.TILE_WIDTH * zoomFactor;
                     length--;
                 }
 
@@ -108,11 +121,13 @@ namespace SleepyScientist
             }
 
             // Draw the right battery terminal
-            currentPosition.X += GameConstants.TILE_WIDTH;
-            currentPosition.Y -= GameConstants.TILE_HEIGHT;
+            currentPosition.X += GameConstants.TILE_WIDTH * zoomFactor;
+            currentPosition.Y -= GameConstants.TILE_HEIGHT * zoomFactor;
             terminal.X = currentPosition.X;
             terminal.Y = currentPosition.Y;
             batch.Draw(this.Terminal, terminal, null, Color.White, 0, Vector2.Zero, SpriteEffects.FlipHorizontally, 0);
+
+            this.RectPosition = prevRectPosition;
         }
 
         #endregion
