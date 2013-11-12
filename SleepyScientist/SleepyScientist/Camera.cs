@@ -24,6 +24,8 @@ namespace SleepyScientist
                                                 // i.e. If value is 2 then level is shown at twice its size.
         private GameObject _followTarget;       // The target, if any, the camera should follow.
         private bool _shouldFollowTarget;       // Should the camera follow its target?
+
+        private float _veloX;                   // The velocity of the camera. Used for camera scrolling.
         
         #endregion
 
@@ -89,7 +91,20 @@ namespace SleepyScientist
         /// <param name="y">Y coordinate.</param>
         public void ZoomToLocation(int x, int y)
         {
-            Zoom(GameConstants.ZOOM_INVENTION_VIEW);
+            if (_zoomFactor != GameConstants.ZOOM_INVENTION_VIEW)
+            {
+                Zoom(GameConstants.ZOOM_INVENTION_VIEW);
+                CenterCameraOn(x, y);
+            }
+        }
+
+        /// <summary>
+        /// Center the camera on the given coordinates.
+        /// </summary>
+        /// <param name="x">x coord.</param>
+        /// <param name="y">y coord.</param>
+        public void CenterCameraOn(int x, int y)
+        {
             // Convert coords to zoomed-scale coords
             x = (int)(x * _zoomFactor);
             y = (int)(y * _zoomFactor);
@@ -97,6 +112,25 @@ namespace SleepyScientist
             _cameraView.X = (int)(x - _cameraView.Width / 2);
             _cameraView.Y = (int)(y - _cameraView.Height / 2);
             FixOffset();
+        }
+
+        /// <summary>
+        /// Determines if the camera should scroll based on the coordinate
+        /// given.
+        /// </summary>
+        /// <param name="x">x coord</param>
+        /// <param name="y">y coord</param>
+        public void UpdateCameraScroll(int x, int y)
+        {
+            float screenXPercent = (float)x / GameConstants.SCREEN_WIDTH;
+
+            // Check if coords are within the bounds of the scroll boxes.
+            if (screenXPercent >= GameConstants.SCROLL_BOUND_RIGHT)
+                _veloX = GameConstants.CAMERA_X_VELO;
+            else if (screenXPercent <= GameConstants.SCROLL_BOUND_LEFT)
+                _veloX = -GameConstants.CAMERA_X_VELO;
+            else
+                _veloX = 0;
         }
 
         /// <summary>
@@ -118,19 +152,28 @@ namespace SleepyScientist
         }
 
         /// <summary>
-        /// Draw the given GameObjects with given modifications to scale and position
+        /// Draw the given GameObject with given modifications to scale and position
         /// due to Camera zoomFactor.
+        /// Note: The given SpriteBatch should have previously called its Begin method.
+        /// </summary>
+        /// <param name="spriteBatch">The SpriteBatch to use.</param>
+        /// <param name="gObject"></param>
+        public void DrawGameObject(SpriteBatch spriteBatch, GameObject gObject ) {
+            Rectangle drawPos = ToLocal(gObject.RectPosition);
+            gObject.Draw(spriteBatch, drawPos);
+        }
+
+        /// <summary>
+        /// Draw multiple GameObjects. Uses DrawGameObject().
         /// Note: The given SpriteBatch should have previously called its Begin method.
         /// </summary>
         /// <param name="spriteBatch">The SpriteBatch to use.</param>
         /// <param name="objects">The objects to draw.</param>
         public void DrawGameObjects(SpriteBatch spriteBatch, List<GameObject> objects)
         {
-            Rectangle drawPos;
             foreach (GameObject g in objects)
             {
-                drawPos = ToLocal(g.RectPosition);
-                g.Draw(spriteBatch, drawPos);
+                DrawGameObject(spriteBatch, g);
             }
         }
 
@@ -139,8 +182,15 @@ namespace SleepyScientist
         /// </summary>
         public void Update()
         {
-            if ( _followTarget != null && _shouldFollowTarget ) {
-                ZoomToLocation(_followTarget.X, _followTarget.Y);
+            if (_followTarget != null && _shouldFollowTarget)
+            {
+                ZoomToLocation( _followTarget.X, _followTarget.Y );
+                CenterCameraOn( _followTarget.X, _followTarget.Y );
+            }
+            else
+            {
+                _cameraView.X = (int)(_cameraView.X + _veloX);
+                FixOffset();
             }
         }
 
@@ -178,8 +228,8 @@ namespace SleepyScientist
                 localPoint.Y
             );
 
-            globalPoint.X = (int)(localPoint.X / _zoomFactor) + _cameraView.X;
-            globalPoint.Y = (int)(localPoint.Y / _zoomFactor) + _cameraView.Y;
+            globalPoint.X = (int)((localPoint.X + _cameraView.X) / _zoomFactor);
+            globalPoint.Y = (int)((localPoint.Y + _cameraView.Y) / _zoomFactor);
 
             return globalPoint;
         }

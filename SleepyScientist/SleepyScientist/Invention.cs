@@ -25,14 +25,16 @@ namespace SleepyScientist
         // Movement attributes
         private int _laddersHit;
         private int _laddersNeeded;
+        private int _stairsHit;
+        private int _stairsNeeded;
         private int _targetX;
         private int _targetY;
         private bool _clicked;
         private bool _hasTarget;
 
-        private List<Stairs> _stairs;
-        private List<Ladder> _ladders;
-        private List<Floor> _floors;
+        private Room _room;
+        private Floor _curFloor;
+        private int _curFloorNum;
 
         #endregion
 
@@ -75,14 +77,18 @@ namespace SleepyScientist
         public int LaddersHit { get { return _laddersHit; } set { _laddersHit = value; } }
         public int LaddersNeeded { get { return _laddersNeeded; } set { _laddersNeeded = value; } }
 
+        // Get or set the stairs needed and hit
+        public int StairsHit { get { return _stairsHit; } set { _stairsHit = value; } }
+        public int StairsNeeded { get { return _stairsNeeded; } set { _stairsNeeded = value; } }
+
         // Get or set the ladders in the room
-        public List<Ladder> Ladders { get { return _ladders; } set { _ladders = value; } }
+        public Room Room { get { return _room; } set { _room = value; } }
 
-        //Get or set the stairs in the room
-        public List<Stairs> Stairs { get { return _stairs; } set { _stairs = value; } }
+        // Get or set the floor number the scientist is on
+        public int FloorNumber { get { return _curFloorNum; } set { _curFloorNum = value; } }
 
-        // Get or set the floors in the room
-        public List<Floor> Floors { get { return _floors; } set { _floors = value; } }
+        // Get or set the current floor the scientist is on
+        public Floor CurrentFloor { get { return _curFloor; } set { _curFloor = value; } }
 
         #endregion
 
@@ -96,7 +102,7 @@ namespace SleepyScientist
         /// <param name="y">Y position</param>
         /// <param name="width">Width of invention</param>
         /// <param name="height">Height of invention</param>
-        public Invention(string name, int x, int y, int width, int height)
+        public Invention(string name, int x, int y, int width, int height, Room room)
             : base(name, x, y, width, height)
         {
             this.CurrentState = InventionState.Idle;
@@ -104,7 +110,13 @@ namespace SleepyScientist
             this.TargetX = 0;
             this.LaddersHit = 0;
             this.LaddersNeeded = 0;
+            this.StairsHit = 0;
+            this.StairsNeeded = 0;
             this.Activated = false;
+            this.Room = room;
+            this.CurrentFloor = room.Floors[room.StartFloor-1];
+            this.CurrentTile = room.Floors[room.StartFloor-1];
+            this.FloorNumber = room.StartFloor - 1;
         }
 
         #endregion
@@ -117,7 +129,7 @@ namespace SleepyScientist
         /// <param name="first">First invention of combo.</param>
         /// <param name="second">Second invention of combo.</param>
         /// <returns></returns>
-        public static Invention operator +(Invention first, Invention second) { return new Invention(first.Name + second.Name, first.X, first.Y, first.Width, first.Height); }
+        public static Invention operator +(Invention first, Invention second) { return new Invention(first.Name + second.Name, first.X, first.Y, first.Width, first.Height, first.Room); }
 
         /// <summary>
         /// Method that executes the default functionality of an invention
@@ -148,19 +160,14 @@ namespace SleepyScientist
             if (this.HasTarget)
             {
                 // Check if the invention is on the ground
-                foreach (Floor floor in this.Floors)
+                if (this.RectPosition.Bottom == this.CurrentFloor.RectPosition.Top)
                 {
-                    // Check if the invention is on the ground
-                    if (this.RectPosition.Bottom == floor.RectPosition.Top)
-                    {
-                        this.CurrentTile = floor;
-                        this.CurrentState = InventionState.Walking;
-                        break;
-                    }
+                    this.CurrentTile = this.CurrentFloor;
+                    this.CurrentState = InventionState.Walking;
                 }
 
                 // Check if the invention is colliding with a ladder
-                foreach (Ladder piece in this.Ladders)
+                foreach (Ladder piece in this.CurrentFloor.Ladders)
                 {
                     // Check if the invention is moving left or right
                     switch (this.Direction)
@@ -198,7 +205,7 @@ namespace SleepyScientist
                 }
 
                 // Check if the invention is colliding with stairs
-                foreach (Stairs stair in this.Stairs)
+                foreach (Stairs stair in this.CurrentFloor.Stairs)
                 {
                     // Check if the invention is moving left or right
                     switch (this.Direction)
@@ -207,7 +214,8 @@ namespace SleepyScientist
                         case 1:
                             if (this.RectPosition.Bottom == stair.RectPosition.Top &&
                                 this.RectPosition.X > stair.RectPosition.X - GameConstants.BUFFER &&
-                                this.RectPosition.X < stair.RectPosition.X + stair.RectPosition.Width)
+                                this.RectPosition.X < stair.RectPosition.X + stair.RectPosition.Width &&
+                                this.StairsHit != this.StairsNeeded)
                             {
                                 this.CurrentTile = stair;
                                 this.CurrentState = InventionState.Stairs;
@@ -218,7 +226,8 @@ namespace SleepyScientist
                         case -1:
                             if (this.RectPosition.Bottom == stair.RectPosition.Top &&
                                 this.RectPosition.X < stair.RectPosition.X &&
-                                this.RectPosition.X > stair.RectPosition.X - stair.RectPosition.Width)
+                                this.RectPosition.X > stair.RectPosition.X - stair.RectPosition.Width &&
+                                this.StairsHit != this.StairsNeeded)
                             {
                                 this.CurrentTile = stair;
                                 this.CurrentState = InventionState.Stairs;
@@ -239,13 +248,17 @@ namespace SleepyScientist
                         this.VeloY = GameConstants.INVENTION_LADDER_Y_VELO;
 
                         // Check if the invention has reached the top of the ladder
-                        if (this.RectPosition.Bottom <= this.CurrentTile.RectPosition.Top)
+                        if (this.RectPosition.Top <= this.CurrentTile.RectPosition.Top)
                         {
                             this.LaddersHit++;
                             this.VeloY = 0;
-                            this.Y = this.CurrentTile.Y - this.Height;
+                            this.Y = this.CurrentTile.Y;
+                            this.CurrentFloor.Inventions.Remove(this);
                             this.CurrentState = InventionState.Walking;
-                            this.CurrentTile = null;
+                            this.CurrentTile = this.Room.Floors[this.FloorNumber + 1];
+                            this.CurrentFloor = this.Room.Floors[this.FloorNumber + 1];
+                            this.CurrentFloor.Inventions.Add(this);
+                            this.FloorNumber++;
                             if (this.X > this.TargetX) { this.Direction = -1; } else { this.Direction = 1; }
                         }
 
@@ -258,15 +271,24 @@ namespace SleepyScientist
                         // Check if the invention has reached the bottom of the stairs
                         if (this.RectPosition.Bottom >= this.CurrentTile.RectPosition.Bottom)
                         {
+                            this.StairsHit++;
+                            this.VeloY = 0;
+                            this.Y = this.CurrentTile.Y;
+                            this.CurrentFloor.Inventions.Remove(this);
                             this.CurrentState = InventionState.Walking;
-                            this.CurrentTile = null;
+                            this.CurrentTile = this.Room.Floors[this.FloorNumber - 1];
+                            this.CurrentFloor = this.Room.Floors[this.FloorNumber - 1];
+                            this.CurrentFloor.Inventions.Add(this);
+                            this.FloorNumber--;
+                            if (this.X > this.TargetX) { this.Direction = -1; } else { this.Direction = 1; }
                         }
                         break;
 
                     case InventionState.Walking:
 
                         // Check if the invention is on the floor it needs to be
-                        if (this.LaddersHit == this.LaddersNeeded)
+                        Console.WriteLine(LaddersNeeded);
+                        if (this.LaddersHit == this.LaddersNeeded && this.StairsHit == this.StairsNeeded)
                         {
                             switch (this.Direction)
                             {
@@ -292,8 +314,6 @@ namespace SleepyScientist
                     default:
                         break;
                 }
-
-                // MessageLayer.AddMessage(new Message(this.LaddersHit.ToString(), X - 10, Y - 30, GameConstants.MESSAGE_TIME));
                 base.Update();
             }
         }
@@ -301,7 +321,8 @@ namespace SleepyScientist
         public void DeterminePath()
         {
             int verticalChange = this.Y + this.Height - this.TargetY;
-            this.LaddersNeeded = verticalChange / GameConstants.DISTANCE_BETWEEN_FLOORS;
+            if (verticalChange > 0) this.LaddersNeeded = verticalChange / GameConstants.DISTANCE_BETWEEN_FLOORS;
+            else this.StairsNeeded = Math.Abs(verticalChange) / GameConstants.DISTANCE_BETWEEN_FLOORS;
             if (this.X > this.TargetX) { this.Direction = -1; } else { this.Direction = 1; }
         }
 

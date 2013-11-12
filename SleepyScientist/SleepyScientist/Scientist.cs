@@ -21,12 +21,23 @@ namespace SleepyScientist
         private ScientistState _curState;
         private ScientistState _prevState;
 
-        private List<Ladder> _ladders;
-        private List<Stairs> _stairs;
-        private List<Floor> _floors;
-        private List<Invention> _inventions;
+        // The room (level) the scientist is in
+        private Room _room;
+
+        // The current floor number the scientist is on
+        private int _curFloorNum;
+
+        // The current floor the scientist is on
+        private Floor _curFloor;
+
+        // The current tile the scientist is on
         private GameObject _currentTile;
+
+        // The previous invention the scientist used
         private Invention _prevInvention;
+
+        private int _initialX;
+        private int _initialY;
 
         #endregion
 
@@ -49,13 +60,25 @@ namespace SleepyScientist
 
         #region Properties
 
+        // Get or set the current state of the scientist
         public ScientistState CurrentState { get { return _curState; } set { _curState = value; } }
+
+        // Get or set the previous state of the scientst
         public ScientistState PreviousState { get { return _prevState; } set { _prevState = value; } }
-        public List<Ladder> Ladders { get { return _ladders; } set { _ladders = value; } }
-        public List<Stairs> Stairs { get { return _stairs; } set { _stairs = value; } }
-        public List<Floor> Floors { get { return _floors; } set { _floors = value; } }
-        public List<Invention> Inventions { get { return _inventions; } set { _inventions = value; } }
+        
+        // Get or set the room the scientist is in
+        public Room Room { get { return _room; } set { _room = value; } }
+
+        // Get or set the floor number the scientist is on
+        public int FloorNumber { get { return _curFloorNum; } set { _curFloorNum = value; } }
+
+        // Get or set the current floor the scientist is on
+        public Floor CurrentFloor { get { return _curFloor; } set { _curFloor = value; } }
+        
+        // Get or set the current tile the scientist is on
         public GameObject CurrentTile { get { return _currentTile; } set { _currentTile = value; } }
+        
+        // Get or set the previous invention the scientist used
         public Invention PreviousInvention { get { return _prevInvention; } set { _prevInvention = value; } }
 
         #endregion
@@ -69,12 +92,19 @@ namespace SleepyScientist
         /// <param name="x">Starting x-coordinate</param>
         /// <param name="y">Starting y-coordinate</param>
         /// <param name="image">The image</param>
-        public Scientist(string name, int x, int y, int width, int height)
+        public Scientist(string name, int x, int y, int width, int height, Room room)
             : base(name, x, y, width, height)
         {
-            _curState = ScientistState.Walking;
-            _prevState = ScientistState.Walking;
-            _currentTile = null;
+            this.Room = room;
+            this.CurrentState = ScientistState.Walking;
+            this.PreviousState = ScientistState.Walking;
+            this.CurrentFloor = room.Floors[room.StartFloor - 1];
+            this.CurrentTile = room.Floors[room.StartFloor - 1];
+            this.FloorNumber = room.StartFloor - 1;
+            this.PrevY = this.Y;
+
+            _initialX = x;
+            _initialY = y;
 
             // Get a copy of the Scientist Animation
             Animations = AnimationLoader.GetSetCopy("Scientist");
@@ -91,23 +121,27 @@ namespace SleepyScientist
         public override void Update() 
         {
 
-            // Check if the scientist is on the ground
-            foreach (Floor floor in this.Floors)
+            /*
+            try { MessageLayer.AddMessage(new Message(this.FloorNumber + " : " + this.CurrentFloor.Ladders[0].X, this.X - 10, this.Y - 30, GameConstants.MESSAGE_TIME)); }
+            catch { MessageLayer.AddMessage(new Message((this.CurrentFloor.Ladders == null).ToString(), this.X - 10, this.Y - 30, GameConstants.MESSAGE_TIME)); }
+            */
+
+            // Check if the scientist is on the ground or just landing
+            if (this.RectPosition.Bottom == this.CurrentFloor.RectPosition.Top ||
+                (this.RectPosition.Intersects(this.CurrentFloor.RectPosition) &&
+                    this.CurrentState == ScientistState.JackInTheBox))
             {
-                // Check if the scientist is on the ground or just landing
-                if (this.RectPosition.Bottom == floor.RectPosition.Top ||
-                    (this.RectPosition.Intersects(floor.RectPosition) &&
-                      this.CurrentState == ScientistState.JackInTheBox))
-                {
-                    // If the scientist is in the floor, slowly move him up to the top
-                    while (this.RectPosition.Bottom > floor.RectPosition.Top) { this.Y--; }
-                    this.CurrentTile = floor;
-                    this.CurrentState = ScientistState.Walking;
-                }
+                // If the scientist is in the floor, slowly move him up to the top
+                while (this.RectPosition.Bottom > this.CurrentFloor.RectPosition.Top) { this.Y--; }
+                this.CurrentTile = this.CurrentFloor;
+                this.CurrentState = ScientistState.Walking;
             }
 
+            // Check if the scientist hit a wall
+            foreach (Wall wall in this.CurrentFloor.Walls) { if (this.RectPosition.Intersects(wall.RectPosition)) { this.Reverse(); } }
+
             // Check if the scientist is using an invention.
-            foreach (Invention invention in this.Inventions)
+            foreach (Invention invention in this.CurrentFloor.Inventions)
             {
                 // Check if the scientist is colliding with an invention
                 if (this.RectPosition.Intersects(invention.RectPosition) 
@@ -119,7 +153,7 @@ namespace SleepyScientist
             }
 
             // Check if the scientist is colliding with a ladder
-            foreach (Ladder piece in this.Ladders)
+            foreach (Ladder piece in this.CurrentFloor.Ladders)
             {
                 // Check if the scientist is moving left or right
                 switch (this.Direction)
@@ -153,7 +187,7 @@ namespace SleepyScientist
             }
 
             // Check if the scientist is colliding with stairs
-            foreach (Stairs stair in this.Stairs)
+            foreach (Stairs stair in this.CurrentFloor.Stairs)
             {
                 // Check if the scientist is moving left or right
                 switch (this.Direction)
@@ -194,12 +228,14 @@ namespace SleepyScientist
                     this.VeloY = GameConstants.LADDER_Y_VELOCITY;
 
                     // Check if the scientist has reached the top of the ladder
-                    if (this.RectPosition.Bottom <= this.CurrentTile.RectPosition.Top)
+                    if (this.RectPosition.Top <= this.CurrentTile.RectPosition.Top)
                     {
                         this.VeloY = 0;
-                        this.Y = this.CurrentTile.Y - this.Height;
+                        this.Y = this.CurrentTile.Y;
                         this.CurrentState = ScientistState.Walking;
-                        this.CurrentTile = null;
+                        this.CurrentFloor = this.Room.Floors[this.FloorNumber + 1];
+                        this.CurrentTile = this.Room.Floors[this.FloorNumber + 1];
+                        this.FloorNumber++;
                     }
                     break;
 
@@ -210,8 +246,12 @@ namespace SleepyScientist
                     // Check if the scientist has reached the bottom of the stairs
                     if (this.RectPosition.Bottom >= this.CurrentTile.RectPosition.Bottom)
                     {
+                        this.VeloY = 0;
                         this.CurrentState = ScientistState.Walking;
-                        this.CurrentTile = null;
+                        this.CurrentFloor = this.Room.Floors[this.FloorNumber - 1];
+                        this.CurrentTile = this.Room.Floors[this.FloorNumber - 1];
+                        this.Y = this.CurrentTile.Y - GameConstants.TILE_HEIGHT;
+                        this.FloorNumber--;
                     }
                     break;
 

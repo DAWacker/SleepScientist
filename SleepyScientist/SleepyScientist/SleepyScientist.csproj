@@ -50,15 +50,19 @@
     <Compile Include="JackInTheBox.cs" />
     <Compile Include="Ladder.cs" />
     <Compile Include="LincolnLogs.cs" />
+    <Compile Include="LevelLoader.cs" />
+    <Compile Include="Menu.cs" />
     <Compile Include="Message.cs" />
     <Compile Include="MessageLayer.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RocketSkateboard.cs" />
+    <Compile Include="Room.cs" />
     <Compile Include="Scientist.cs" />
     <Compile Include="Stairs.cs" />
     <Compile Include="TileableGameObject.cs" />
     <Compile Include="Time.cs" />
+    <Compile Include="Wall.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="OpenTK">
@@ -91,10 +95,10 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Image\floor.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Image\ladder.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Image\eggBeater.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -129,7 +133,7 @@
     <Content Include="Content\Image\jackInTheBox.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Image\ladder.png">
+    <Content Include="Content\Image\pauseOverlay.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Image\pauseOverlay.png">
@@ -181,16 +185,18 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Image\Scientist\walk9.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Image\stairs.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Image\rocketSkateboard.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Image\stairs.png">
+    <Content Include="Content\Image\test_Instructions1.PNG">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Levels\Level01.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Image\test_Instructions1.PNG">
@@ -199,10 +205,12 @@
     <Content Include="Content\ScientistAnimationSet.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\test.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    <Content Include="Content\Image\walltile.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Icon.ico" />
+    <Content Include="Icon.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
