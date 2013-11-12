@@ -18,9 +18,9 @@ namespace SleepyScientist
         #region Attributes
 
         // Movement
-        private int _veloX;
-        private int _veloY;
-        private int _prevVeloX;
+        private float _veloX;
+        private float _veloY;
+        private float _prevVeloX;
         private float _prevY;
 
         // General
@@ -32,9 +32,9 @@ namespace SleepyScientist
         #region Properties
 
         // Get or set the AI's movement
-        public int VeloX { get { return _veloX; } set { _veloX = value; } }
-        public int VeloY { get { return _veloY; } set { _veloY = value; } }
-        public int PrevVeloX { get { return _prevVeloX; } set { _prevVeloX = value; } }
+        public float VeloX { get { return _veloX; } set { _veloX = value; } }
+        public float VeloY { get { return _veloY; } set { _veloY = value; } }
+        public float PrevVeloX { get { return _prevVeloX; } set { _prevVeloX = value; } }
         public float PrevY { get { return _prevY; } set { _prevY = value; } }
 
         // Get or set the AI's name
@@ -83,13 +83,14 @@ namespace SleepyScientist
             // Check if the user is moving an invention
             if (GameConstants.MOVING_INVENTION)
             {
-                this.X += this.VeloX / GameConstants.SLOW_MOTION;
-                this.Y += this.VeloY / GameConstants.SLOW_MOTION;
+                this.X = (this.X + this.VeloX * Time.DeltaTime / GameConstants.SLOW_MOTION);
+                this.Y = (this.Y + this.VeloY * Time.DeltaTime / GameConstants.SLOW_MOTION);
             }
             else
             {
-                this.X += this.VeloX;
-                this.Y += this.VeloY;
+                float updateX = this.VeloX * Time.DeltaTime;
+                this.X = (this.X + this.VeloX * Time.DeltaTime);
+                this.Y = (this.Y + this.VeloY * Time.DeltaTime);
             }
         }
 

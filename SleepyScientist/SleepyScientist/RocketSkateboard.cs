@@ -49,7 +49,7 @@ namespace SleepyScientist
             }
         }
 
-        public void Move(int veloX)
+        public void Move(float veloX)
         {
             this.VeloX = veloX;
             this.StayOnScreen();

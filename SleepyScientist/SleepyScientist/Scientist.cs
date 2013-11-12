@@ -361,7 +361,14 @@ namespace SleepyScientist
                     break;
 
                 case ScientistState.JackInTheBox:
-                    this.VeloY++;
+                    if (GameConstants.MOVING_INVENTION)
+                    {
+                        this.VeloY += GameConstants.GRAVITY * Time.DeltaTime / GameConstants.SLOW_MOTION;
+                    }
+                    else
+                    {
+                        this.VeloY += GameConstants.GRAVITY * Time.DeltaTime;
+                    }
                     break;
 
                 case ScientistState.Bed:
