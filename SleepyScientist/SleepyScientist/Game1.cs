@@ -94,7 +94,7 @@ namespace SleepyScientist
 
         // Test
         private bool _begin = false;
-        private int _levelNumber = 7;
+        private int _levelNumber = 1;
         private int _totalLevels = 7;
         private Room level = null;
 
@@ -211,9 +211,9 @@ namespace SleepyScientist
             _instructionsButtonTexture = this.Content.Load<Texture2D>("Image/button_Instructions");
             _pauseOverlayTexture = this.Content.Load<Texture2D>("Image/pauseOverlay");
             _instructionsTexture1 = this.Content.Load<Texture2D>("Image/test_Instructions1");
-            //_instructionsTexture2 = this.Content.Load<Texture2D>("Image/test_Instructions2");
             _resumeButtonTexture = this.Content.Load<Texture2D>("Image/button_Resume");
-
+            
+            // Create the level.
             Room level = LevelLoader.Load(_levelNumber);
 
             // This startx is a test to see if the loader broke
@@ -221,13 +221,13 @@ namespace SleepyScientist
 
             // Create the scientist
             _sleepy = new Scientist("Sleepy", level.StartX, level.StartY, 50, 50, level);
+            ResetCamera();
 
             // Store all the GameObjects.
             foreach (Floor floor in level.Floors)
             {
                 _inventions.AddRange(floor.Inventions);
             }
-            _camera.FollowTarget = _sleepy;
 
             // Set up Main Menu
             _mainMenuButtons.Add(new Button((screenWidth / 2) - (_newGameButtonTexture.Width / 2), screenHeight / 2 - _newGameButtonTexture.Height, _newGameButtonTexture.Width, _newGameButtonTexture.Height, _newGameButtonTexture));
@@ -316,15 +316,16 @@ namespace SleepyScientist
                     // If scroll down.
                     else
                     {
-                        // Zoom out and camera stops following its target.
-                        _camera.Zoom(GameConstants.ZOOM_ROOM_VIEW);
-                        _camera.ShouldFollowTarget = false;
+                        // Zoom out only if player is moving an invention.
+                        if ( GameConstants.MOVING_INVENTION == true )
+                            _camera.Zoom(GameConstants.ZOOM_ROOM_VIEW);
                     }
                 }
 
                 Point convertedMousePos = _camera.ToGlobal(new Point(_curMouseState.X, _curMouseState.Y));
 				if (_begin)
             	{
+                    // Update Game Time.
 		            if (GameConstants.MOVING_INVENTION) { Time.Update((float)gameTime.ElapsedGameTime.TotalSeconds / 2); }
 		            else { Time.Update((float)gameTime.ElapsedGameTime.TotalSeconds); }
 					
@@ -382,6 +383,7 @@ namespace SleepyScientist
 
 		                // Create the scientist and set his image
 		                _sleepy = new Scientist("Sleepy", level.StartX, level.StartY, 50, 50, level);
+                        ResetCamera();
 		                this.Load();
 		            }
 
@@ -397,12 +399,21 @@ namespace SleepyScientist
 
 		                //Create the scientist and set his image
 		                // Create the scientist and set his image
-		                _sleepy = new Scientist("Sleepy", level.StartX, level.StartY, 50, 50, level);
+                        _sleepy = new Scientist("Sleepy", level.StartX, level.StartY, 50, 50, level);
+                        ResetCamera();
 		                this.Load();
 		            }
 				}
                 else if (_curMouseState.LeftButton == ButtonState.Released &&
-                    _prevMouseState.LeftButton == ButtonState.Pressed) { _begin = true; }
+                    _prevMouseState.LeftButton == ButtonState.Pressed)
+                {
+                    _begin = true;
+
+                    // Zoom into the scientist.
+                    _camera.Zoom(GameConstants.ZOOM_ROOM_VIEW);
+                    _camera.ShouldFollowTarget = true;
+                    _camera.Update();
+                }
 
                 MessageLayer.Update(gameTime.ElapsedGameTime.TotalSeconds);
             }
@@ -584,6 +595,18 @@ namespace SleepyScientist
             _inventions.Clear();
             _floors.Clear();
             _pits.Clear();
+        }
+
+        /// <summary>
+        /// Resets the camera to view the entire room and target the new scientist.
+        /// Should be called at the start of each level.
+        /// </summary>
+        public void ResetCamera()
+        {
+            _camera.FollowTarget = _sleepy;
+            _camera.Zoom(GameConstants.ZOOM_ROOM_VIEW);
+            _camera.ShouldFollowTarget = false;
+            _camera.Update();
         }
 
         /// <summary>
