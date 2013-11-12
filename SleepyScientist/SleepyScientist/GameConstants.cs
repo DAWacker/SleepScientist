@@ -37,10 +37,10 @@ namespace SleepyScientist
         
         // User input related
         public static bool MOVING_INVENTION = false;
-        public static int SLOW_MOTION = 3;
+        public static int SLOW_MOTION = 4;
 
         // Default movement speeds for inventions
-        public static float DEFAULT_INVENTION_X_VELOCITY = DEFAULT_X_VELOCITY * 2;
+        public static float DEFAULT_INVENTION_X_VELOCITY = DEFAULT_X_VELOCITY * 4;
         public static float DEFAULT_INVENTION_Y_VELOCITY = 0;
 
         // Floor constants
