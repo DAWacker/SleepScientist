@@ -48,7 +48,6 @@ namespace SleepyScientist
         private List<Button> _instructionsButtons;
 
         // Textures
-        private Texture2D _scientistTexture;
         private Texture2D _stairsTexture;
         private Texture2D _ladderTexture;
         private Texture2D _floorTexture;
@@ -168,7 +167,6 @@ namespace SleepyScientist
             _instructionsButtonTexture = this.Content.Load<Texture2D>("Image/button_Instructions");
             _pauseOverlayTexture = this.Content.Load<Texture2D>("Image/pauseOverlay");
             _instructionsTexture1 = this.Content.Load<Texture2D>("Image/test_Instructions1");
-            _instructionsTexture2 = this.Content.Load<Texture2D>("Image/test_Instructions2");
             _resumeButtonTexture = this.Content.Load<Texture2D>("Image/button_Resume");
 
             // Create the scientist and set his image
@@ -272,7 +270,6 @@ namespace SleepyScientist
             // Instructions
             _instructionsButtons.Add(new Button((screenWidth / 2), screenHeight / 2, _resumeButtonTexture.Width, _resumeButtonTexture.Height, _resumeButtonTexture));
             _instructionsButtons.Add(new Button(0, 0, _instructionsTexture1.Width, _instructionsTexture1.Height, _instructionsTexture1));
-            _instructionsButtons.Add(new Button(_instructionsTexture1.Width, 0, _instructionsTexture2.Width, _instructionsTexture2.Height, _instructionsTexture2));
             _instructionsButtons.Add(new Button((screenWidth / 2), (screenHeight / 2) + _mainMenuButtonTexture.Height, _mainMenuButtonTexture.Width, _mainMenuButtonTexture.Height, _mainMenuButtonTexture));
         }
 
