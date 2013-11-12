@@ -15,8 +15,8 @@ namespace SleepyScientist
     {
         #region Constructor
         
-        public TileableGameObject(int x, int y, int width, int height)
-            : base(x, y, width, height) { }
+        public TileableGameObject(int x, int y, int width, int height, int direction)
+            : base(x, y, width, height, direction) { }
 
         #endregion
 
@@ -41,27 +41,27 @@ namespace SleepyScientist
                 zoomFactor = 1.0F;
 
             drawClip = new Rectangle(0, 0, Image.Width, Image.Height);
-            drawDest = new Rectangle(X, Y, (int)(zoomFactor * Image.Width), (int)(zoomFactor * Image.Height));
+            drawDest = new Rectangle((int)X, (int)Y, (int)(zoomFactor * Image.Width), (int)(zoomFactor * Image.Height));
 
             // Draw width of object.
             for (int xOff = 0; xOff < Width; xOff += drawDest.Width)
             {
-                drawDest.X = X + xOff;
+                drawDest.X = (int)(X + xOff);
                 if (xOff + drawDest.Width > Width)
                 {
                     // Prevent overdraw.
-                    drawClip.Width = Width - xOff;
+                    drawClip.Width = (int)(Width - xOff);
                     drawDest.Width = drawClip.Width;
                 }
 
                 // Draw height of object.
                 for (int yOff = 0; yOff < Height; yOff += drawDest.Height)
                 {
-                    drawDest.Y = Y + yOff;
+                    drawDest.Y = (int)(Y + yOff);
                     if (yOff + drawDest.Height > Height)
                     {
                         // Prevent overdraw.
-                        drawClip.Height = Height - yOff;
+                        drawClip.Height = (int)(Height - yOff);
                         drawDest.Height = drawClip.Height;
                     }
                     batch.Draw(Image, drawDest, drawClip, Color.White);

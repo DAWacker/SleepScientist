@@ -18,6 +18,7 @@ namespace SleepyScientist
     /// </summary>
     public class Game1 : Game
     {
+
         #region Attributes
 
         public STATE state = STATE.MAIN_MENU;
@@ -39,6 +40,7 @@ namespace SleepyScientist
         private List<Floor> _floors;
         private List<Ladder> _ladders;
         private List<Stairs> _stairs;
+        private List<Pit> _pits;
         private List<Invention> _inventions;
         private List<Button> _mainMenuButtons;
         private List<Button> _optionsMenuButtons;
@@ -53,7 +55,17 @@ namespace SleepyScientist
         private Texture2D _rocketSkateboardTexture;
         private Texture2D _eggBeaterTexture;
         private Texture2D _jackintheboxTexture;
+        private Texture2D _bedTexture;
+        private Texture2D _wallTexture;
+        private Texture2D _railingTexture;
+        private Texture2D _pitLaserLeft;
+        private Texture2D _pitLaserRight;
+        private Texture2D _pitLaserTile;
+        private Texture2D _pitTerminal;
+        private Texture2D _doorOpenTexture;
+        private Texture2D _doorClosedTexture;
 
+		// Menu stuff.
         private Texture2D _mainMenuButtonTexture;
         private Texture2D _newGameButtonTexture;
         private Texture2D _optionsButtonTexture;
@@ -79,6 +91,12 @@ namespace SleepyScientist
 
         // Camera
         private Camera _camera;
+
+        // Test
+        private bool _begin = false;
+        private int _levelNumber = 7;
+        private int _totalLevels = 7;
+        private Room level = null;
 
         #endregion
 
@@ -115,7 +133,10 @@ namespace SleepyScientist
             _floors = new List<Floor>();
             _ladders = new List<Ladder>();
             _stairs = new List<Stairs>();
+            _pits = new List<Pit>();
             _inventions = new List<Invention>();
+
+			// Menu buttons.
             _mainMenuButtons = new List<Button>();
             _optionsMenuButtons = new List<Button>();
             _levelSelectMenuButtons = new List<Button>();
@@ -151,7 +172,18 @@ namespace SleepyScientist
             _rocketSkateboardTexture = this.Content.Load<Texture2D>("Image/rocketSkateboard");
             _eggBeaterTexture = this.Content.Load<Texture2D>("Image/eggBeater");
             _jackintheboxTexture = this.Content.Load<Texture2D>("Image/jackInTheBox");
-			
+            _bedTexture = this.Content.Load<Texture2D>("Image/bed");
+            _wallTexture = this.Content.Load<Texture2D>("Image/walltile");
+            _railingTexture = this.Content.Load<Texture2D>("Image/railing");
+            _doorOpenTexture = this.Content.Load<Texture2D>("Image/doorOpen");
+            _doorClosedTexture = this.Content.Load<Texture2D>("Image/doorClosed");
+
+            // Load textures for the pits
+            _pitLaserLeft = this.Content.Load<Texture2D>("Image/laserLeftEnd");
+            _pitLaserRight = this.Content.Load<Texture2D>("Image/laserRightEnd");
+            _pitLaserTile = this.Content.Load<Texture2D>("Image/laserTile");
+            _pitTerminal = this.Content.Load<Texture2D>("Image/batteryHolder");
+            
             // Make these textures static
             GameConstants.FLOOR_TEXTURE = _floorTexture;
             GameConstants.STAIR_TEXTURE = _stairsTexture;
@@ -159,7 +191,16 @@ namespace SleepyScientist
             GameConstants.ROCKETBOARD_TEXTURE = _rocketSkateboardTexture;
             GameConstants.EGG_TEXTURE = _eggBeaterTexture;
             GameConstants.JACK_TEXTURE = _jackintheboxTexture;
+            GameConstants.BED_TEXTURE = _bedTexture;
+            GameConstants.RAILING_TEXTURE = _railingTexture;
+            GameConstants.PIT_LEFT_END_TEXTURE = _pitLaserLeft;
+            GameConstants.PIT_RIGHT_END_TEXTURE = _pitLaserRight;
+            GameConstants.PIT_TERMINAL_TEXTURE = _pitTerminal;
+            GameConstants.PIT_TILE_TEXTURE = _pitLaserTile;
+            GameConstants.DOOR_OPEN_TEXTURE = _doorOpenTexture;
+            GameConstants.DOOR_CLOSED_TEXTURE = _doorClosedTexture;
 
+			// Load the menu textures.
             _mainMenuButtonTexture = this.Content.Load<Texture2D>("Image/button_MainMenu");
             _newGameButtonTexture = this.Content.Load<Texture2D>("Image/button_NewGame");
             _optionsButtonTexture = this.Content.Load<Texture2D>("Image/button_Options");
@@ -173,18 +214,15 @@ namespace SleepyScientist
             //_instructionsTexture2 = this.Content.Load<Texture2D>("Image/test_Instructions2");
             _resumeButtonTexture = this.Content.Load<Texture2D>("Image/button_Resume");
 
-            // Add some test messages.
-            MessageLayer.AddMessage(new Message("Test", 0, 0));
-            MessageLayer.AddMessage(new Message("Test 5 Seconds", 0, 30, 5));
+            Room level = LevelLoader.Load(_levelNumber);
 
-            Room level = LevelLoader.Load("Level01");
+            // This startx is a test to see if the loader broke
             int startx = level.StartX;
 
-            // Create the scientist and set his image
+            // Create the scientist
             _sleepy = new Scientist("Sleepy", level.StartX, level.StartY, 50, 50, level);
 
             // Store all the GameObjects.
-            // This should be inside of the Level Class when we get to it.
             foreach (Floor floor in level.Floors)
             {
                 _inventions.AddRange(floor.Inventions);
@@ -246,22 +284,11 @@ namespace SleepyScientist
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            if (Keyboard.GetState().IsKeyDown(Keys.OemPlus))
-                _camera.ModZoom(GameConstants.ZOOM_STEP);
-
-            if (Keyboard.GetState().IsKeyDown(Keys.OemMinus))
-                _camera.ModZoom(-GameConstants.ZOOM_STEP);
-
-            if (Keyboard.GetState().IsKeyDown(Keys.NumPad0))
-                _camera.Zoom(1);
-
             _prevMouseState = _curMouseState;
             _curMouseState = Mouse.GetState();
             _prevKeyboardState = _curKeyboardState;
             _curKeyboardState = Keyboard.GetState();
 
-            if (Keyboard.GetState().IsKeyDown(Keys.NumPad0))
-                _camera.Zoom(1);
             if (state == STATE.PLAY || state == STATE.PAUSE)
             {
                 if (_prevKeyboardState.IsKeyDown(Keys.P) && _curKeyboardState.IsKeyUp(Keys.P))
@@ -271,15 +298,6 @@ namespace SleepyScientist
             #region Play
             if (state == STATE.PLAY)
             {
-                if (Keyboard.GetState().IsKeyDown(Keys.OemPlus))
-                    _camera.ModZoom(GameConstants.ZOOM_STEP);
-
-                if (Keyboard.GetState().IsKeyDown(Keys.OemMinus))
-                    _camera.ModZoom(-GameConstants.ZOOM_STEP);
-
-                if (Keyboard.GetState().IsKeyDown(Keys.NumPad0))
-                    _camera.Zoom(1);
-
                 // Update mouse
                 _deltaScrollWheel = Mouse.GetState().ScrollWheelValue - _curScrollWheel;
 
@@ -304,57 +322,89 @@ namespace SleepyScientist
                     }
                 }
 
-                // Update global Time class.
-                Time.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
-
                 Point convertedMousePos = _camera.ToGlobal(new Point(_curMouseState.X, _curMouseState.Y));
-                foreach (Invention invention in _inventions)
-                {
-                    invention.Update();
-                    Rectangle convertedInventionPos = _camera.ToLocal(invention.RectPosition);
+				if (_begin)
+            	{
+		            if (GameConstants.MOVING_INVENTION) { Time.Update((float)gameTime.ElapsedGameTime.TotalSeconds / 2); }
+		            else { Time.Update((float)gameTime.ElapsedGameTime.TotalSeconds); }
 					
-                    if (_prevMouseState.LeftButton == ButtonState.Pressed && 
-                    _curMouseState.LeftButton == ButtonState.Released &&
-                    convertedInventionPos.Contains(new Point(_curMouseState.X, _curMouseState.Y)))
-	                {
-                        invention.Clicked = true;
-                        GameConstants.MOVING_INVENTION = true;
+		            foreach (Invention invention in _inventions)
+		            {
+		                invention.Update();
+		                Rectangle convertedInventionPos = _camera.ToLocal(invention.RectPosition);
+					
+		                if (_prevMouseState.LeftButton == ButtonState.Pressed && 
+		                _curMouseState.LeftButton == ButtonState.Released &&
+		                convertedInventionPos.Contains(new Point(_curMouseState.X, _curMouseState.Y)))
+			            {
+		                    invention.Clicked = true;
+		                    GameConstants.MOVING_INVENTION = true;
 						
-                        _camera.ShouldFollowTarget = false;
-                        _camera.Zoom(GameConstants.ZOOM_ROOM_VIEW);
-                        break;
-                    }
+		                    _camera.ShouldFollowTarget = false;
+		                    _camera.Zoom(GameConstants.ZOOM_ROOM_VIEW);
+		                    break;
+		                }
 
-                    if (invention.Clicked && _prevMouseState.LeftButton == ButtonState.Pressed &&
-                        _curMouseState.LeftButton == ButtonState.Released)
-                    {   
-                        invention.HasTarget = true;
-                        invention.Clicked = false;
-                        invention.TargetX = convertedMousePos.X;
-                        invention.TargetY = convertedMousePos.Y;
-                        invention.VeloX = GameConstants.DEFAULT_INVENTION_X_VELO;
-                        Console.WriteLine(invention.TargetX + " : " + (invention.Y + invention.Height - invention.TargetY));
-                        invention.DeterminePath();
-                        GameConstants.MOVING_INVENTION = false;
+		                if (invention.Clicked && _prevMouseState.LeftButton == ButtonState.Pressed &&
+		                    _curMouseState.LeftButton == ButtonState.Released)
+		                {
+		                    invention.HasTarget = true;
+		                    invention.Clicked = false;
+		                    invention.TargetX = convertedMousePos.X;
+		                    invention.TargetY = convertedMousePos.Y;
+		                    invention.VeloX = GameConstants.DEFAULT_INVENTION_X_VELOCITY;
+		                    invention.DeterminePath();
+		                    GameConstants.MOVING_INVENTION = false;
 
-                        _camera.ShouldFollowTarget = true;
-                        _camera.Zoom(GameConstants.ZOOM_INVENTION_VIEW);
-                    }
-                }
-				/*
-		        foreach (Floor floor in _sleepy.Room.Floors)
-		        {
-		            try { MessageLayer.AddMessage(new Message(floor.Ladders[0].X.ToString(), floor.Ladders[0].X, floor.Ladders[0].Y, GameConstants.MESSAGE_TIME)); }
-		            catch { }
-		        }
-		        */
+		                    _camera.ShouldFollowTarget = true;
+		                    _camera.Zoom(GameConstants.ZOOM_INVENTION_VIEW);
+		                }
+		            }
 
-                _sleepy.Update();
+		            _sleepy.Update();
+		            MessageLayer.Update(gameTime.ElapsedGameTime.TotalSeconds);
+		            if (_camera.ShouldFollowTarget == false)
+		                _camera.UpdateCameraScroll(_curMouseState.X, _curMouseState.Y);
+
+		            _camera.Update();
+
+					// Check if the user won
+		            if (_sleepy.Winner)
+		            {
+		                _begin = false;
+		                if (_levelNumber == _totalLevels) { _levelNumber = 1; }
+		                else { _levelNumber++; }
+		                this.Reset();
+
+		                // Load the current level
+		                Room level = LevelLoader.Load(_levelNumber);
+		                this.level = level;
+
+		                // Create the scientist and set his image
+		                _sleepy = new Scientist("Sleepy", level.StartX, level.StartY, 50, 50, level);
+		                this.Load();
+		            }
+
+		            // Check if the user lost
+		            if (_sleepy.Loser)
+		            {
+		                _begin = false;
+		                this.Reset();
+
+		                // Load the current level
+		                Room level = LevelLoader.Load(_levelNumber);
+		                this.level = level;
+
+		                //Create the scientist and set his image
+		                // Create the scientist and set his image
+		                _sleepy = new Scientist("Sleepy", level.StartX, level.StartY, 50, 50, level);
+		                this.Load();
+		            }
+				}
+                else if (_curMouseState.LeftButton == ButtonState.Released &&
+                    _prevMouseState.LeftButton == ButtonState.Pressed) { _begin = true; }
+
                 MessageLayer.Update(gameTime.ElapsedGameTime.TotalSeconds);
-                if (_camera.ShouldFollowTarget == false)
-                    _camera.UpdateCameraScroll(_curMouseState.X, _curMouseState.Y);
-
-                _camera.Update();
             }
             #endregion
             #region Main Menu
@@ -475,17 +525,24 @@ namespace SleepyScientist
 
             spriteBatch.Begin();
 
-            /*
-            // Draw the messages.
-            MessageLayer.Draw(spriteBatch);
-            */
             if (state == STATE.PLAY || state == STATE.PAUSE)
             {
+		        // Draw the background
+		        GameObject wallTile;
+		        for (int x = 0; x < GameConstants.SCREEN_WIDTH; x += 50)
+		        {
+		            for (int y = 0; y < GameConstants.SCREEN_HEIGHT; y += 50)
+		            {
+		                wallTile = new GameObject(x, y, 50, 50, GameConstants.DEFAULT_DIRECTION);
+		                wallTile.Image = _wallTexture;
+		                wallTile.Draw(spriteBatch);
+		            }
+		        }
+				
                 _camera.DrawGameObjects(spriteBatch, _sleepy.Room.GetGameObjects());
                 _camera.DrawGameObject(spriteBatch, _sleepy );
                 
                 if (state == STATE.PAUSE)
-
                 {
                     foreach (Button b in _pauseMenuButtons)
                         b.Draw(spriteBatch);
@@ -510,10 +567,6 @@ namespace SleepyScientist
             {
                 foreach (Button b in _instructionsButtons)
                     b.Draw(spriteBatch);
-
-                //MessageLayer.ClearMessages();
-                //MessageLayer.AddMessage(new Message("-The objective of the game is to get the scientist to his bed in each level.\n-You may pick up inventions by clicking on them, and move the inventions by clicking on the place you want to move them.", 0, 0));
-                //MessageLayer.Draw(spriteBatch);
             }
 
             spriteBatch.End();
@@ -522,74 +575,32 @@ namespace SleepyScientist
         }
 
         /// <summary>
-        /// Creates and positions Floors and Ladders for testing.
+        /// Resets all of the drawable objects in the level
         /// </summary>
-        /// <param name="numFloors">The number of floors to create for the test environment.</param>
-        /// <param name="createLadders">Should Ladders be added to the test environment?</param>
-        private void SetupLevel(int numFloors, int startFloor, bool createLadders = false, bool createStairs = false)
+        public void Reset()
         {
-            Random rand = new Random();
-            Room room = new Room(numFloors, startFloor-1, 0, 0);
-            int x;
-            int y;
-            int width = screenWidth;
-            int distanceBetweenFloors = screenHeight / numFloors;
-
-            // Add Floors.
-            for (int i = 0; i < numFloors; i++)
-            {
-                x = 0;
-                y = screenHeight - distanceBetweenFloors * i - GameConstants.FLOOR_HEIGHT;
-                Floor floor = new Floor(x, y, width, GameConstants.FLOOR_HEIGHT);
-                floor.Image = _floorTexture;
-                room.Floors.Add(floor);
-
-                // Add ladder
-                if (createLadders && i != numFloors - 1)
-                {
-                    x = rand.Next(screenWidth - GameConstants.TILE_WIDTH);
-                    y = floor.Y - distanceBetweenFloors - GameConstants.TILE_HEIGHT;
-                    Ladder ladderToAdd = new Ladder(x, y, GameConstants.LADDER_WIDTH, distanceBetweenFloors + GameConstants.TILE_HEIGHT);
-                    ladderToAdd.Image = _ladderTexture;
-                    floor.Ladders.Add(ladderToAdd);
-                }
-
-                if (createStairs && i != 0)
-                {
-                    x = rand.Next(screenWidth - GameConstants.TILE_WIDTH);
-                    y = screenHeight - distanceBetweenFloors * i - GameConstants.FLOOR_HEIGHT;
-                    Stairs stair = new Stairs(x, y, GameConstants.LADDER_WIDTH, distanceBetweenFloors);
-                    stair.Image = _stairsTexture;
-                    floor.Stairs.Add(stair);
-                }
-            }
-
-            Invention box = new JackInTheBox("JackInTheBox", screenWidth / 2, room.Floors[0].Y - GameConstants.TILE_HEIGHT, 50, 50, room);
-            box.Image = _jackintheboxTexture;
-            room.Floors[0].Inventions.Add(box);
-            _inventions.Add(box);
-
-            // Create the scientist and set his image
-            _sleepy = new Scientist("Sleepy", 100, room.Floors[startFloor - 1].Y - GameConstants.TILE_HEIGHT, 50, 50, room);
+            _stairs.Clear();
+            _ladders.Clear();
+            _inventions.Clear();
+            _floors.Clear();
+            _pits.Clear();
         }
 
         /// <summary>
-        /// !This should be inside of AI, but it requires AI to have a currentFloor and Floors to have a list of Inventions!
-        /// Updates the states of the objects.
+        /// Loads all of the drawable objects in the level
         /// </summary>
-        private bool handleCollisions(AI ai)
+        public void Load()
         {
-            bool hasCollided = false;
-
-            foreach (Ladder ladder in _ladders)
+            // Store all the GameObjects.
+            // This should be inside of the Level Class when we get to it.
+            foreach (Floor floor in this.level.Floors)
             {
-                if ( ladder.RectPosition.Contains( ai.RectPosition.Center ) )
-                {
-                    //hasCollided = ai.InteractWith(ladder);                    
-                }
+                _floors.Add(floor);
+                _ladders.AddRange(floor.Ladders);
+                _stairs.AddRange(floor.Stairs);
+                _pits.AddRange(floor.Pits);
+                _inventions.AddRange(floor.Inventions);
             }
-
-            return hasCollided;
         }
     }
 }

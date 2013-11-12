@@ -13,7 +13,6 @@ namespace SleepyScientist
 {
     class Floor : TileableGameObject
     {
-
         #region Attributes
 
         // The inventions on the floor
@@ -27,6 +26,9 @@ namespace SleepyScientist
 
         // The walls on the floor
         public List<Wall> _walls;
+
+        // The pits on the floor
+        public List<Pit> _pits;
 
         #endregion
 
@@ -44,6 +46,9 @@ namespace SleepyScientist
         // Gets or sets the walls on the floor
         public List<Wall> Walls { get { return _walls; } set { _walls = value; } }
 
+        // Gets or sets the pits on the floor
+        public List<Pit> Pits { get { return _pits; } set { _pits = value; } }
+
         #endregion
 
         #region Constructor
@@ -56,19 +61,20 @@ namespace SleepyScientist
         /// <param name="width">The width of the floor</param>
         /// <param name="height">The height of the floor</param>
         public Floor(int x, int y, int width, int height)
-            : base(x, y, width, height) 
+            : base(x, y, width, height, 1) 
         {
             this.Inventions = new List<Invention>();
             this.Ladders = new List<Ladder>();
             this.Stairs = new List<Stairs>();
             this.Walls = new List<Wall>();
+            this.Pits = new List<Pit>();
         }
 
         #endregion
 
         #region Methods
-
-        /// <summary>
+		
+		/// <summary>
         /// Grab and return all GameObjects on this Floor (includes self).
         /// </summary>
         /// <returns>Every GameObject on this Floor.</returns>
@@ -78,7 +84,13 @@ namespace SleepyScientist
             floorObjects.Add(this);
             floorObjects.AddRange(Ladders);
             floorObjects.AddRange(Stairs);
+            foreach (Stairs g in Stairs)
+            {
+                floorObjects.Add(g.Railing);
+
+            }
             floorObjects.AddRange(Inventions);
+			floorObjects.AddRange(Pits);
 
             return floorObjects;
         }

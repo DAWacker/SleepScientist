@@ -89,7 +89,7 @@ namespace SleepyScientist
         /// </summary>
         /// <param name="x">X coordinate.</param>
         /// <param name="y">Y coordinate.</param>
-        public void ZoomToLocation(int x, int y)
+        public void ZoomToLocation(float x, float y)
         {
             if (_zoomFactor != GameConstants.ZOOM_INVENTION_VIEW)
             {
@@ -103,7 +103,7 @@ namespace SleepyScientist
         /// </summary>
         /// <param name="x">x coord.</param>
         /// <param name="y">y coord.</param>
-        public void CenterCameraOn(int x, int y)
+        public void CenterCameraOn(float x, float y)
         {
             // Convert coords to zoomed-scale coords
             x = (int)(x * _zoomFactor);
@@ -120,7 +120,7 @@ namespace SleepyScientist
         /// </summary>
         /// <param name="x">x coord</param>
         /// <param name="y">y coord</param>
-        public void UpdateCameraScroll(int x, int y)
+        public void UpdateCameraScroll(float x, float y)
         {
             float screenXPercent = (float)x / GameConstants.SCREEN_WIDTH;
 

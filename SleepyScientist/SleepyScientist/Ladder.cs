@@ -16,7 +16,7 @@ namespace SleepyScientist
         #region Constructor
 
         public Ladder(int x, int y, int width, int height)
-            : base(x, y, width, height) { }
+            : base(x, y, width, height, GameConstants.DEFAULT_DIRECTION) { }
 
         #endregion
     }

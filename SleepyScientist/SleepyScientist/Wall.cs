@@ -23,7 +23,7 @@ namespace SleepyScientist
         /// <param name="width">The width of the wall</param>
         /// <param name="height">The height of the wall</param>
         public Wall(int x, int y, int width, int height)
-            : base(x, y, width, height) { }
+            : base(x, y, width, height, GameConstants.DEFAULT_DIRECTION) { }
 
         #endregion
 
@@ -33,9 +33,9 @@ namespace SleepyScientist
         {
             batch.Draw(this.Image, this.RectPosition, Color.Red);
             // Only draw this much of the _image. Prevents overdraw.
-            Rectangle drawClip = new Rectangle(0, 0, Image.Width, Image.Height);
+            RectangleVector drawClip = new RectangleVector(0, 0, Image.Width, Image.Height);
             // Where to draw the current tile. Include offset.
-            Rectangle drawDest = new Rectangle(X, Y, Image.Width, Image.Height);
+            RectangleVector drawDest = new RectangleVector(X, Y, Image.Width, Image.Height);
 
             for (int xOff = 0; xOff < Width; xOff += Image.Width)
             {
@@ -43,7 +43,7 @@ namespace SleepyScientist
                 if (xOff + Image.Width > Width)
                 {
                     // Prevent overdraw.
-                    drawClip.Width = Width - xOff;
+                    drawClip.Width = (int)(Width - xOff);
                     drawDest.Width = drawClip.Width;
                 }
 
@@ -53,7 +53,7 @@ namespace SleepyScientist
                     if (yOff + Image.Height > Height)
                     {
                         // Prevent overdraw.
-                        drawClip.Height = Height - yOff;
+                        drawClip.Height = (int)(Height - yOff);
                         drawDest.Height = drawClip.Height;
                     }
                     if (pos != null)

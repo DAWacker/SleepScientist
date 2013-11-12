@@ -19,7 +19,10 @@ namespace SleepyScientist
         private int _startFloor;
         private int _startX;
         private int _startY;
+        private int _startDirection;
         private List<Floor> _floors;
+        private Bed _bed;
+        private Door _door;
 
         #endregion
 
@@ -35,8 +38,17 @@ namespace SleepyScientist
         public int StartX { get { return _startX; } set { _startX = value; } }
         public int StartY { get { return _startY; } set { _startY = value; } }
 
+        // Get or set the starting direction of the scientist for the room
+        public int StartDirection { get { return _startDirection; } set { _startDirection = value; } }
+
         // Get or set the floors that are in the room
         public List<Floor> Floors { get { return _floors; } set { _floors = value; } }
+
+        // Get or set the bed in the room
+        public Bed Bed { get { return _bed; } set { _bed = value; } }
+
+        // Get or set the door in the room
+        public Door Door { get { return _door; } set { _door = value; }}
 
         #endregion
 
@@ -49,13 +61,16 @@ namespace SleepyScientist
         /// <param name="ladders">The ladders in the room</param>
         /// <param name="stairs">The stairs in the room</param>
         /// <param name="floors">The floors in the room</param>
-        public Room(int numFloors, int startFloor, int startX, int startY)
+        public Room(int numFloors, int startFloor, int startX, int startY, int startDirection, Bed bed)
         {
             this.NumberFloors = numFloors;
             this.StartFloor = startFloor;
             this.StartX = startX;
             this.StartY = startY;
+            this.StartDirection = startDirection;
             this.Floors = new List<Floor>();
+            this.Bed = bed;
+            this.Door = null;
         }
 
         #endregion
@@ -75,6 +90,9 @@ namespace SleepyScientist
             {
                 roomObjects.AddRange(floor.GetGameObjects());
             }
+            roomObjects.Add(Bed);
+            if (Door != null)
+                roomObjects.Add(Door);
 
             return roomObjects;
         }

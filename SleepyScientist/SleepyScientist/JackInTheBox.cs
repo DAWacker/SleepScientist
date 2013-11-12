@@ -21,8 +21,8 @@ namespace SleepyScientist
         /// <param name="y">Initial Y position for invention</param>
         /// <param name="width">Width of invention</param>
         /// <param name="height">Height of invention</param>
-        public JackInTheBox(string name, int x, int y, int width, int height, Room room)
-            : base(name, x, y, width, height, room) { }
+        public JackInTheBox(string name, int x, int y, int width, int height, Room room, int startFloor)
+            : base(name, x, y, width, height, room, startFloor) { }
 
         #endregion
 
