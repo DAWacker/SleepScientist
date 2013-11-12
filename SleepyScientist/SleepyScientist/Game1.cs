@@ -18,7 +18,15 @@ namespace SleepyScientist
     {
         #region Attributes
 
-        public static STATE state = STATE.MAIN_MENU;
+        // State variables
+        private static STATE _state = STATE.MAIN_MENU;
+        public static STATE PrevState = _state;
+        public static STATE State
+        {
+            get{ return _state; }
+            // Save previous value and get new value
+            set{ PrevState = _state; _state = value; }
+        }
         private Menu _menu;
 
         GraphicsDeviceManager graphics;
@@ -199,7 +207,7 @@ namespace SleepyScientist
                 _camera.Zoom(1);
             
             #region Play
-            if (state == STATE.PLAY)
+            if (_state == STATE.PLAY)
             {
                 if (Keyboard.GetState().IsKeyDown(Keys.OemPlus))
                     _camera.ModZoom(GameConstants.ZOOM_STEP);
@@ -309,7 +317,7 @@ namespace SleepyScientist
             MessageLayer.Draw(spriteBatch);
             */
 
-            if (state == STATE.PLAY || state == STATE.PAUSE)
+            if (_state == STATE.PLAY || _state == STATE.PAUSE)
             {
                 _camera.DrawGameObjects(spriteBatch, _sleepy.Room.GetGameObjects());
                 _camera.DrawGameObject(spriteBatch, _sleepy );
