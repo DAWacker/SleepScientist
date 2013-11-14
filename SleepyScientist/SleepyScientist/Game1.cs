@@ -128,6 +128,12 @@ namespace SleepyScientist
             _spriteFont = Content.Load<SpriteFont>("Font/defaultFont");
             MessageLayer.Font = _spriteFont;
 
+            // Set up the TextHelper.
+            TextHelper.Batch = spriteBatch;
+            TextHelper.Font = _spriteFont;
+            TextHelper.TextColor = Color.White;
+            TextHelper.Alignment = TextHelper.TextAlignment.Center;
+
             // Load animation sets.
             AnimationLoader.Load("ScientistAnimationSet.xml", Content);
 
@@ -135,9 +141,9 @@ namespace SleepyScientist
             _floorTexture = this.Content.Load<Texture2D>("Image/floor");
             _stairsTexture = this.Content.Load<Texture2D>("Image/stairs");
             _ladderTexture = this.Content.Load<Texture2D>("Image/ladder");
-            _rocketSkateboardTexture = this.Content.Load<Texture2D>("Image/rocketSkateboard");
-            _eggBeaterTexture = this.Content.Load<Texture2D>("Image/eggBeater");
-            _jackintheboxTexture = this.Content.Load<Texture2D>("Image/jackInTheBox");
+            _rocketSkateboardTexture = this.Content.Load<Texture2D>("Image/skateboard");
+            _eggBeaterTexture = this.Content.Load<Texture2D>("Image/eggbeater");
+            _jackintheboxTexture = this.Content.Load<Texture2D>("Image/jack_inthe_box");
 			
             // Make these textures static
             GameConstants.FLOOR_TEXTURE = _floorTexture;
