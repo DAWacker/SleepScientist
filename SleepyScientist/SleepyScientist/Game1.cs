@@ -47,7 +47,6 @@ namespace SleepyScientist
         private List<Ladder> _ladders;
         private List<Stairs> _stairs;
         private List<Invention> _inventions;
-        private List<GameObject> _allGameObjects;
 
         // Textures
         private Texture2D _stairsTexture;
