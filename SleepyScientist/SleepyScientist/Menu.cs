@@ -20,6 +20,7 @@ namespace SleepyScientist
         private Texture2D _levelNumButtonTexture;
         private Texture2D _levelSelectButtonTexture;
         private Texture2D _instructionsButtonTexture;
+        private Texture2D _resumeButtonTexture;
         private Texture2D _backButtonTexture;
         private Texture2D _instructionsTexture1;
         private Texture2D _soundOffButtonTexture;
@@ -40,14 +41,15 @@ namespace SleepyScientist
 
         public void LoadContent(ContentManager Content)
         {
-            _mainMenuButtonTexture = Content.Load<Texture2D>("Image/Buttons/main_menu");
-            _newGameButtonTexture = Content.Load<Texture2D>("Image/Buttons/new_game");
-            _levelNumButtonTexture = Content.Load<Texture2D>("Image/Buttons/level");
-            _levelSelectButtonTexture = Content.Load<Texture2D>("Image/Buttons/level_select");
-            _instructionsButtonTexture = Content.Load<Texture2D>("Image/Buttons/instructions");
-            _backButtonTexture = Content.Load<Texture2D>("Image/Buttons/back");
-            _soundOffButtonTexture = Content.Load<Texture2D>("Image/Buttons/sound_off");
-            _soundOnButtonTexture = Content.Load<Texture2D>("Image/Buttons/sound_on");
+            _mainMenuButtonTexture = Content.Load<Texture2D>("Image/Buttons/main_menu_button");
+            _newGameButtonTexture = Content.Load<Texture2D>("Image/Buttons/new_game_button");
+            _levelNumButtonTexture = Content.Load<Texture2D>("Image/Buttons/level_num_button");
+            _levelSelectButtonTexture = Content.Load<Texture2D>("Image/Buttons/level_select_button");
+            _instructionsButtonTexture = Content.Load<Texture2D>("Image/Buttons/instructions_button");
+            _resumeButtonTexture = Content.Load<Texture2D>("Image/Buttons/resume_button");
+            _backButtonTexture = Content.Load<Texture2D>("Image/Buttons/back_button");
+            _soundOffButtonTexture = Content.Load<Texture2D>("Image/Buttons/sound_off_button");
+            _soundOnButtonTexture = Content.Load<Texture2D>("Image/Buttons/sound_on_button");
 
             _pauseOverlayTexture = Content.Load<Texture2D>("Image/pause_overlay");
             _pauseMenuTemplateTexture= Content.Load<Texture2D>("Image/pause_menu_template");
@@ -57,8 +59,8 @@ namespace SleepyScientist
             _mainMenuButtons.Add("newGame", new Button(0, _instructionsButtonTexture.Height, _newGameButtonTexture.Width, _newGameButtonTexture.Height, _newGameButtonTexture));
             _mainMenuButtons.Add("levelSelect", new Button(0, _instructionsButtonTexture.Height * 3, _levelSelectButtonTexture.Width, _levelSelectButtonTexture.Height, _levelSelectButtonTexture));
             _mainMenuButtons.Add("instructions", new Button(0, _instructionsButtonTexture.Height * 4, _instructionsButtonTexture.Width, _instructionsButtonTexture.Height, _instructionsButtonTexture));
-            // Add Image...
-            // Add Quit Button
+            // Quit _mainMenuButtons.Add("quit", new Button( (Game1.screenWidth - _mainMenuButtonTexture.Width, Game1.screenHeight - _mainMenuButtonTexture.Height, _quitButtonTexture.Width, _quitButtonTexture.Height, _quitButtonTexture));
+            // Add Image... 
 
             // Set up Level Select Menu
             int lvlNum = 0;
@@ -78,14 +80,17 @@ namespace SleepyScientist
             _pauseMenuElements.Add("pauseImage", new Button((Game1.screenWidth / 2) - (_pauseMenuTemplateTexture.Width / 2), (Game1.screenHeight / 2) - (_pauseMenuTemplateTexture.Height / 2), _pauseMenuTemplateTexture.Width, _pauseMenuTemplateTexture.Height, _pauseMenuTemplateTexture));
             // Restart _pauseMenuElements.Add("restart", new Button( (Game1.screenWidth / 2) - _restartButtonTexture.Width / 2, (Game1.screenHeight / 2) - 2 * _restartButtonTexture.Height, _restartButtonTexture.Width, _restartButtonTexture.Height, _restartButtonTexture)):
             _pauseMenuElements.Add("instructions", new Button((Game1.screenWidth / 2) - _instructionsButtonTexture.Width / 2, (Game1.screenHeight / 2) - 1 * _instructionsButtonTexture.Height, _instructionsButtonTexture.Width, _instructionsButtonTexture.Height, _instructionsButtonTexture));
-            // Resume _pauseMenuElements.Add("resume", new Button( (Game1.screenWidth / 2) - _resumeButtonTexture.Width / 2, (Game1.screenHeight / 2) + 1 * _resumeButtonTexture.Height, _resumeButtonTexture.Width, _resumeButtonTexture.Height, _resumeButtonTexture)):
+            _pauseMenuElements.Add("resume", new Button((Game1.screenWidth / 2) - _instructionsButtonTexture.Width / 2, (Game1.screenHeight / 2) + 1 * _instructionsButtonTexture.Height, _resumeButtonTexture.Width, _resumeButtonTexture.Height, _resumeButtonTexture));
             // Quit _pauseMenuElements.Add("quit", new Button( (Game1.screenWidth / 2) - _quitButtonTexture.Width / 2, (Game1.screenHeight / 2) + 2 * _quitButtonTexture.Height, _quitButtonTexture.Width, _quitButtonTexture.Height, _quitButtonTexture)):
-
-            // Instructions
+            _pauseMenuElements.Add("sound", new Button((Game1.screenWidth / 2) + 1 * _soundOffButtonTexture.Width + (_soundOffButtonTexture.Width/2), (Game1.screenHeight / 2), _soundOnButtonTexture.Width, _soundOnButtonTexture.Height, _soundOnButtonTexture));     
+    
+            // Instructions Full Screen
             // NEW SET UP OF INSTRUCTIONS MENU
             _instructionsButtons.Add("back", new Button((Game1.screenWidth / 2), Game1.screenHeight / 2, _backButtonTexture.Width, _backButtonTexture.Height, _backButtonTexture));
             _instructionsButtons.Add("instructions1", new Button(0, 0, _instructionsTexture1.Width, _instructionsTexture1.Height, _instructionsTexture1));
-            _instructionsButtons.Add("mainMenu", new Button(Game1.screenWidth - _mainMenuButtonTexture.Width, Game1.screenHeight - _mainMenuButtonTexture.Height, _mainMenuButtonTexture.Width, _mainMenuButtonTexture.Height, _mainMenuButtonTexture));
+            // DO WE NEED THIS: _instructionsButtons.Add("mainMenu", new Button(Game1.screenWidth - _mainMenuButtonTexture.Width, Game1.screenHeight - _mainMenuButtonTexture.Height, _mainMenuButtonTexture.Width, _mainMenuButtonTexture.Height, _mainMenuButtonTexture));
+
+            // Instructions Pause
         }
 
         public void Update()
@@ -146,19 +151,27 @@ namespace SleepyScientist
                 {
                     Game1.State = STATE.INSTRUCTIONS;
                 }
+                else if (Game1._prevMouseState.LeftButton == ButtonState.Pressed &&
+                    Game1._curMouseState.LeftButton == ButtonState.Released &&
+                    Game1._curMouseState.X > _pauseMenuElements["resume"].X && Game1._curMouseState.X < _pauseMenuElements["resume"].X + _pauseMenuElements["resume"].Width &&
+                    Game1._curMouseState.Y > _pauseMenuElements["resume"].Y && Game1._curMouseState.Y < _pauseMenuElements["resume"].Y + _pauseMenuElements["resume"].Height)
+                {
+                    Game1.State = STATE.PLAY;
+                }
+                else if (Game1._prevMouseState.LeftButton == ButtonState.Pressed &&
+                    Game1._curMouseState.LeftButton == ButtonState.Released &&
+                    Game1._curMouseState.X > _pauseMenuElements["sound"].X && Game1._curMouseState.X < _pauseMenuElements["sound"].X + _pauseMenuElements["sound"].Width &&
+                    Game1._curMouseState.Y > _pauseMenuElements["sound"].Y && Game1._curMouseState.Y < _pauseMenuElements["sound"].Y + _pauseMenuElements["sound"].Height)
+                {
+                    _pauseMenuElements["sound"].Image = (_soundOffButtonTexture == _pauseMenuElements["sound"].Image) ? _soundOnButtonTexture : _soundOffButtonTexture;
+                    // Toggle sound
+                }
             }
             #endregion
             #region Instructions
             else if (Game1.State == STATE.INSTRUCTIONS)
             {
                 if (Game1._prevMouseState.LeftButton == ButtonState.Pressed &&
-                   Game1._curMouseState.LeftButton == ButtonState.Released &&
-                   Game1._curMouseState.X > _instructionsButtons["mainMenu"].X && Game1._curMouseState.X < _instructionsButtons["mainMenu"].X + _instructionsButtons["mainMenu"].Width &&
-                   Game1._curMouseState.Y > _instructionsButtons["mainMenu"].Y && Game1._curMouseState.Y < _instructionsButtons["mainMenu"].Y + _instructionsButtons["mainMenu"].Height)
-                {
-                    Game1.State = STATE.MAIN_MENU;
-                }
-                else if (Game1._prevMouseState.LeftButton == ButtonState.Pressed &&
                    Game1._curMouseState.LeftButton == ButtonState.Released &&
                    Game1._curMouseState.X > _instructionsButtons["back"].X && Game1._curMouseState.X < _instructionsButtons["back"].X + _instructionsButtons["back"].Width &&
                    Game1._curMouseState.Y > _instructionsButtons["back"].Y && Game1._curMouseState.Y < _instructionsButtons["back"].Y + _instructionsButtons["back"].Height)
