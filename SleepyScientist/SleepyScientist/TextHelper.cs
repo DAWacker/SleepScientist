@@ -57,7 +57,7 @@ namespace SleepyScientist
                 _batch.DrawString(_font, text, pos, _textColor);
                 _batch.End();
             }
-            catch( Exception e )
+            catch( Exception )
             {
                 _batch.DrawString(_font, text, pos, _textColor);
             }

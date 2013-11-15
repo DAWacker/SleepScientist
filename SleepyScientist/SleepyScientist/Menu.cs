@@ -20,9 +20,14 @@ namespace SleepyScientist
         private Texture2D _levelNumButtonTexture;
         private Texture2D _levelSelectButtonTexture;
         private Texture2D _instructionsButtonTexture;
+        private Texture2D _generalInstButtonTexture;
+        private Texture2D _jackInstButtonTexture;
+        private Texture2D _eggInstButtonTexture;
+        private Texture2D _skateboardInstButtonTexture;
+        private Texture2D _batteryInstButtonTexture;
+        private Texture2D _doorPitInstButtonTexture;
         private Texture2D _resumeButtonTexture;
         private Texture2D _backButtonTexture;
-        private Texture2D _instructionsTexture1;
         private Texture2D _soundOffButtonTexture;
         private Texture2D _soundOnButtonTexture;
 
@@ -51,9 +56,15 @@ namespace SleepyScientist
             _soundOffButtonTexture = Content.Load<Texture2D>("Image/Buttons/sound_off_button");
             _soundOnButtonTexture = Content.Load<Texture2D>("Image/Buttons/sound_on_button");
 
+            _generalInstButtonTexture = _levelNumButtonTexture;
+            _jackInstButtonTexture = _levelNumButtonTexture;
+            _eggInstButtonTexture = _levelNumButtonTexture;
+            _skateboardInstButtonTexture = _levelNumButtonTexture;
+            _batteryInstButtonTexture = _levelNumButtonTexture;
+            _doorPitInstButtonTexture = _levelNumButtonTexture;
+
             _pauseOverlayTexture = Content.Load<Texture2D>("Image/pause_overlay");
             _pauseMenuTemplateTexture= Content.Load<Texture2D>("Image/pause_menu_template");
-            _instructionsTexture1 = Content.Load<Texture2D>("Image/test_instructions1");
 
             // Set up Main Menu
             _mainMenuButtons.Add("newGame", new Button(0, _instructionsButtonTexture.Height, _newGameButtonTexture.Width, _newGameButtonTexture.Height, _newGameButtonTexture));
@@ -87,7 +98,14 @@ namespace SleepyScientist
             // Instructions Full Screen
             // NEW SET UP OF INSTRUCTIONS MENU
             _instructionsButtons.Add("back", new Button((Game1.screenWidth / 2), Game1.screenHeight / 2, _backButtonTexture.Width, _backButtonTexture.Height, _backButtonTexture));
-            _instructionsButtons.Add("instructions1", new Button(0, 0, _instructionsTexture1.Width, _instructionsTexture1.Height, _instructionsTexture1));
+            // Instructions buttons
+            _instructionsButtons.Add("general", new Button(0, 0, _generalInstButtonTexture.Width, _generalInstButtonTexture.Height, _generalInstButtonTexture));
+            _instructionsButtons.Add("jack", new Button(_generalInstButtonTexture.Width, 0, _jackInstButtonTexture.Width, _jackInstButtonTexture.Height, _jackInstButtonTexture));
+            _instructionsButtons.Add("egg", new Button(2 * _generalInstButtonTexture.Width, 0, _eggInstButtonTexture.Width, _eggInstButtonTexture.Height, _eggInstButtonTexture));
+            _instructionsButtons.Add("skateboard", new Button(3 * _generalInstButtonTexture.Width, 0, _skateboardInstButtonTexture.Width, _skateboardInstButtonTexture.Height, _skateboardInstButtonTexture));
+            _instructionsButtons.Add("battery", new Button(3 * _generalInstButtonTexture.Width, 0, _batteryInstButtonTexture.Width, _batteryInstButtonTexture.Height, _batteryInstButtonTexture));
+            _instructionsButtons.Add("doorpit", new Button(4 * _generalInstButtonTexture.Width, 0, _doorPitInstButtonTexture.Width, _doorPitInstButtonTexture.Height, _doorPitInstButtonTexture));
+            TextHelper.DrawString("Headsadadasdllo", new Microsoft.Xna.Framework.Vector2(Game1.screenWidth / 2, Game1.screenHeight / 2));
             // DO WE NEED THIS: _instructionsButtons.Add("mainMenu", new Button(Game1.screenWidth - _mainMenuButtonTexture.Width, Game1.screenHeight - _mainMenuButtonTexture.Height, _mainMenuButtonTexture.Width, _mainMenuButtonTexture.Height, _mainMenuButtonTexture));
 
             // Instructions Pause
@@ -178,6 +196,8 @@ namespace SleepyScientist
                 {
                     Game1.State = Game1.PrevState;
                 }
+
+                TextHelper.DrawString("Headsadadasdllo", new Microsoft.Xna.Framework.Vector2(0,0));
             }
             #endregion
         }
