@@ -159,14 +159,14 @@ namespace SleepyScientist
             AnimationLoader.Load("ScientistAnimationSet.xml", Content);
 
             // Load content of other GameObjects.
+            _ladderTexture = this.Content.Load<Texture2D>("Image/ladder");
             _floorTexture = this.Content.Load<Texture2D>("Image/floor");
             _stairsTexture = this.Content.Load<Texture2D>("Image/stairs");
-            _ladderTexture = this.Content.Load<Texture2D>("Image/ladder");
-            _rocketSkateboardTexture = this.Content.Load<Texture2D>("Image/rocket_skateboard");
-            _eggBeaterTexture = this.Content.Load<Texture2D>("Image/egg_beater");
+            _rocketSkateboardTexture = this.Content.Load<Texture2D>("Image/skateboard");
+            _eggBeaterTexture = this.Content.Load<Texture2D>("Image/eggbeater");
             _jackintheboxTexture = this.Content.Load<Texture2D>("Image/jack_inthe_box");
             _bedTexture = this.Content.Load<Texture2D>("Image/bed");
-            _wallTexture = this.Content.Load<Texture2D>("Image/walltile");
+            _wallTexture = this.Content.Load<Texture2D>("Image/wall");
             _railingTexture = this.Content.Load<Texture2D>("Image/railing");
             _doorOpenTexture = this.Content.Load<Texture2D>("Image/door_open");
             _doorClosedTexture = this.Content.Load<Texture2D>("Image/door_closed");
