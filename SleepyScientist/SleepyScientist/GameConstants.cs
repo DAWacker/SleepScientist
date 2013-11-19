@@ -94,6 +94,11 @@ namespace SleepyScientist
         public static int BED_HEIGHT = 50;
         public static Texture2D BED_TEXTURE;
 
+        // Wall info
+        public static int WALL_WIDTH = 10;
+        public static int WALL_HEIGHT = 200;
+        public static Texture2D WALL_TEXTURE;
+
         // Skateboard info
         public static int SKATEBOARD_WIDTH = 100;
         public static int SKATEBOARD_HEIGHT = 25;
@@ -122,7 +127,7 @@ namespace SleepyScientist
         // Game Textures
         public static Texture2D STAIR_TEXTURE;
         public static Texture2D RAILING_TEXTURE;
-        public static Texture2D WALL_TEXTURE;
+        public static Texture2D BACKGROUND_TEXTURE;
 
         #endregion
     }

@@ -77,8 +77,8 @@ namespace SleepyScientist
 
         // Test
         private bool _begin = false;
-        private int _levelNumber = 2;
-        private int _totalLevels = 6;
+        private int _levelNumber = 7;
+        private int _totalLevels = 7;
         private Room level = null;
 
         #endregion
@@ -165,7 +165,8 @@ namespace SleepyScientist
             GameConstants.PIT_TILE_TEXTURE = this.Content.Load<Texture2D>("Image/laser_tile");
             GameConstants.DOOR_OPEN_TEXTURE = this.Content.Load<Texture2D>("Image/door_open");
             GameConstants.DOOR_CLOSED_TEXTURE = this.Content.Load<Texture2D>("Image/door_closed");
-            GameConstants.WALL_TEXTURE = this.Content.Load<Texture2D>("Image/wall_tile");
+            GameConstants.BACKGROUND_TEXTURE = this.Content.Load<Texture2D>("Image/wall_tile");
+            GameConstants.WALL_TEXTURE = this.Content.Load<Texture2D>("Image/floor");
 
 			// Load the menu textures.
             _mainMenuButtonTexture = this.Content.Load<Texture2D>("Image/main_menu");
@@ -501,7 +502,7 @@ namespace SleepyScientist
 		            for (int y = 0; y < GameConstants.SCREEN_HEIGHT; y += 50)
 		            {
 		                wallTile = new GameObject(x, y, 50, 50, GameConstants.DEFAULT_DIRECTION);
-		                wallTile.Image = GameConstants.WALL_TEXTURE;
+		                wallTile.Image = GameConstants.BACKGROUND_TEXTURE;
 		                wallTile.Draw(spriteBatch);
 		            }
 		        }

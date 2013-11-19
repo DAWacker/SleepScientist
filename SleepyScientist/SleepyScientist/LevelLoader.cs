@@ -162,6 +162,19 @@ namespace SleepyScientist
                                                         room.Door = door;
                                                         break;
 
+                                                    case "Wall":
+                                                        reader.Read();
+                                                        reader.Read();
+                                                        int wallXcoor = Int32.Parse(reader.Value);
+                                                        reader.Read();
+                                                        reader.Read();
+                                                        reader.Read();
+                                                        int wallYcoor = Int32.Parse(reader.Value);
+                                                        Wall wall = new Wall(wallXcoor, wallYcoor, GameConstants.WALL_WIDTH, GameConstants.WALL_HEIGHT);
+                                                        wall.Image = GameConstants.WALL_TEXTURE;
+                                                        floor.Walls.Add(wall);
+                                                        break;
+
                                                     case "Invention":
                                                         reader.Read();
                                                         reader.Read();

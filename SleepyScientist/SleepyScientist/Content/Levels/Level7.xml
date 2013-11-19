@@ -33,6 +33,10 @@
       <X>500</X>
       <Y>350</Y>
     </Invention>
+    <Wall>
+      <X>450</X>
+      <Y>200</Y>
+    </Wall>
     <Stairs>
       <X>300</X>
       <Y>350</Y>

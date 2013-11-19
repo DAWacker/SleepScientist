@@ -152,9 +152,6 @@ namespace SleepyScientist
                 this.CurrentState = ScientistState.Walking;
             }
 
-            // Check if the scientist hit a wall
-            foreach (Wall wall in this.CurrentFloor.Walls) { if (this.RectPosition.Intersects(wall.RectPosition)) { this.Reverse(); } }
-
             // Check if the scientist is using an invention.
             foreach (Invention invention in this.CurrentFloor.Inventions)
             {
@@ -276,6 +273,7 @@ namespace SleepyScientist
                     // Moving right
                     case 1:
                         if (positionCheck.Intersects(stair.RectPosition) &&
+                            this.RectPosition.X < stair.RectPosition.X + this.Width + 25 &&
                             this.RectPosition.X > stair.RectPosition.X &&
                             this.Direction == stair.Direction)
                         {
@@ -289,6 +287,7 @@ namespace SleepyScientist
                     case -1:
                         if (positionCheck.Intersects(stair.RectPosition) &&
                             this.RectPosition.X < stair.RectPosition.X + stair.Width - this.Width &&
+                            this.RectPosition.X > stair.RectPosition.X + stair.Width - this.Width - 25 &&
                             this.Direction == stair.Direction)
                         {
                             this.CurrentTile = stair;
@@ -318,6 +317,9 @@ namespace SleepyScientist
 
             // Check if the scientist has reached the bed
             if (positionCheck.Intersects(this.Room.Bed.RectPosition)) { this.CurrentState = ScientistState.Bed; }
+
+            // Check if the scientist hit a wall
+            foreach (Wall wall in this.CurrentFloor.Walls) { if (this.RectPosition.Intersects(wall.RectPosition)) { this.Reverse(); } }
 
             // Update scientist based on current state.
             switch (this.CurrentState)

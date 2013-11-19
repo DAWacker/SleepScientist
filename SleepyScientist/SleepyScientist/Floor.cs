@@ -83,6 +83,7 @@ namespace SleepyScientist
             List<GameObject> floorObjects = new List<GameObject>();
             floorObjects.AddRange(Inventions);
             floorObjects.AddRange(Teleporters);
+            floorObjects.AddRange(Walls);
             floorObjects.Add(this);
             floorObjects.AddRange(Stairs);
             foreach (Stairs g in Stairs)
