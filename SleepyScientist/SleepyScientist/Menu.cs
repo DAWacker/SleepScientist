@@ -19,13 +19,14 @@ namespace SleepyScientist
         private Texture2D _newGameButtonTexture;
         private Texture2D _levelNumButtonTexture;
         private Texture2D _levelSelectButtonTexture;
+
         private Texture2D _instructionsButtonTexture;
         private Texture2D _generalInstButtonTexture;
         private Texture2D _jackInstButtonTexture;
         private Texture2D _eggInstButtonTexture;
         private Texture2D _skateboardInstButtonTexture;
-        private Texture2D _batteryInstButtonTexture;
-        private Texture2D _doorPitInstButtonTexture;
+        private Texture2D _otherObjectsInstButtonTexture;
+
         private Texture2D _resumeButtonTexture;
         private Texture2D _backButtonTexture;
         private Texture2D _musicOffButtonTexture;
@@ -67,12 +68,11 @@ namespace SleepyScientist
             _quitButtonTexture = Content.Load<Texture2D>("Image/Buttons/quit_button");
             _restartButtonTexture = Content.Load<Texture2D>("Image/Buttons/restart_button");
 
-            _generalInstButtonTexture = _levelNumButtonTexture;
-            _jackInstButtonTexture = _levelNumButtonTexture;
-            _eggInstButtonTexture = _levelNumButtonTexture;
-            _skateboardInstButtonTexture = _levelNumButtonTexture;
-            _batteryInstButtonTexture = _levelNumButtonTexture;
-            _doorPitInstButtonTexture = _levelNumButtonTexture;
+            _generalInstButtonTexture = Content.Load<Texture2D>("Image/Buttons/overview_button");
+            _jackInstButtonTexture = Content.Load<Texture2D>("Image/Buttons/jack_inthe_box_button");
+            _eggInstButtonTexture = Content.Load<Texture2D>("Image/Buttons/eggbeater_button");
+            _skateboardInstButtonTexture = Content.Load<Texture2D>("Image/Buttons/skateboard_button");
+            _otherObjectsInstButtonTexture = Content.Load<Texture2D>("Image/Buttons/other_objects_button");
 
             _pauseOverlayTexture = Content.Load<Texture2D>("Image/pause_overlay");
             _pauseMenuTemplateTexture = Content.Load<Texture2D>("Image/pause_background");
@@ -108,17 +108,12 @@ namespace SleepyScientist
             _pauseMenuElements.Add("effects", new Button((int)(_pauseMenuElements["pauseImage"].X + _pauseMenuElements["pauseImage"].Width - _effectsOnButtonTexture.Width - 99), (int)(_pauseMenuElements["music"].Y - _effectsOnButtonTexture.Height - 22), _effectsOnButtonTexture.Width, _effectsOnButtonTexture.Height, _effectsOnButtonTexture));
 
             // Instructions Full Screen
-            // NEW SET UP OF INSTRUCTIONS MENU
             _instructionsButtons.Add("back", new Button((_game.screenWidth / 2), _game.screenHeight / 2, _backButtonTexture.Width, _backButtonTexture.Height, _backButtonTexture));
-            // Instructions buttons
             _instructionsButtons.Add("general", new Button(0, 0, _generalInstButtonTexture.Width, _generalInstButtonTexture.Height, _generalInstButtonTexture));
             _instructionsButtons.Add("jack", new Button(_generalInstButtonTexture.Width, 0, _jackInstButtonTexture.Width, _jackInstButtonTexture.Height, _jackInstButtonTexture));
             _instructionsButtons.Add("egg", new Button(2 * _generalInstButtonTexture.Width, 0, _eggInstButtonTexture.Width, _eggInstButtonTexture.Height, _eggInstButtonTexture));
             _instructionsButtons.Add("skateboard", new Button(3 * _generalInstButtonTexture.Width, 0, _skateboardInstButtonTexture.Width, _skateboardInstButtonTexture.Height, _skateboardInstButtonTexture));
-            _instructionsButtons.Add("battery", new Button(3 * _generalInstButtonTexture.Width, 0, _batteryInstButtonTexture.Width, _batteryInstButtonTexture.Height, _batteryInstButtonTexture));
-            _instructionsButtons.Add("doorpit", new Button(4 * _generalInstButtonTexture.Width, 0, _doorPitInstButtonTexture.Width, _doorPitInstButtonTexture.Height, _doorPitInstButtonTexture));
-            TextHelper.DrawString("Headsadadasdllo", new Microsoft.Xna.Framework.Vector2(_game.screenWidth / 2, _game.screenHeight / 2));
-            // DO WE NEED THIS: _instructionsButtons.Add("mainMenu", new Button(_game.screenWidth - _mainMenuButtonTexture.Width, _game.screenHeight - _mainMenuButtonTexture.Height, _mainMenuButtonTexture.Width, _mainMenuButtonTexture.Height, _mainMenuButtonTexture));
+            _instructionsButtons.Add("other", new Button(4 * _generalInstButtonTexture.Width, 0, _otherObjectsInstButtonTexture.Width, _otherObjectsInstButtonTexture.Height, _otherObjectsInstButtonTexture));
 
             // Instructions Pause
         }
@@ -234,7 +229,8 @@ namespace SleepyScientist
                     _game.State = _game.PrevState;
                 }
 
-                TextHelper.DrawString("Headsadadasdllo", new Microsoft.Xna.Framework.Vector2(0,0));
+                MessageLayer.AddMessage(new Message(TextHelper.ConstrainWidth("Hello this is the instructions screen", 150), _game.screenWidth/2, _game.screenHeight/2));
+                //TextHelper.DrawString("Headsadadasdllo", new Microsoft.Xna.Framework.Vector2(0,0));
             }
             #endregion
         }
@@ -261,6 +257,8 @@ namespace SleepyScientist
                 foreach (Button b in _instructionsButtons.Values)
                     b.Draw(spriteBatch);
             }
+
+            MessageLayer.Draw(spriteBatch);
         }
     }
 }

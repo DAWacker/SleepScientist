@@ -118,6 +118,12 @@
     <Content Include="Content\Image\Buttons\effects_on_button.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\Image\Buttons\eggbeater_button.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Image\Buttons\jack_inthe_box_button.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Content\Image\Buttons\level_num_button.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -139,6 +145,12 @@
     <Content Include="Content\Image\Buttons\music_on_button.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\Image\Buttons\other_objects_button.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Image\Buttons\overview_button.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Content\Image\Buttons\quit_button.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -146,6 +158,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Image\Buttons\resume_button.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Image\Buttons\skateboard_button.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Image\door_closed.png">
