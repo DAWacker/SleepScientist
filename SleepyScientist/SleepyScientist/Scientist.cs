@@ -153,74 +153,77 @@ namespace SleepyScientist
             }
 
             // Check if the scientist is using an invention.
-            foreach (Invention invention in this.CurrentFloor.Inventions)
+            if (this.CurrentState != ScientistState.Teleporter && this.CurrentState != ScientistState.Stairs)
             {
-                // Check if the scientist is colliding with an invention
-                if (this.RectPosition.Intersects(invention.RectPosition)
-                    && !invention.Activated && !invention.HasTarget && !invention.Clicked)
+                foreach (Invention invention in this.CurrentFloor.Inventions)
                 {
-                    // Check if the scientist isn't on a skateboard yet
-                    if (invention.GetType() == typeof(RocketSkateboard) && this.Skateboard == null)
+                    // Check if the scientist is colliding with an invention
+                    if (this.RectPosition.Intersects(invention.RectPosition)
+                        && !invention.Activated && !invention.HasTarget && !invention.Clicked)
                     {
-                        this.X = invention.X + 25;
-                        this.Y = invention.Y - (this.Height / 2) - 5;
-                        this.Skateboard = (RocketSkateboard)invention;
-                        InteractWith(invention);
-                    }
-
-                    // Check if the invention is a jack in the box
-                    if (invention.GetType() == typeof(JackInTheBox))
-                    {
-                        // Make sure you are not on the top floor
-                        if (this.FloorNumber != Room.NumberFloors - 1)
+                        // Check if the scientist isn't on a skateboard yet
+                        if (invention.GetType() == typeof(RocketSkateboard) && this.Skateboard == null)
                         {
-                            // Loop through all of the stairs on the floor above you
-                            foreach (Stairs stair in this.Room.Floors[this.FloorNumber + 1].Stairs)
-                            {
-                                // Check which way the staircase is facing
-                                switch (stair.Direction)
-                                {
-                                    case 1:
-                                        // Check if the jack in the box is placed at the bottom of the stairs
-                                        if (((stair.RectPosition.Intersects(invention.RectPosition) && invention.X > stair.X + stair.Width - 25) ||
-                                            invention.X > stair.X + stair.Width && invention.X < stair.X + stair.Width + 25) && this.Direction == -stair.Direction)
-                                        {
-                                            this.Jump(true);
-                                            this.CurrentFloor = this.Room.Floors[this.FloorNumber + 1];
-                                            this.CurrentTile = this.Room.Floors[this.FloorNumber + 1];
-                                            this.FloorNumber++;
-                                        }
-
-                                        // If the jack in the box isn't at the bottom of the stairs, do a normal jump
-                                        else { this.InteractWith(invention); }
-                                        break;
-
-                                    case -1:
-                                        // Check if the jack in the box is placed at the bottom of the stairs
-                                        if (((stair.RectPosition.Intersects(invention.RectPosition) && invention.X < stair.X + 25) ||
-                                            invention.X > stair.X - invention.Width - 25 && invention.X < stair.X - invention.Width) && this.Direction == -stair.Direction)
-                                        {
-                                            this.Jump(true);
-                                            this.CurrentFloor = this.Room.Floors[this.FloorNumber + 1];
-                                            this.CurrentTile = this.Room.Floors[this.FloorNumber + 1];
-                                            this.FloorNumber++;
-                                        }
-
-                                        // If the jack in the box isn't at the bottom of the stairs, do a normal jump
-                                        else { this.InteractWith(invention); }
-                                        break;
-                                }
-                            }
-                            // If the floor above has no stairs, interact with the invention normally
-                            if (this.CurrentState != ScientistState.JackInTheBox) { if (this.Room.Floors[this.FloorNumber + 1].Stairs.Count == 0) { this.InteractWith(invention); } }
+                            this.X = invention.X + 25;
+                            this.Y = invention.Y - (this.Height / 2) - 5;
+                            this.Skateboard = (RocketSkateboard)invention;
+                            InteractWith(invention);
                         }
-                        // If the jack in the box isn't at the bottom of the stairs, do a normal jump
-                        else { this.InteractWith(invention); }
-                    }
 
-                    // Interact normally with other inventions
-                    else { this.InteractWith(invention); }
-                    break;
+                        // Check if the invention is a jack in the box
+                        if (invention.GetType() == typeof(JackInTheBox))
+                        {
+                            // Make sure you are not on the top floor
+                            if (this.FloorNumber != Room.NumberFloors - 1)
+                            {
+                                // Loop through all of the stairs on the floor above you
+                                foreach (Stairs stair in this.Room.Floors[this.FloorNumber + 1].Stairs)
+                                {
+                                    // Check which way the staircase is facing
+                                    switch (stair.Direction)
+                                    {
+                                        case 1:
+                                            // Check if the jack in the box is placed at the bottom of the stairs
+                                            if (((stair.RectPosition.Intersects(invention.RectPosition) && invention.X > stair.X + stair.Width - 25) ||
+                                                invention.X > stair.X + stair.Width && invention.X < stair.X + stair.Width + 25) && this.Direction == -stair.Direction)
+                                            {
+                                                this.Jump(true);
+                                                this.CurrentFloor = this.Room.Floors[this.FloorNumber + 1];
+                                                this.CurrentTile = this.Room.Floors[this.FloorNumber + 1];
+                                                this.FloorNumber++;
+                                            }
+
+                                            // If the jack in the box isn't at the bottom of the stairs, do a normal jump
+                                            else { this.InteractWith(invention); }
+                                            break;
+
+                                        case -1:
+                                            // Check if the jack in the box is placed at the bottom of the stairs
+                                            if (((stair.RectPosition.Intersects(invention.RectPosition) && invention.X < stair.X + 25) ||
+                                                invention.X > stair.X - invention.Width - 25 && invention.X < stair.X - invention.Width) && this.Direction == -stair.Direction)
+                                            {
+                                                this.Jump(true);
+                                                this.CurrentFloor = this.Room.Floors[this.FloorNumber + 1];
+                                                this.CurrentTile = this.Room.Floors[this.FloorNumber + 1];
+                                                this.FloorNumber++;
+                                            }
+
+                                            // If the jack in the box isn't at the bottom of the stairs, do a normal jump
+                                            else { this.InteractWith(invention); }
+                                            break;
+                                    }
+                                }
+                                // If the floor above has no stairs, interact with the invention normally
+                                if (this.CurrentState != ScientistState.JackInTheBox) { if (this.Room.Floors[this.FloorNumber + 1].Stairs.Count == 0) { this.InteractWith(invention); } }
+                            }
+                            // If the jack in the box isn't at the bottom of the stairs, do a normal jump
+                            else { this.InteractWith(invention); }
+                        }
+
+                        // Interact normally with other inventions
+                        else { this.InteractWith(invention); }
+                        break;
+                    }
                 }
             }
 
