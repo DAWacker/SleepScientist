@@ -22,9 +22,9 @@ namespace SleepyScientist
         #region Attributes
 
         // State variables
-        private static STATE _state = STATE.MAIN_MENU;
-        public static STATE PrevState = _state;
-        public static STATE State
+        private  STATE _state = STATE.MAIN_MENU;
+        public STATE PrevState = STATE.MAIN_MENU;   // error can't access _state?
+        public  STATE State
         {
             get{ return _state; }
             // Save previous value and get new value
@@ -37,8 +37,8 @@ namespace SleepyScientist
         SpriteFont _spriteFont;
 
         // Screen dimensions
-        public static int screenWidth;
-        public static int screenHeight;
+        public int screenWidth;
+        public int screenHeight;
 
         // Scroll wheel state
         private int _curScrollWheel;
@@ -70,12 +70,12 @@ namespace SleepyScientist
         private Texture2D _doorClosedTexture;
 
         // Mouse Input
-        public static MouseState _prevMouseState;
-        public static MouseState _curMouseState;
+        public MouseState _prevMouseState;
+        public MouseState _curMouseState;
 
         // Keyboard Input
-        public static KeyboardState _prevKeyboardState;
-        public static KeyboardState _curKeyboardState;
+        public KeyboardState _prevKeyboardState;
+        public KeyboardState _curKeyboardState;
 
         // Debug Messages
 
@@ -84,7 +84,7 @@ namespace SleepyScientist
 
         // Test
         private bool _begin = false;
-        private int _levelNumber = 1;
+        public int _levelNumber = 1;
         private int _totalLevels = 7;
         private Room level = null;
 
@@ -131,7 +131,7 @@ namespace SleepyScientist
 
             // Initialize menus
             _menu = new Menu();
-            _menu.Initialize();
+            _menu.Initialize(this);
 
             base.Initialize();
         }
@@ -166,7 +166,7 @@ namespace SleepyScientist
             _eggBeaterTexture = this.Content.Load<Texture2D>("Image/eggbeater");
             _jackintheboxTexture = this.Content.Load<Texture2D>("Image/jack_inthe_box");
             _bedTexture = this.Content.Load<Texture2D>("Image/bed");
-            _wallTexture = this.Content.Load<Texture2D>("Image/wall");
+            _wallTexture = this.Content.Load<Texture2D>("Image/walltile");
             _railingTexture = this.Content.Load<Texture2D>("Image/railing");
             _doorOpenTexture = this.Content.Load<Texture2D>("Image/door_open");
             _doorClosedTexture = this.Content.Load<Texture2D>("Image/door_closed");
@@ -322,7 +322,6 @@ namespace SleepyScientist
 		                // Load the current level
 		                Room level = LevelLoader.Load(_levelNumber);
 		                this.level = level;
-
 		                // Create the scientist and set his image
 		                _sleepy = new Scientist("Sleepy", level.StartX, level.StartY, 50, 50, level);
                         ResetCamera();

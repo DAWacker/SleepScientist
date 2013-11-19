@@ -28,20 +28,27 @@ namespace SleepyScientist
         private Texture2D _doorPitInstButtonTexture;
         private Texture2D _resumeButtonTexture;
         private Texture2D _backButtonTexture;
-        private Texture2D _soundOffButtonTexture;
-        private Texture2D _soundOnButtonTexture;
+        private Texture2D _musicOffButtonTexture;
+        private Texture2D _musicOnButtonTexture;
+        private Texture2D _effectsOffButtonTexture;
+        private Texture2D _effectsOnButtonTexture;
+        private Texture2D _quitButtonTexture;
+        private Texture2D _restartButtonTexture;
 
         private Texture2D _pauseOverlayTexture;
         private Texture2D _pauseMenuTemplateTexture;
 
+        private Game1 _game;
+
         #endregion
 
-        public void Initialize()
+        public void Initialize(Game1 game)
         {
             _mainMenuButtons = new Dictionary<string, Button>();
             _levelSelectMenuButtons = new Dictionary<string, Button>();
             _pauseMenuElements = new Dictionary<string, Button>();
             _instructionsButtons = new Dictionary<string, Button>();
+            _game = game;
         }
 
         public void LoadContent(ContentManager Content)
@@ -53,8 +60,12 @@ namespace SleepyScientist
             _instructionsButtonTexture = Content.Load<Texture2D>("Image/Buttons/instructions_button");
             _resumeButtonTexture = Content.Load<Texture2D>("Image/Buttons/resume_button");
             _backButtonTexture = Content.Load<Texture2D>("Image/Buttons/back_button");
-            _soundOffButtonTexture = Content.Load<Texture2D>("Image/Buttons/sound_off_button");
-            _soundOnButtonTexture = Content.Load<Texture2D>("Image/Buttons/sound_on_button");
+            _musicOffButtonTexture = Content.Load<Texture2D>("Image/Buttons/music_off_button");
+            _musicOnButtonTexture = Content.Load<Texture2D>("Image/Buttons/music_on_button");
+            _effectsOffButtonTexture = Content.Load<Texture2D>("Image/Buttons/effects_off_button");
+            _effectsOnButtonTexture = Content.Load<Texture2D>("Image/Buttons/effects_on_button");
+            _quitButtonTexture = Content.Load<Texture2D>("Image/Buttons/quit_button");
+            _restartButtonTexture = Content.Load<Texture2D>("Image/Buttons/restart_button");
 
             _generalInstButtonTexture = _levelNumButtonTexture;
             _jackInstButtonTexture = _levelNumButtonTexture;
@@ -64,13 +75,13 @@ namespace SleepyScientist
             _doorPitInstButtonTexture = _levelNumButtonTexture;
 
             _pauseOverlayTexture = Content.Load<Texture2D>("Image/pause_overlay");
-            _pauseMenuTemplateTexture= Content.Load<Texture2D>("Image/pause_menu_template");
+            _pauseMenuTemplateTexture = Content.Load<Texture2D>("Image/pause_background");
 
             // Set up Main Menu
             _mainMenuButtons.Add("newGame", new Button(0, _instructionsButtonTexture.Height, _newGameButtonTexture.Width, _newGameButtonTexture.Height, _newGameButtonTexture));
             _mainMenuButtons.Add("levelSelect", new Button(0, _instructionsButtonTexture.Height * 3, _levelSelectButtonTexture.Width, _levelSelectButtonTexture.Height, _levelSelectButtonTexture));
             _mainMenuButtons.Add("instructions", new Button(0, _instructionsButtonTexture.Height * 4, _instructionsButtonTexture.Width, _instructionsButtonTexture.Height, _instructionsButtonTexture));
-            // Quit _mainMenuButtons.Add("quit", new Button( (Game1.screenWidth - _mainMenuButtonTexture.Width, Game1.screenHeight - _mainMenuButtonTexture.Height, _quitButtonTexture.Width, _quitButtonTexture.Height, _quitButtonTexture));
+            _mainMenuButtons.Add("quit", new Button(_game.screenWidth - _mainMenuButtonTexture.Width, _game.screenHeight - _mainMenuButtonTexture.Height, _quitButtonTexture.Width, _quitButtonTexture.Height, _quitButtonTexture));
             // Add Image... 
 
             // Set up Level Select Menu
@@ -84,20 +95,21 @@ namespace SleepyScientist
                 }
 
             }
-            _levelSelectMenuButtons.Add("mainMenu", new Button((Game1.screenWidth / 2), Game1.screenHeight / 2 + _mainMenuButtonTexture.Height, _mainMenuButtonTexture.Width, _mainMenuButtonTexture.Height, _mainMenuButtonTexture));
+            _levelSelectMenuButtons.Add("mainMenu", new Button((_game.screenWidth / 2), _game.screenHeight / 2 + _mainMenuButtonTexture.Height, _mainMenuButtonTexture.Width, _mainMenuButtonTexture.Height, _mainMenuButtonTexture));
 
             // Set up the Pause Menu
             _pauseMenuElements.Add("pauseOverlay", new Button(0, 0, _pauseOverlayTexture.Width, _pauseOverlayTexture.Height, _pauseOverlayTexture));
-            _pauseMenuElements.Add("pauseImage", new Button((Game1.screenWidth / 2) - (_pauseMenuTemplateTexture.Width / 2), (Game1.screenHeight / 2) - (_pauseMenuTemplateTexture.Height / 2), _pauseMenuTemplateTexture.Width, _pauseMenuTemplateTexture.Height, _pauseMenuTemplateTexture));
-            // Restart _pauseMenuElements.Add("restart", new Button( (Game1.screenWidth / 2) - _restartButtonTexture.Width / 2, (Game1.screenHeight / 2) - 2 * _restartButtonTexture.Height, _restartButtonTexture.Width, _restartButtonTexture.Height, _restartButtonTexture)):
-            _pauseMenuElements.Add("instructions", new Button((Game1.screenWidth / 2) - _instructionsButtonTexture.Width / 2, (Game1.screenHeight / 2) - 1 * _instructionsButtonTexture.Height, _instructionsButtonTexture.Width, _instructionsButtonTexture.Height, _instructionsButtonTexture));
-            _pauseMenuElements.Add("resume", new Button((Game1.screenWidth / 2) - _instructionsButtonTexture.Width / 2, (Game1.screenHeight / 2) + 1 * _instructionsButtonTexture.Height, _resumeButtonTexture.Width, _resumeButtonTexture.Height, _resumeButtonTexture));
-            // Quit _pauseMenuElements.Add("quit", new Button( (Game1.screenWidth / 2) - _quitButtonTexture.Width / 2, (Game1.screenHeight / 2) + 2 * _quitButtonTexture.Height, _quitButtonTexture.Width, _quitButtonTexture.Height, _quitButtonTexture)):
-            _pauseMenuElements.Add("sound", new Button((Game1.screenWidth / 2) + 1 * _soundOffButtonTexture.Width + (_soundOffButtonTexture.Width/2), (Game1.screenHeight / 2), _soundOnButtonTexture.Width, _soundOnButtonTexture.Height, _soundOnButtonTexture));     
-    
+            _pauseMenuElements.Add("pauseImage", new Button((_game.screenWidth / 2) - (_pauseMenuTemplateTexture.Width / 2), (_game.screenHeight / 2) - (_pauseMenuTemplateTexture.Height / 2), _pauseMenuTemplateTexture.Width, _pauseMenuTemplateTexture.Height, _pauseMenuTemplateTexture));
+            _pauseMenuElements.Add("quit", new Button((_game.screenWidth / 2) - _quitButtonTexture.Width / 2, (int)(_pauseMenuElements["pauseImage"].Y + _pauseMenuElements["pauseImage"].Height - _quitButtonTexture.Height - 51), _quitButtonTexture.Width, _quitButtonTexture.Height, _quitButtonTexture));
+            _pauseMenuElements.Add("instructions", new Button((_game.screenWidth / 2) - _instructionsButtonTexture.Width / 2, (int)(_pauseMenuElements["quit"].Y - _instructionsButtonTexture.Height - 18), _instructionsButtonTexture.Width, _instructionsButtonTexture.Height, _instructionsButtonTexture));
+            _pauseMenuElements.Add("restart", new Button((_game.screenWidth / 2) - _restartButtonTexture.Width / 2, (int)(_pauseMenuElements["instructions"].Y - _restartButtonTexture.Height - 18), _restartButtonTexture.Width, _restartButtonTexture.Height, _restartButtonTexture));
+            _pauseMenuElements.Add("resume", new Button((_game.screenWidth / 2) - _instructionsButtonTexture.Width / 2, (int)(_pauseMenuElements["restart"].Y - _resumeButtonTexture.Height - 18), _resumeButtonTexture.Width, _resumeButtonTexture.Height, _resumeButtonTexture));
+            _pauseMenuElements.Add("music", new Button((int)(_pauseMenuElements["pauseImage"].X + _pauseMenuElements["pauseImage"].Width - _musicOnButtonTexture.Width - 99), (int)(_pauseMenuElements["pauseImage"].Y + _pauseMenuElements["pauseImage"].Height - _musicOnButtonTexture.Height - 187), _musicOnButtonTexture.Width, _musicOnButtonTexture.Height, _musicOnButtonTexture));
+            _pauseMenuElements.Add("effects", new Button((int)(_pauseMenuElements["pauseImage"].X + _pauseMenuElements["pauseImage"].Width - _effectsOnButtonTexture.Width - 99), (int)(_pauseMenuElements["music"].Y - _effectsOnButtonTexture.Height - 22), _effectsOnButtonTexture.Width, _effectsOnButtonTexture.Height, _effectsOnButtonTexture));
+
             // Instructions Full Screen
             // NEW SET UP OF INSTRUCTIONS MENU
-            _instructionsButtons.Add("back", new Button((Game1.screenWidth / 2), Game1.screenHeight / 2, _backButtonTexture.Width, _backButtonTexture.Height, _backButtonTexture));
+            _instructionsButtons.Add("back", new Button((_game.screenWidth / 2), _game.screenHeight / 2, _backButtonTexture.Width, _backButtonTexture.Height, _backButtonTexture));
             // Instructions buttons
             _instructionsButtons.Add("general", new Button(0, 0, _generalInstButtonTexture.Width, _generalInstButtonTexture.Height, _generalInstButtonTexture));
             _instructionsButtons.Add("jack", new Button(_generalInstButtonTexture.Width, 0, _jackInstButtonTexture.Width, _jackInstButtonTexture.Height, _jackInstButtonTexture));
@@ -105,8 +117,8 @@ namespace SleepyScientist
             _instructionsButtons.Add("skateboard", new Button(3 * _generalInstButtonTexture.Width, 0, _skateboardInstButtonTexture.Width, _skateboardInstButtonTexture.Height, _skateboardInstButtonTexture));
             _instructionsButtons.Add("battery", new Button(3 * _generalInstButtonTexture.Width, 0, _batteryInstButtonTexture.Width, _batteryInstButtonTexture.Height, _batteryInstButtonTexture));
             _instructionsButtons.Add("doorpit", new Button(4 * _generalInstButtonTexture.Width, 0, _doorPitInstButtonTexture.Width, _doorPitInstButtonTexture.Height, _doorPitInstButtonTexture));
-            TextHelper.DrawString("Headsadadasdllo", new Microsoft.Xna.Framework.Vector2(Game1.screenWidth / 2, Game1.screenHeight / 2));
-            // DO WE NEED THIS: _instructionsButtons.Add("mainMenu", new Button(Game1.screenWidth - _mainMenuButtonTexture.Width, Game1.screenHeight - _mainMenuButtonTexture.Height, _mainMenuButtonTexture.Width, _mainMenuButtonTexture.Height, _mainMenuButtonTexture));
+            TextHelper.DrawString("Headsadadasdllo", new Microsoft.Xna.Framework.Vector2(_game.screenWidth / 2, _game.screenHeight / 2));
+            // DO WE NEED THIS: _instructionsButtons.Add("mainMenu", new Button(_game.screenWidth - _mainMenuButtonTexture.Width, _game.screenHeight - _mainMenuButtonTexture.Height, _mainMenuButtonTexture.Width, _mainMenuButtonTexture.Height, _mainMenuButtonTexture));
 
             // Instructions Pause
         }
@@ -114,87 +126,112 @@ namespace SleepyScientist
         public void Update()
         {
             #region Play/Pause
-            if (Game1.State == STATE.PLAY || Game1.State == STATE.PAUSE)
+            if (_game.State == STATE.PLAY || _game.State == STATE.PAUSE)
             {
-                if (Game1._prevKeyboardState.IsKeyDown(Keys.P) && Game1._curKeyboardState.IsKeyUp(Keys.P))  // Actually escape
-                    Game1.State = (Game1.State == STATE.PLAY) ? STATE.PAUSE : STATE.PLAY;
+                if (_game._prevKeyboardState.IsKeyDown(Keys.P) && _game._curKeyboardState.IsKeyUp(Keys.P))  // Actually escape
+                    _game.State = (_game.State == STATE.PLAY) ? STATE.PAUSE : STATE.PLAY;
             }
             #endregion
             #region Main Menu
-            if (Game1.State == STATE.MAIN_MENU)
+            if (_game.State == STATE.MAIN_MENU)
             {
 
-                if (Game1._prevMouseState.LeftButton == ButtonState.Pressed &&
-                    Game1._curMouseState.LeftButton == ButtonState.Released &&
-                    Game1._curMouseState.X > _mainMenuButtons["newGame"].X && Game1._curMouseState.X < _mainMenuButtons["newGame"].X + _mainMenuButtons["newGame"].Width &&
-                    Game1._curMouseState.Y > _mainMenuButtons["newGame"].Y && Game1._curMouseState.Y < _mainMenuButtons["newGame"].Y + _mainMenuButtons["newGame"].Height)
+                if (_game._prevMouseState.LeftButton == ButtonState.Pressed &&
+                    _game._curMouseState.LeftButton == ButtonState.Released &&
+                    _game._curMouseState.X > _mainMenuButtons["newGame"].X && _game._curMouseState.X < _mainMenuButtons["newGame"].X + _mainMenuButtons["newGame"].Width &&
+                    _game._curMouseState.Y > _mainMenuButtons["newGame"].Y && _game._curMouseState.Y < _mainMenuButtons["newGame"].Y + _mainMenuButtons["newGame"].Height)
                 {
-                    Game1.State = STATE.PLAY;
+                    _game.State = STATE.PLAY;
                 }
-                else if (Game1._prevMouseState.LeftButton == ButtonState.Pressed &&
-                    Game1._curMouseState.LeftButton == ButtonState.Released &&
-                    Game1._curMouseState.X > _mainMenuButtons["levelSelect"].X && Game1._curMouseState.X < _mainMenuButtons["levelSelect"].X + _mainMenuButtons["levelSelect"].Width &&
-                    Game1._curMouseState.Y > _mainMenuButtons["levelSelect"].Y && Game1._curMouseState.Y < _mainMenuButtons["levelSelect"].Y + _mainMenuButtons["levelSelect"].Height)
+                else if (_game._prevMouseState.LeftButton == ButtonState.Pressed &&
+                    _game._curMouseState.LeftButton == ButtonState.Released &&
+                    _game._curMouseState.X > _mainMenuButtons["levelSelect"].X && _game._curMouseState.X < _mainMenuButtons["levelSelect"].X + _mainMenuButtons["levelSelect"].Width &&
+                    _game._curMouseState.Y > _mainMenuButtons["levelSelect"].Y && _game._curMouseState.Y < _mainMenuButtons["levelSelect"].Y + _mainMenuButtons["levelSelect"].Height)
                 {
-                    Game1.State = STATE.LEVEL_SELECT;
+                    _game.State = STATE.LEVEL_SELECT;
                 }
-                else if (Game1._prevMouseState.LeftButton == ButtonState.Pressed &&
-                    Game1._curMouseState.LeftButton == ButtonState.Released &&
-                    Game1._curMouseState.X > _mainMenuButtons["instructions"].X && Game1._curMouseState.X < _mainMenuButtons["instructions"].X + _mainMenuButtons["instructions"].Width &&
-                    Game1._curMouseState.Y > _mainMenuButtons["instructions"].Y && Game1._curMouseState.Y < _mainMenuButtons["instructions"].Y + _mainMenuButtons["instructions"].Height)
+                else if (_game._prevMouseState.LeftButton == ButtonState.Pressed &&
+                    _game._curMouseState.LeftButton == ButtonState.Released &&
+                    _game._curMouseState.X > _mainMenuButtons["instructions"].X && _game._curMouseState.X < _mainMenuButtons["instructions"].X + _mainMenuButtons["instructions"].Width &&
+                    _game._curMouseState.Y > _mainMenuButtons["instructions"].Y && _game._curMouseState.Y < _mainMenuButtons["instructions"].Y + _mainMenuButtons["instructions"].Height)
                 {
-                    Game1.State = STATE.INSTRUCTIONS;
+                    _game.State = STATE.INSTRUCTIONS;
                 }
             }
             #endregion
             #region Level Select
-            else if (Game1.State == STATE.LEVEL_SELECT)
+            else if (_game.State == STATE.LEVEL_SELECT)
             {
-                if (Game1._prevMouseState.LeftButton == ButtonState.Pressed &&
-                    Game1._curMouseState.LeftButton == ButtonState.Released &&
-                    Game1._curMouseState.X > _levelSelectMenuButtons["mainMenu"].X && Game1._curMouseState.X < _levelSelectMenuButtons["mainMenu"].X + _levelSelectMenuButtons["mainMenu"].Width &&
-                    Game1._curMouseState.Y > _levelSelectMenuButtons["mainMenu"].Y && Game1._curMouseState.Y < _levelSelectMenuButtons["mainMenu"].Y + _levelSelectMenuButtons["mainMenu"].Height)
+                if (_game._prevMouseState.LeftButton == ButtonState.Pressed &&
+                    _game._curMouseState.LeftButton == ButtonState.Released &&
+                    _game._curMouseState.X > _levelSelectMenuButtons["mainMenu"].X && _game._curMouseState.X < _levelSelectMenuButtons["mainMenu"].X + _levelSelectMenuButtons["mainMenu"].Width &&
+                    _game._curMouseState.Y > _levelSelectMenuButtons["mainMenu"].Y && _game._curMouseState.Y < _levelSelectMenuButtons["mainMenu"].Y + _levelSelectMenuButtons["mainMenu"].Height)
                 {
-                    Game1.State = STATE.MAIN_MENU;
+                    _game.State = STATE.MAIN_MENU;
                 }
             }
             #endregion
             #region Pause
-            else if (Game1.State == STATE.PAUSE)
+            else if (_game.State == STATE.PAUSE)
             {
-                if (Game1._prevMouseState.LeftButton == ButtonState.Pressed &&
-                    Game1._curMouseState.LeftButton == ButtonState.Released &&
-                    Game1._curMouseState.X > _pauseMenuElements["instructions"].X && Game1._curMouseState.X < _pauseMenuElements["instructions"].X + _pauseMenuElements["instructions"].Width &&
-                    Game1._curMouseState.Y > _pauseMenuElements["instructions"].Y && Game1._curMouseState.Y < _pauseMenuElements["instructions"].Y + _pauseMenuElements["instructions"].Height)
+                if (_game._prevMouseState.LeftButton == ButtonState.Pressed &&
+                    _game._curMouseState.LeftButton == ButtonState.Released &&
+                    _game._curMouseState.X > _pauseMenuElements["instructions"].X && _game._curMouseState.X < _pauseMenuElements["instructions"].X + _pauseMenuElements["instructions"].Width &&
+                    _game._curMouseState.Y > _pauseMenuElements["instructions"].Y && _game._curMouseState.Y < _pauseMenuElements["instructions"].Y + _pauseMenuElements["instructions"].Height)
                 {
-                    Game1.State = STATE.INSTRUCTIONS;
+                    _game.State = STATE.INSTRUCTIONS;
                 }
-                else if (Game1._prevMouseState.LeftButton == ButtonState.Pressed &&
-                    Game1._curMouseState.LeftButton == ButtonState.Released &&
-                    Game1._curMouseState.X > _pauseMenuElements["resume"].X && Game1._curMouseState.X < _pauseMenuElements["resume"].X + _pauseMenuElements["resume"].Width &&
-                    Game1._curMouseState.Y > _pauseMenuElements["resume"].Y && Game1._curMouseState.Y < _pauseMenuElements["resume"].Y + _pauseMenuElements["resume"].Height)
+                else if (_game._prevMouseState.LeftButton == ButtonState.Pressed &&
+                    _game._curMouseState.LeftButton == ButtonState.Released &&
+                    _game._curMouseState.X > _pauseMenuElements["resume"].X && _game._curMouseState.X < _pauseMenuElements["resume"].X + _pauseMenuElements["resume"].Width &&
+                    _game._curMouseState.Y > _pauseMenuElements["resume"].Y && _game._curMouseState.Y < _pauseMenuElements["resume"].Y + _pauseMenuElements["resume"].Height)
                 {
-                    Game1.State = STATE.PLAY;
+                    _game.State = STATE.PLAY;
                 }
-                else if (Game1._prevMouseState.LeftButton == ButtonState.Pressed &&
-                    Game1._curMouseState.LeftButton == ButtonState.Released &&
-                    Game1._curMouseState.X > _pauseMenuElements["sound"].X && Game1._curMouseState.X < _pauseMenuElements["sound"].X + _pauseMenuElements["sound"].Width &&
-                    Game1._curMouseState.Y > _pauseMenuElements["sound"].Y && Game1._curMouseState.Y < _pauseMenuElements["sound"].Y + _pauseMenuElements["sound"].Height)
+                else if (_game._prevMouseState.LeftButton == ButtonState.Pressed &&
+                    _game._curMouseState.LeftButton == ButtonState.Released &&
+                    _game._curMouseState.X > _pauseMenuElements["music"].X && _game._curMouseState.X < _pauseMenuElements["music"].X + _pauseMenuElements["music"].Width &&
+                    _game._curMouseState.Y > _pauseMenuElements["music"].Y && _game._curMouseState.Y < _pauseMenuElements["music"].Y + _pauseMenuElements["music"].Height)
                 {
-                    _pauseMenuElements["sound"].Image = (_soundOffButtonTexture == _pauseMenuElements["sound"].Image) ? _soundOnButtonTexture : _soundOffButtonTexture;
-                    // Toggle sound
+                    // Toggle music
+                    _pauseMenuElements["music"].Image = (_musicOffButtonTexture == _pauseMenuElements["music"].Image) ? _musicOnButtonTexture : _musicOffButtonTexture;
+                }
+                else if (_game._prevMouseState.LeftButton == ButtonState.Pressed &&
+                    _game._curMouseState.LeftButton == ButtonState.Released &&
+                    _game._curMouseState.X > _pauseMenuElements["effects"].X && _game._curMouseState.X < _pauseMenuElements["effects"].X + _pauseMenuElements["effects"].Width &&
+                    _game._curMouseState.Y > _pauseMenuElements["effects"].Y && _game._curMouseState.Y < _pauseMenuElements["effects"].Y + _pauseMenuElements["effects"].Height)
+                {
+                    // Toggle effects sounds
+                    _pauseMenuElements["effects"].Image = (_effectsOffButtonTexture == _pauseMenuElements["effects"].Image) ? _effectsOnButtonTexture : _effectsOffButtonTexture;
+                }
+                else if (_game._prevMouseState.LeftButton == ButtonState.Pressed &&
+                    _game._curMouseState.LeftButton == ButtonState.Released &&
+                    _game._curMouseState.X > _pauseMenuElements["quit"].X && _game._curMouseState.X < _pauseMenuElements["quit"].X + _pauseMenuElements["quit"].Width &&
+                    _game._curMouseState.Y > _pauseMenuElements["quit"].Y && _game._curMouseState.Y < _pauseMenuElements["quit"].Y + _pauseMenuElements["quit"].Height)
+                {
+                    _game.State = STATE.MAIN_MENU;
+                }
+                else if (_game._prevMouseState.LeftButton == ButtonState.Pressed &&
+                    _game._curMouseState.LeftButton == ButtonState.Released &&
+                    _game._curMouseState.X > _pauseMenuElements["restart"].X && _game._curMouseState.X < _pauseMenuElements["restart"].X + _pauseMenuElements["restart"].Width &&
+                    _game._curMouseState.Y > _pauseMenuElements["restart"].Y && _game._curMouseState.Y < _pauseMenuElements["restart"].Y + _pauseMenuElements["restart"].Height)
+                {
+                    // Restart Level
+                    //_game.Load();
+                    //_game._sleepy.Loser = true;
+                    _game.State = STATE.PLAY;
                 }
             }
             #endregion
             #region Instructions
-            else if (Game1.State == STATE.INSTRUCTIONS)
+            else if (_game.State == STATE.INSTRUCTIONS)
             {
-                if (Game1._prevMouseState.LeftButton == ButtonState.Pressed &&
-                   Game1._curMouseState.LeftButton == ButtonState.Released &&
-                   Game1._curMouseState.X > _instructionsButtons["back"].X && Game1._curMouseState.X < _instructionsButtons["back"].X + _instructionsButtons["back"].Width &&
-                   Game1._curMouseState.Y > _instructionsButtons["back"].Y && Game1._curMouseState.Y < _instructionsButtons["back"].Y + _instructionsButtons["back"].Height)
+                if (_game._prevMouseState.LeftButton == ButtonState.Pressed &&
+                   _game._curMouseState.LeftButton == ButtonState.Released &&
+                   _game._curMouseState.X > _instructionsButtons["back"].X && _game._curMouseState.X < _instructionsButtons["back"].X + _instructionsButtons["back"].Width &&
+                   _game._curMouseState.Y > _instructionsButtons["back"].Y && _game._curMouseState.Y < _instructionsButtons["back"].Y + _instructionsButtons["back"].Height)
                 {
-                    Game1.State = Game1.PrevState;
+                    _game.State = _game.PrevState;
                 }
 
                 TextHelper.DrawString("Headsadadasdllo", new Microsoft.Xna.Framework.Vector2(0,0));
@@ -204,22 +241,22 @@ namespace SleepyScientist
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            if (Game1.State == STATE.PAUSE)
+            if (_game.State == STATE.PAUSE)
             {
                 foreach (Button b in _pauseMenuElements.Values)
                     b.Draw(spriteBatch);
             }
-            else if (Game1.State == STATE.MAIN_MENU)
+            else if (_game.State == STATE.MAIN_MENU)
             {
                 foreach (Button b in _mainMenuButtons.Values)
                     b.Draw(spriteBatch);
             }
-            else if (Game1.State == STATE.LEVEL_SELECT)
+            else if (_game.State == STATE.LEVEL_SELECT)
             {
                 foreach (Button b in _levelSelectMenuButtons.Values)
                     b.Draw(spriteBatch);
             }
-            else if (Game1.State == STATE.INSTRUCTIONS)
+            else if (_game.State == STATE.INSTRUCTIONS)
             {
                 foreach (Button b in _instructionsButtons.Values)
                     b.Draw(spriteBatch);
