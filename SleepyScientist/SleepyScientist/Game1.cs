@@ -21,7 +21,7 @@ namespace SleepyScientist
 
         #region Attributes
 
-        public STATE state = STATE.MAIN_MENU;
+        public STATE state = STATE.PLAY;
 
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
@@ -38,7 +38,7 @@ namespace SleepyScientist
         // GameObjects
         private Scientist _sleepy;
         private List<Floor> _floors;
-        private List<Ladder> _ladders;
+        private List<Teleporter> _teleporters;
         private List<Stairs> _stairs;
         private List<Pit> _pits;
         private List<Invention> _inventions;
@@ -47,23 +47,6 @@ namespace SleepyScientist
         private List<Button> _levelSelectMenuButtons;
         private List<Button> _pauseMenuButtons;
         private List<Button> _instructionsButtons;
-
-        // Textures
-        private Texture2D _stairsTexture;
-        private Texture2D _ladderTexture;
-        private Texture2D _floorTexture;
-        private Texture2D _rocketSkateboardTexture;
-        private Texture2D _eggBeaterTexture;
-        private Texture2D _jackintheboxTexture;
-        private Texture2D _bedTexture;
-        private Texture2D _wallTexture;
-        private Texture2D _railingTexture;
-        private Texture2D _pitLaserLeft;
-        private Texture2D _pitLaserRight;
-        private Texture2D _pitLaserTile;
-        private Texture2D _pitTerminal;
-        private Texture2D _doorOpenTexture;
-        private Texture2D _doorClosedTexture;
 
 		// Menu stuff.
         private Texture2D _mainMenuButtonTexture;
@@ -94,8 +77,8 @@ namespace SleepyScientist
 
         // Test
         private bool _begin = false;
-        private int _levelNumber = 7;
-        private int _totalLevels = 7;
+        private int _levelNumber = 2;
+        private int _totalLevels = 6;
         private Room level = null;
 
         #endregion
@@ -131,7 +114,7 @@ namespace SleepyScientist
 
             // Initialize test "Level" objects.
             _floors = new List<Floor>();
-            _ladders = new List<Ladder>();
+            _teleporters = new List<Teleporter>();
             _stairs = new List<Stairs>();
             _pits = new List<Pit>();
             _inventions = new List<Invention>();
@@ -164,55 +147,39 @@ namespace SleepyScientist
 
             // Load animation sets.
             AnimationLoader.Load("ScientistAnimationSet.xml", Content);
-
-            // Load content of other GameObjects.
-            _floorTexture = this.Content.Load<Texture2D>("Image/floor");
-            _stairsTexture = this.Content.Load<Texture2D>("Image/stairs");
-            _ladderTexture = this.Content.Load<Texture2D>("Image/ladder");
-            _rocketSkateboardTexture = this.Content.Load<Texture2D>("Image/rocketSkateboard");
-            _eggBeaterTexture = this.Content.Load<Texture2D>("Image/eggBeater");
-            _jackintheboxTexture = this.Content.Load<Texture2D>("Image/jackInTheBox");
-            _bedTexture = this.Content.Load<Texture2D>("Image/bed");
-            _wallTexture = this.Content.Load<Texture2D>("Image/walltile");
-            _railingTexture = this.Content.Load<Texture2D>("Image/railing");
-            _doorOpenTexture = this.Content.Load<Texture2D>("Image/doorOpen");
-            _doorClosedTexture = this.Content.Load<Texture2D>("Image/doorClosed");
-
-            // Load textures for the pits
-            _pitLaserLeft = this.Content.Load<Texture2D>("Image/laserLeftEnd");
-            _pitLaserRight = this.Content.Load<Texture2D>("Image/laserRightEnd");
-            _pitLaserTile = this.Content.Load<Texture2D>("Image/laserTile");
-            _pitTerminal = this.Content.Load<Texture2D>("Image/batteryHolder");
             
             // Make these textures static
-            GameConstants.FLOOR_TEXTURE = _floorTexture;
-            GameConstants.STAIR_TEXTURE = _stairsTexture;
-            GameConstants.LADDER_TEXTURE = _ladderTexture;
-            GameConstants.ROCKETBOARD_TEXTURE = _rocketSkateboardTexture;
-            GameConstants.EGG_TEXTURE = _eggBeaterTexture;
-            GameConstants.JACK_TEXTURE = _jackintheboxTexture;
-            GameConstants.BED_TEXTURE = _bedTexture;
-            GameConstants.RAILING_TEXTURE = _railingTexture;
-            GameConstants.PIT_LEFT_END_TEXTURE = _pitLaserLeft;
-            GameConstants.PIT_RIGHT_END_TEXTURE = _pitLaserRight;
-            GameConstants.PIT_TERMINAL_TEXTURE = _pitTerminal;
-            GameConstants.PIT_TILE_TEXTURE = _pitLaserTile;
-            GameConstants.DOOR_OPEN_TEXTURE = _doorOpenTexture;
-            GameConstants.DOOR_CLOSED_TEXTURE = _doorClosedTexture;
+            GameConstants.FLOOR_TEXTURE = this.Content.Load<Texture2D>("Image/floor"); ;
+            GameConstants.STAIR_TEXTURE = this.Content.Load<Texture2D>("Image/stairs");
+            GameConstants.TELEPORTER_TILE_TEXTURE = this.Content.Load<Texture2D>("Image/teleporter_tile");
+            GameConstants.TELEPORTER_BOTTOM_TEXTURE = this.Content.Load<Texture2D>("Image/teleporter_bottom");
+            GameConstants.TELEPORTER_TOP_TEXTURE = this.Content.Load<Texture2D>("Image/teleporter_top");
+            GameConstants.ROCKETBOARD_TEXTURE = this.Content.Load<Texture2D>("Image/skateboard");
+            GameConstants.EGG_TEXTURE = this.Content.Load<Texture2D>("Image/eggbeater");
+            GameConstants.JACK_TEXTURE = this.Content.Load<Texture2D>("Image/jack_inthe_box");
+            GameConstants.BED_TEXTURE = this.Content.Load<Texture2D>("Image/bed");
+            GameConstants.RAILING_TEXTURE = this.Content.Load<Texture2D>("Image/railing");
+            GameConstants.PIT_LEFT_END_TEXTURE = this.Content.Load<Texture2D>("Image/laser_left_end");
+            GameConstants.PIT_RIGHT_END_TEXTURE = this.Content.Load<Texture2D>("Image/laser_right_end");
+            GameConstants.PIT_TERMINAL_TEXTURE = this.Content.Load<Texture2D>("Image/battery_holder");
+            GameConstants.PIT_TILE_TEXTURE = this.Content.Load<Texture2D>("Image/laser_tile");
+            GameConstants.DOOR_OPEN_TEXTURE = this.Content.Load<Texture2D>("Image/door_open");
+            GameConstants.DOOR_CLOSED_TEXTURE = this.Content.Load<Texture2D>("Image/door_closed");
+            GameConstants.WALL_TEXTURE = this.Content.Load<Texture2D>("Image/wall_tile");
 
 			// Load the menu textures.
-            _mainMenuButtonTexture = this.Content.Load<Texture2D>("Image/button_MainMenu");
-            _newGameButtonTexture = this.Content.Load<Texture2D>("Image/button_NewGame");
-            _optionsButtonTexture = this.Content.Load<Texture2D>("Image/button_Options");
-            _levelNumButtonTexture = this.Content.Load<Texture2D>("Image/button_Level");
-            _levelSelectButtonTexture = this.Content.Load<Texture2D>("Image/button_LevelSelect");
-            _yesButtonTexture = this.Content.Load<Texture2D>("Image/button_Yes");
-            _noButtonTexture = this.Content.Load<Texture2D>("Image/button_No");
-            _instructionsButtonTexture = this.Content.Load<Texture2D>("Image/button_Instructions");
-            _pauseOverlayTexture = this.Content.Load<Texture2D>("Image/pauseOverlay");
-            _instructionsTexture1 = this.Content.Load<Texture2D>("Image/test_Instructions1");
+            _mainMenuButtonTexture = this.Content.Load<Texture2D>("Image/main_menu");
+            _newGameButtonTexture = this.Content.Load<Texture2D>("Image/new_game");
+            _optionsButtonTexture = this.Content.Load<Texture2D>("Image/options_button");
+            _levelNumButtonTexture = this.Content.Load<Texture2D>("Image/level");
+            _levelSelectButtonTexture = this.Content.Load<Texture2D>("Image/level_select");
+            //_yesButtonTexture = this.Content.Load<Texture2D>("Image/button_Yes");
+            //_noButtonTexture = this.Content.Load<Texture2D>("Image/button_No");
+            _instructionsButtonTexture = this.Content.Load<Texture2D>("Image/instructions_button");
+            _pauseOverlayTexture = this.Content.Load<Texture2D>("Image/pause_menu");
+            //_instructionsTexture1 = this.Content.Load<Texture2D>("Image/test_Instructions1");
             //_instructionsTexture2 = this.Content.Load<Texture2D>("Image/test_Instructions2");
-            _resumeButtonTexture = this.Content.Load<Texture2D>("Image/button_Resume");
+            _resumeButtonTexture = this.Content.Load<Texture2D>("Image/resume");
 
             Room level = LevelLoader.Load(_levelNumber);
 
@@ -239,8 +206,8 @@ namespace SleepyScientist
             _optionsMenuButtons.Add(new Button((screenWidth / 2), _optionsButtonTexture.Height, _optionsButtonTexture.Width, _optionsButtonTexture.Height, _optionsButtonTexture));
             for (int i = 0; i < 3; i++)
             {
-                _optionsMenuButtons.Add(new Button((screenWidth / 2) + (_yesButtonTexture.Width / 2), screenHeight / 2 - i * _yesButtonTexture.Height, _yesButtonTexture.Width, _yesButtonTexture.Height, _yesButtonTexture));
-                _optionsMenuButtons.Add(new Button((screenWidth / 2) - (_noButtonTexture.Width / 2), screenHeight / 2 - i * _noButtonTexture.Height, _noButtonTexture.Width, _noButtonTexture.Height, _noButtonTexture));
+                //_optionsMenuButtons.Add(new Button((screenWidth / 2) + (_yesButtonTexture.Width / 2), screenHeight / 2 - i * _yesButtonTexture.Height, _yesButtonTexture.Width, _yesButtonTexture.Height, _yesButtonTexture));
+                //_optionsMenuButtons.Add(new Button((screenWidth / 2) - (_noButtonTexture.Width / 2), screenHeight / 2 - i * _noButtonTexture.Height, _noButtonTexture.Width, _noButtonTexture.Height, _noButtonTexture));
             }
             _optionsMenuButtons.Add(new Button((screenWidth / 2), screenHeight / 2 + _mainMenuButtonTexture.Height, _mainMenuButtonTexture.Width, _mainMenuButtonTexture.Height, _mainMenuButtonTexture));
 
@@ -260,7 +227,7 @@ namespace SleepyScientist
 
             // Instructions
             _instructionsButtons.Add(new Button((screenWidth / 2), screenHeight / 2, _resumeButtonTexture.Width, _resumeButtonTexture.Height, _resumeButtonTexture));
-            _instructionsButtons.Add(new Button(0, 0, _instructionsTexture1.Width, _instructionsTexture1.Height, _instructionsTexture1));
+            //_instructionsButtons.Add(new Button(0, 0, _instructionsTexture1.Width, _instructionsTexture1.Height, _instructionsTexture1));
             //_instructionsButtons.Add(new Button(_instructionsTexture1.Width, 0, _instructionsTexture2.Width, _instructionsTexture2.Height, _instructionsTexture2));
             _instructionsButtons.Add(new Button((screenWidth / 2), (screenHeight / 2) + _mainMenuButtonTexture.Height, _mainMenuButtonTexture.Width, _mainMenuButtonTexture.Height, _mainMenuButtonTexture));
         }
@@ -534,7 +501,7 @@ namespace SleepyScientist
 		            for (int y = 0; y < GameConstants.SCREEN_HEIGHT; y += 50)
 		            {
 		                wallTile = new GameObject(x, y, 50, 50, GameConstants.DEFAULT_DIRECTION);
-		                wallTile.Image = _wallTexture;
+		                wallTile.Image = GameConstants.WALL_TEXTURE;
 		                wallTile.Draw(spriteBatch);
 		            }
 		        }
@@ -580,7 +547,7 @@ namespace SleepyScientist
         public void Reset()
         {
             _stairs.Clear();
-            _ladders.Clear();
+            _teleporters.Clear();
             _inventions.Clear();
             _floors.Clear();
             _pits.Clear();
@@ -596,7 +563,7 @@ namespace SleepyScientist
             foreach (Floor floor in this.level.Floors)
             {
                 _floors.Add(floor);
-                _ladders.AddRange(floor.Ladders);
+                _teleporters.AddRange(floor.Teleporters);
                 _stairs.AddRange(floor.Stairs);
                 _pits.AddRange(floor.Pits);
                 _inventions.AddRange(floor.Inventions);

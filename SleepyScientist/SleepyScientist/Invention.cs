@@ -48,7 +48,7 @@ namespace SleepyScientist
             Idle,
             Walking,
             JackInTheBox,
-            Ladder,
+            Teleporter,
             Stairs
         }
 
@@ -218,7 +218,7 @@ namespace SleepyScientist
                                                     this.LaddersNeeded != this.LaddersHit)
                                                 {
                                                     this.CurrentTile = stairs;
-                                                    this.CurrentState = InventionState.Ladder;
+                                                    this.CurrentState = InventionState.Teleporter;
                                                 }
                                             }
                                             // Check if the invention needs to go down the stairs and is past them
@@ -242,7 +242,7 @@ namespace SleepyScientist
                                                     this.X > stairs.X && this.LaddersNeeded != this.LaddersHit)
                                                 {
                                                     this.CurrentTile = stairs;
-                                                    this.CurrentState = InventionState.Ladder;
+                                                    this.CurrentState = InventionState.Teleporter;
                                                 }
                                             }
                                             // Check if the invention needs to go down the stairs and is past them
@@ -272,8 +272,8 @@ namespace SleepyScientist
                             break;
 
                         // The route is a ladder
-                        case "SleepyScientist.Ladder":
-                            Ladder ladder = (Ladder)route;
+                        case "SleepyScientist.Teleporter":
+                            Teleporter ladder = (Teleporter)route;
                              // Check if the invention is moving left or right
                             switch (this.Direction)
                             {
@@ -290,7 +290,7 @@ namespace SleepyScientist
                                         {
                                             this.X = ladder.X;
                                             this.CurrentTile = ladder;
-                                            this.CurrentState = InventionState.Ladder;
+                                            this.CurrentState = InventionState.Teleporter;
                                         }
                                     }
                                     // Check if the invention needs to go down the ladder
@@ -322,7 +322,7 @@ namespace SleepyScientist
                                         {
                                             this.X = ladder.X;
                                             this.CurrentTile = ladder;
-                                            this.CurrentState = InventionState.Ladder;
+                                            this.CurrentState = InventionState.Teleporter;
                                         }
                                     }
                                     // Check if the invention needs to go down the ladder
@@ -359,9 +359,9 @@ namespace SleepyScientist
                                 this.VeloY = GameConstants.INVENTION_STAIR_Y_VELOCITY;
                                 break;
                             // The invention is going down a ladder
-                            case "SleepyScientist.Ladder":
-                                this.VeloX = GameConstants.INVENTION_LADDER_X_VELOCITY;
-                                this.VeloY = -GameConstants.INVENTION_LADDER_Y_VELOCITY;
+                            case "SleepyScientist.Teleporter":
+                                this.VeloX = GameConstants.INVENTION_TELEPORTER_X_VELOCITY;
+                                this.VeloY = -GameConstants.INVENTION_TELEPORTER_Y_VELOCITY;
                                 break;
                         }
                         // Check if the invention has reached the bottom of the stairs
@@ -385,7 +385,7 @@ namespace SleepyScientist
                         break;
 
                     // The invention is going up something
-                    case InventionState.Ladder:
+                    case InventionState.Teleporter:
                         // Check if the invention is going up a ladder or staircase
                         switch (this.CurrentTile.GetType().ToString())
                         {
@@ -395,9 +395,9 @@ namespace SleepyScientist
                                 this.VeloY = -GameConstants.INVENTION_STAIR_Y_VELOCITY;
                                 break;
                             // The invention is going up a ladder
-                            case "SleepyScientist.Ladder":
-                                this.VeloX = GameConstants.INVENTION_LADDER_X_VELOCITY;
-                                this.VeloY = GameConstants.INVENTION_LADDER_Y_VELOCITY;
+                            case "SleepyScientist.Teleporter":
+                                this.VeloX = GameConstants.INVENTION_TELEPORTER_X_VELOCITY;
+                                this.VeloY = GameConstants.INVENTION_TELEPORTER_Y_VELOCITY;
                                 break;
                         }
                         // Check if the invention has reached the top of the stairs
@@ -484,7 +484,7 @@ namespace SleepyScientist
                 if (this.LaddersNeeded > 0)
                 {
                     // Pool together all of the potential routes the invention can take on this floor
-                    if (this.Room.Floors[currentFloor].Ladders.Count != 0) potentialRoutes.AddRange(this.Room.Floors[currentFloor].Ladders);
+                    if (this.Room.Floors[currentFloor].Teleporters.Count != 0) potentialRoutes.AddRange(this.Room.Floors[currentFloor].Teleporters);
                     if (this.Room.Floors[currentFloor + 1].Stairs.Count != 0) potentialRoutes.AddRange(this.Room.Floors[currentFloor + 1].Stairs);
 
                     // If the potential routes are not zero, find the closest
@@ -510,7 +510,7 @@ namespace SleepyScientist
                 {
                     // Pool together all of the potential routes the invention can take on this floor
                     if (this.Room.Floors[currentFloor].Stairs.Count != 0) potentialRoutes.AddRange(this.Room.Floors[currentFloor].Stairs);
-                    if (this.Room.Floors[currentFloor - 1].Ladders.Count != 0) potentialRoutes.AddRange(this.Room.Floors[currentFloor - 1].Ladders);
+                    if (this.Room.Floors[currentFloor - 1].Teleporters.Count != 0) potentialRoutes.AddRange(this.Room.Floors[currentFloor - 1].Teleporters);
 
                     // If the potential routes are not zero, find the closest
                     if (potentialRoutes.Count != 0)

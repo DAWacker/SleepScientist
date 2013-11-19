@@ -14,10 +14,10 @@
   <Floor>
     <X>0</X>
     <Y>600</Y>
-    <Ladder>
+    <Teleporter>
       <X>600</X>
       <Y>350</Y>
-    </Ladder>
+    </Teleporter>
   </Floor>
   <Floor>
     <X>0</X>

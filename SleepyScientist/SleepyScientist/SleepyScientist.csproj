@@ -50,7 +50,7 @@
     <Compile Include="GameObject.cs" />
     <Compile Include="Invention.cs" />
     <Compile Include="JackInTheBox.cs" />
-    <Compile Include="Ladder.cs" />
+    <Compile Include="Teleporter.cs" />
     <Compile Include="Batteries.cs" />
     <Compile Include="LevelLoader.cs" />
     <Compile Include="Message.cs" />
@@ -89,88 +89,76 @@
       <Link>SDL.dll</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Image\button_Instructions.png">
+    <Content Include="Content\Image\back_button.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Image\button_Resume.png">
+    <Content Include="Content\Image\battery.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Image\batteryHolder.png">
+    <Content Include="Content\Image\battery_holder.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Image\doorClosed.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\Image\doorOpen.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\Image\eggBeater.png">
+    <Content Include="Content\Image\battery_holder_full.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Image\bed.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Image\door_closed.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Image\door_open.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Image\eggbeater.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Image\floor.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Image\bed.png">
+    <Content Include="Content\Image\instructions_button.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Image\jackInTheBox.png">
+    <Content Include="Content\Image\instructions_menu.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Image\ladder.png">
+    <Content Include="Content\Image\jack_inthe_box.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Image\eggBeater.png">
+    <Content Include="Content\Image\laser_left_end.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Image\bed.png">
+    <Content Include="Content\Image\laser_right_end.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Image\button_Level.png">
+    <Content Include="Content\Image\laser_tile.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Image\button_LevelSelect.png">
+    <Content Include="Content\Image\level.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Image\button_MainMenu.png">
+    <Content Include="Content\Image\level_select.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Image\button_NewGame.png">
+    <Content Include="Content\Image\main_menu.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Image\button_No.png">
+    <Content Include="Content\Image\new_game.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Image\button_Options.png">
+    <Content Include="Content\Image\options_button.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Image\button_Yes.png">
+    <Content Include="Content\Image\pause_menu.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Image\jackInTheBox.png">
+    <Content Include="Content\Image\quit_button.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Image\ladder.png">
+    <Content Include="Content\Image\railing.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Image\pauseOverlay.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\Image\laserLeftEnd.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\Image\laserRightEnd.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\Image\laserTile.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\Image\pit.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\Image\scientist.png">
+    <Content Include="Content\Image\resume.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Image\Scientist\walk1.png">
@@ -218,26 +206,33 @@
     <Content Include="Content\Image\Scientist\walk9.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\Image\skateboard.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Image\sound_off.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Image\sound_on.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Content\Image\stairs.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Image\rocketSkateboard.png">
+    <Content Include="Content\Image\teleporter_bottom.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Image\rocketSkateboard.png">
+    <Content Include="Content\Image\teleporter_tile.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Image\stairs.png">
+    <Content Include="Content\Image\teleporter_top.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Image\test_Instructions1.PNG">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\Image\walltile.png">
+    <Content Include="Content\Image\wall_tile.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Levels\Level7.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="Content\Levels\Level6.xml">
       <SubType>Designer</SubType>
@@ -262,14 +257,8 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="Content\Image\railing.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="Content\ScientistAnimationSet.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\Image\walltile.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Icon.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

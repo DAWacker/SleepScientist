@@ -24,10 +24,10 @@
       <X>400</X>
       <Y>550</Y>
     </Invention>
-    <Ladder>
+    <Teleporter>
       <X>900</X>
       <Y>350</Y>
-    </Ladder>
+    </Teleporter>
   </Floor>
   <Floor>
     <X>0</X>

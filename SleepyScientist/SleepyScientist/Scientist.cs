@@ -57,7 +57,7 @@ namespace SleepyScientist
             RocketSkates,
             EggBeater,
             Batteries,
-            Ladder,
+            Teleporter,
             Stairs,
             Bed,
             Pit,
@@ -231,8 +231,8 @@ namespace SleepyScientist
             if (this.Skateboard != null) { positionCheck = this.Skateboard.RectPosition; }
             else { positionCheck = this.RectPosition; }
 
-            // Check if the scientist is colliding with a ladder
-            foreach (Ladder piece in this.CurrentFloor.Ladders)
+            // Check if the scientist is colliding with a Teleporter
+            foreach (Teleporter piece in this.CurrentFloor.Teleporters)
             {
                 // Check if the scientist is moving left or right
                 switch (this.Direction)
@@ -244,7 +244,7 @@ namespace SleepyScientist
                             this.RectPosition.X < piece.RectPosition.X + piece.RectPosition.Width)
                         {
                             this.CurrentTile = piece;
-                            this.CurrentState = ScientistState.Ladder;
+                            this.CurrentState = ScientistState.Teleporter;
                             this.Skateboard = null;
                         }
                         break;
@@ -256,7 +256,7 @@ namespace SleepyScientist
                             this.RectPosition.X > piece.RectPosition.X - piece.RectPosition.Width)
                         {
                             this.CurrentTile = piece;
-                            this.CurrentState = ScientistState.Ladder;
+                            this.CurrentState = ScientistState.Teleporter;
                             this.Skateboard = null;
                         }
                         break;
@@ -322,11 +322,11 @@ namespace SleepyScientist
             // Update scientist based on current state.
             switch (this.CurrentState)
             {
-                case ScientistState.Ladder:
+                case ScientistState.Teleporter:
                     this.VeloX = 0;
-                    this.VeloY = GameConstants.LADDER_Y_VELOCITY;
+                    this.VeloY = GameConstants.TELEPORTER_Y_VELOCITY;
 
-                    // Check if the scientist has reached the top of the ladder
+                    // Check if the scientist has reached the top of the teleporter
                     if (this.RectPosition.Top <= this.CurrentTile.RectPosition.Top)
                     {
                         this.VeloY = 0;

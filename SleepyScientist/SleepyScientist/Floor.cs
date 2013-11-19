@@ -19,7 +19,7 @@ namespace SleepyScientist
         public List<Invention> _inventions;
 
         // The ladders on the floor
-        public List<Ladder> _ladders;
+        public List<Teleporter> _teleporters;
 
         // The stairs on the floor
         public List<Stairs> _stairs;
@@ -38,7 +38,7 @@ namespace SleepyScientist
         public List<Invention> Inventions { get { return _inventions; } set { _inventions = value; } }
 
         // Gets or sets the ladders on the floor
-        public List<Ladder> Ladders { get { return _ladders; } set { _ladders = value; } }
+        public List<Teleporter> Teleporters { get { return _teleporters; } set { _teleporters = value; } }
 
         // Gets or sets the stairs on the floor
         public List<Stairs> Stairs { get { return _stairs; } set { _stairs = value; } }
@@ -64,7 +64,7 @@ namespace SleepyScientist
             : base(x, y, width, height, 1) 
         {
             this.Inventions = new List<Invention>();
-            this.Ladders = new List<Ladder>();
+            this.Teleporters = new List<Teleporter>();
             this.Stairs = new List<Stairs>();
             this.Walls = new List<Wall>();
             this.Pits = new List<Pit>();
@@ -81,15 +81,15 @@ namespace SleepyScientist
         public List<GameObject> GetGameObjects()
         {
             List<GameObject> floorObjects = new List<GameObject>();
+            floorObjects.AddRange(Inventions);
+            floorObjects.AddRange(Teleporters);
             floorObjects.Add(this);
-            floorObjects.AddRange(Ladders);
             floorObjects.AddRange(Stairs);
             foreach (Stairs g in Stairs)
             {
                 floorObjects.Add(g.Railing);
 
             }
-            floorObjects.AddRange(Inventions);
 			floorObjects.AddRange(Pits);
 
             return floorObjects;

@@ -46,13 +46,16 @@ namespace SleepyScientist
         // Floor constants
         public static int FLOOR_HEIGHT = TILE_HEIGHT;
 
-        // Ladder constants
-        public static int LADDER_WIDTH = 50;
-        public static int LADDER_HEIGHT = 200;
-        public static float LADDER_X_VELOCITY = 0;
-        public static float LADDER_Y_VELOCITY = -5 * EULER_SCALE;
-        public static float INVENTION_LADDER_X_VELOCITY = 0;
-        public static float INVENTION_LADDER_Y_VELOCITY = -8 * EULER_SCALE;
+        // Teleporter info
+        public static Texture2D TELEPORTER_TILE_TEXTURE;
+        public static Texture2D TELEPORTER_TOP_TEXTURE;
+        public static Texture2D TELEPORTER_BOTTOM_TEXTURE;
+        public static int TELEPORTER_WIDTH = 50;
+        public static int TELEPORTER_HEIGHT = 200;
+        public static float TELEPORTER_X_VELOCITY = 0;
+        public static float TELEPORTER_Y_VELOCITY = -5 * EULER_SCALE;
+        public static float INVENTION_TELEPORTER_X_VELOCITY = 0;
+        public static float INVENTION_TELEPORTER_Y_VELOCITY = -8 * EULER_SCALE;
 
         // Stair constants
         public static int STAIR_WIDTH = 300;
@@ -117,9 +120,9 @@ namespace SleepyScientist
         public static float SCROLL_BOUND_RIGHT = 1 - SCROLL_BOUND_LEFT;
 
         // Game Textures
-        public static Texture2D LADDER_TEXTURE;
         public static Texture2D STAIR_TEXTURE;
         public static Texture2D RAILING_TEXTURE;
+        public static Texture2D WALL_TEXTURE;
 
         #endregion
     }
