@@ -48,6 +48,7 @@ namespace SleepyScientist
         private Texture2D _pauseMenuTexture;
         private Texture2D _instMenuTexture;
         private Texture2D _gameOverTexture;
+        private Texture2D _mainMenuTexture;
 
         private Game1 _game;
 
@@ -96,12 +97,14 @@ namespace SleepyScientist
             _pauseMenuTexture = Content.Load<Texture2D>("Image/pause_background");
             _instMenuTexture = Content.Load<Texture2D>("Image/instructions_background");
             _gameOverTexture = Content.Load<Texture2D>("Image/game_over_background");
+            _mainMenuTexture = Content.Load<Texture2D>("Image/main_menu_background");
 
             // Set up Main Menu
-            _mainMenuButtons.Add("newGame", new Button(0, _instructionsButtonTexture.Height, _newGameButtonTexture.Width, _newGameButtonTexture.Height, _newGameButtonTexture));
-            _mainMenuButtons.Add("levelSelect", new Button(0, _instructionsButtonTexture.Height * 3, _levelSelectButtonTexture.Width, _levelSelectButtonTexture.Height, _levelSelectButtonTexture));
-            _mainMenuButtons.Add("instructions", new Button(0, _instructionsButtonTexture.Height * 4, _instructionsButtonTexture.Width, _instructionsButtonTexture.Height, _instructionsButtonTexture));
-            _mainMenuButtons.Add("quit", new Button(_game.screenWidth - _mainMenuButtonTexture.Width, _game.screenHeight - _mainMenuButtonTexture.Height, _quitButtonTexture.Width, _quitButtonTexture.Height, _quitButtonTexture));
+            _mainMenuButtons.Add("background", new Button((_game.screenWidth / 2) - (_gameOverTexture.Width / 2), (_game.screenHeight / 2) - (_gameOverTexture.Height / 2), _mainMenuTexture.Width, _mainMenuTexture.Height, _mainMenuTexture));
+            _mainMenuButtons.Add("quit", new Button((_game.screenWidth / 2) - (_quitButtonTexture.Width / 2), (int)(_mainMenuButtons["background"].Y + _mainMenuButtons["background"].Height - _quitButtonTexture.Height - 60), _quitButtonTexture.Width, _quitButtonTexture.Height, _quitButtonTexture));
+            _mainMenuButtons.Add("levelSelect", new Button((int)(_mainMenuButtons["quit"].X), (int)(_mainMenuButtons["quit"].Y - _levelSelectButtonTexture.Height - 10), _levelSelectButtonTexture.Width, _levelSelectButtonTexture.Height, _levelSelectButtonTexture));
+            _mainMenuButtons.Add("instructions", new Button((int)(_mainMenuButtons["levelSelect"].X), (int)(_mainMenuButtons["levelSelect"].Y - _instructionsButtonTexture.Height - 10), _instructionsButtonTexture.Width, _instructionsButtonTexture.Height, _instructionsButtonTexture));
+            _mainMenuButtons.Add("newGame", new Button((int)(_mainMenuButtons["instructions"].X), (int)(_mainMenuButtons["instructions"].Y - _newGameButtonTexture.Height - 10), _newGameButtonTexture.Width, _newGameButtonTexture.Height, _newGameButtonTexture));
             // Add Image... 
 
             // Set up Level Select Menu
