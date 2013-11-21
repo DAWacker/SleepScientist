@@ -138,9 +138,6 @@ namespace SleepyScientist
         /// </summary>
         public override void Update() 
         {
-            // Check if the skateboard needs to move with the scientist
-            if (this.Skateboard != null) { this.Skateboard.Move(this.VeloX); }
-
             // Check if the scientist is on the ground or just landing
             if (this.RectPosition.Bottom == this.CurrentFloor.RectPosition.Top ||
                 (this.RectPosition.Intersects(this.CurrentFloor.RectPosition) &&
@@ -245,6 +242,7 @@ namespace SleepyScientist
                         {
                             this.CurrentTile = piece;
                             this.CurrentState = ScientistState.Teleporter;
+                            if (this.Skateboard != null) { this.Skateboard.VeloX = 0; }
                             this.Skateboard = null;
                         }
                         break;
@@ -257,6 +255,7 @@ namespace SleepyScientist
                         {
                             this.CurrentTile = piece;
                             this.CurrentState = ScientistState.Teleporter;
+                            if (this.Skateboard != null) { this.Skateboard.VeloX = 0; }
                             this.Skateboard = null;
                         }
                         break;
@@ -282,6 +281,7 @@ namespace SleepyScientist
                         {
                             this.CurrentTile = stair;
                             this.CurrentState = ScientistState.Stairs;
+                            if (this.Skateboard != null) { this.Skateboard.VeloX = 0; }
                             this.Skateboard = null;
                         }
                         break;
@@ -295,6 +295,7 @@ namespace SleepyScientist
                         {
                             this.CurrentTile = stair;
                             this.CurrentState = ScientistState.Stairs;
+                            if (this.Skateboard != null) { this.Skateboard.VeloX = 0; }
                             this.Skateboard = null;
                         }
                         break;
@@ -314,6 +315,7 @@ namespace SleepyScientist
                 {
                     this.CurrentTile = pit;
                     this.CurrentState = ScientistState.Pit;
+                    if (this.Skateboard != null) { this.Skateboard.VeloX = 0; }
                     this.Skateboard = null;
                 }
             }
@@ -341,6 +343,7 @@ namespace SleepyScientist
                         this.CurrentTile = this.Room.Floors[this.FloorNumber + 1];
                         this.FloorNumber++;
                     }
+                    base.Update();
                     break;
 
                 case ScientistState.Stairs:
@@ -357,12 +360,18 @@ namespace SleepyScientist
                         this.Y = this.CurrentTile.Y - GameConstants.TILE_HEIGHT;
                         this.FloorNumber--;
                     }
+                    base.Update();
                     break;
 
                 case ScientistState.RocketSkates:
+                    this.Skateboard.Update();
+                    this.Direction = this.Skateboard.Direction;
+                    this.X = this.Skateboard.X + 25;
+                    this.Y = this.Skateboard.Y - this.Height + 10;
                     break;
 
                 case ScientistState.EggBeater:
+                    base.Update();
                     break;
 
                 case ScientistState.JackInTheBox:
@@ -374,6 +383,7 @@ namespace SleepyScientist
                     {
                         this.VeloY += GameConstants.GRAVITY * Time.DeltaTime;
                     }
+                    base.Update();
                     break;
 
                 case ScientistState.Bed:
@@ -388,12 +398,12 @@ namespace SleepyScientist
                     this.RefreshInventions();
                     this.VeloX = GameConstants.DEFAULT_X_VELOCITY * this.Direction;
                     this.VeloY = 0;
+                    base.Update();
                     break;
 
                 default:
                     break;
             }
-            base.Update();
         }
 
         /// <summary>

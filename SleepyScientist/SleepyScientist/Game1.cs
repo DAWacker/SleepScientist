@@ -77,7 +77,7 @@ namespace SleepyScientist
 
         // Test
         private bool _begin = false;
-        private int _levelNumber = 7;
+        private int _levelNumber = 6;
         private int _totalLevels = 7;
         private Room level = null;
 
@@ -494,7 +494,7 @@ namespace SleepyScientist
             spriteBatch.Begin();
 
             if (state == STATE.PLAY || state == STATE.PAUSE)
-            {
+            {       
 		        // Draw the background
 		        GameObject wallTile;
 		        for (int x = 0; x < GameConstants.SCREEN_WIDTH; x += 50)
