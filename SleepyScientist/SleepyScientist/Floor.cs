@@ -71,30 +71,5 @@ namespace SleepyScientist
         }
 
         #endregion
-
-        #region Methods
-		
-		/// <summary>
-        /// Grab and return all GameObjects on this Floor (includes self).
-        /// </summary>
-        /// <returns>Every GameObject on this Floor.</returns>
-        public List<GameObject> GetGameObjects()
-        {
-            List<GameObject> floorObjects = new List<GameObject>();
-            floorObjects.AddRange(Inventions);
-            floorObjects.AddRange(Teleporters);
-            floorObjects.AddRange(Walls);
-            floorObjects.Add(this);
-            floorObjects.AddRange(Stairs);
-            foreach (Stairs g in Stairs)
-            {
-                floorObjects.Add(g.Railing);
-
-            }
-			floorObjects.AddRange(Pits);
-
-            return floorObjects;
-        }
-        #endregion
     }
 }

@@ -113,6 +113,7 @@ namespace SleepyScientist
             : base(name, x, y, width, height)
         {
             this.Room = room;
+            this.Room.Scientist = this;
             this.Direction = this.Room.StartDirection;
             this.CurrentState = ScientistState.Walking;
             this.PreviousState = ScientistState.Walking;
@@ -174,8 +175,9 @@ namespace SleepyScientist
                             if (this.FloorNumber != Room.NumberFloors - 1)
                             {
                                 // Loop through all of the stairs on the floor above you
-                                foreach (Stairs stair in this.Room.Floors[this.FloorNumber + 1].Stairs)
+                                for (int i = 0; i < this.Room.Floors[this.FloorNumber + 1].Stairs.Count; i++)
                                 {
+                                    Stairs stair = this.Room.Floors[this.FloorNumber + 1].Stairs[i];
                                     // Check which way the staircase is facing
                                     switch (stair.Direction)
                                     {
@@ -188,10 +190,13 @@ namespace SleepyScientist
                                                 this.CurrentFloor = this.Room.Floors[this.FloorNumber + 1];
                                                 this.CurrentTile = this.Room.Floors[this.FloorNumber + 1];
                                                 this.FloorNumber++;
+                                                i = 10;
                                             }
 
                                             // If the jack in the box isn't at the bottom of the stairs, do a normal jump
                                             else { this.InteractWith(invention); }
+                                            if (this.Skateboard != null) { this.Skateboard.VeloX = 0; }
+                                            this.Skateboard = null;
                                             break;
 
                                         case -1:
@@ -203,10 +208,13 @@ namespace SleepyScientist
                                                 this.CurrentFloor = this.Room.Floors[this.FloorNumber + 1];
                                                 this.CurrentTile = this.Room.Floors[this.FloorNumber + 1];
                                                 this.FloorNumber++;
+                                                i = 10;
                                             }
 
                                             // If the jack in the box isn't at the bottom of the stairs, do a normal jump
                                             else { this.InteractWith(invention); }
+                                            if (this.Skateboard != null) { this.Skateboard.VeloX = 0; }
+                                            this.Skateboard = null;
                                             break;
                                     }
                                 }
@@ -277,6 +285,7 @@ namespace SleepyScientist
                         if (positionCheck.Intersects(stair.RectPosition) &&
                             this.RectPosition.X < stair.RectPosition.X + this.Width + 25 &&
                             this.RectPosition.X > stair.RectPosition.X &&
+                            this.RectPosition.Top == stair.RectPosition.Top &&
                             this.Direction == stair.Direction)
                         {
                             this.CurrentTile = stair;
@@ -291,6 +300,7 @@ namespace SleepyScientist
                         if (positionCheck.Intersects(stair.RectPosition) &&
                             this.RectPosition.X < stair.RectPosition.X + stair.Width - this.Width &&
                             this.RectPosition.X > stair.RectPosition.X + stair.Width - this.Width - 25 &&
+                            this.RectPosition.Top == stair.RectPosition.Top &&
                             this.Direction == stair.Direction)
                         {
                             this.CurrentTile = stair;
@@ -324,7 +334,7 @@ namespace SleepyScientist
             if (positionCheck.Intersects(this.Room.Bed.RectPosition)) { this.CurrentState = ScientistState.Bed; }
 
             // Check if the scientist hit a wall
-            foreach (Wall wall in this.CurrentFloor.Walls) { if (this.RectPosition.Intersects(wall.RectPosition)) { this.Reverse(); } }
+            if (this.CurrentState != ScientistState.JackInTheBox) { foreach (Wall wall in this.CurrentFloor.Walls) { if (this.RectPosition.Intersects(wall.RectPosition)) { this.Reverse(); } } }
 
             // Update scientist based on current state.
             switch (this.CurrentState)

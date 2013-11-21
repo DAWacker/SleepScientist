@@ -77,7 +77,7 @@ namespace SleepyScientist
 
         // Test
         private bool _begin = false;
-        private int _levelNumber = 6;
+        private int _levelNumber = 7;
         private int _totalLevels = 7;
         private Room level = null;
 
@@ -508,7 +508,6 @@ namespace SleepyScientist
 		        }
 				
                 _camera.DrawGameObjects(spriteBatch, _sleepy.Room.GetGameObjects());
-                _camera.DrawGameObject(spriteBatch, _sleepy );
                 
                 if (state == STATE.PAUSE)
                 {

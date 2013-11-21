@@ -21,6 +21,7 @@ namespace SleepyScientist
         private int _startY;
         private int _startDirection;
         private List<Floor> _floors;
+        private Scientist _scientist;
         private Bed _bed;
         private Door _door;
 
@@ -50,6 +51,9 @@ namespace SleepyScientist
         // Get or set the door in the room
         public Door Door { get { return _door; } set { _door = value; }}
 
+        // Get of set the scientist in the room
+        public Scientist Scientist { get { return _scientist; } set { _scientist = value; } }
+
         #endregion
 
         #region Constructor
@@ -71,6 +75,7 @@ namespace SleepyScientist
             this.Floors = new List<Floor>();
             this.Bed = bed;
             this.Door = null;
+            this.Scientist = null;
         }
 
         #endregion
@@ -86,10 +91,32 @@ namespace SleepyScientist
         public List<GameObject> GetGameObjects()
         {
             List<GameObject> roomObjects = new List<GameObject>();
+            List<Invention> inventions = new List<Invention>();
+            List<GameObject> railings = new List<GameObject>();
+            List<Teleporter> teleporters = new List<Teleporter>();
+            List<Stairs> stairs = new List<Stairs>();
+            List<Wall> walls = new List<Wall>();
+            List<Floor> floors = new List<Floor>();
+            List<Pit> pits = new List<Pit>();
+
             foreach (Floor floor in this.Floors)
             {
-                roomObjects.AddRange(floor.GetGameObjects());
+                teleporters.AddRange(floor.Teleporters);
+                foreach (Stairs stair in floor.Stairs) { railings.Add(stair.Railing); }
+                inventions.AddRange(floor.Inventions);
+                stairs.AddRange(floor.Stairs);
+                walls.AddRange(floor.Walls);
+                pits.AddRange(floor.Pits);
+                floors.Add(floor);
             }
+            roomObjects.AddRange(walls);
+            roomObjects.AddRange(floors);
+            roomObjects.AddRange(pits);
+            roomObjects.AddRange(stairs);
+            roomObjects.AddRange(teleporters);
+            roomObjects.AddRange(inventions);
+            roomObjects.Add(this.Scientist);
+            roomObjects.AddRange(railings);
             roomObjects.Add(Bed);
             if (Door != null)
                 roomObjects.Add(Door);

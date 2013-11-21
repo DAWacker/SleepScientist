@@ -46,10 +46,11 @@ namespace SleepyScientist
 
         public override void Update()
         {
-            if (this.Activated)
+            if (this.Activated || this.HasTarget)
             {
                 this.StayOnScreen();
                 this.Move();
+                base.Update();
             }
         }
     }
