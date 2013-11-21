@@ -181,6 +181,9 @@
     <Content Include="Content\Image\floor.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\Image\game_over_background.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Content\Image\instructions_background.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

@@ -11,7 +11,7 @@ using Microsoft.Xna.Framework.GamerServices;
 
 namespace SleepyScientist
 {
-    public enum STATE { MAIN_MENU, LEVEL_SELECT, PLAY, PAUSE, INSTRUCTIONS }
+    public enum STATE { MAIN_MENU, LEVEL_SELECT, PLAY, PAUSE, INSTRUCTIONS, GAME_OVER }
 
     /// <summary>
     /// This is the main type for your game
@@ -325,7 +325,8 @@ namespace SleepyScientist
 		            if (_sleepy.Loser)
 		            {
 		                _begin = false;
-		                //this.Reset();
+
+                        this.State = STATE.GAME_OVER;
 
 		                this.SetupLevel(this._levelNumber);
 		            }
