@@ -47,7 +47,7 @@ namespace SleepyScientist
         // GameObjects
         private Scientist _sleepy;
         private List<Floor> _floors;
-        private List<Ladder> _ladders;
+        private List<Teleporter> _teleporters;
         private List<Stairs> _stairs;
         private List<Pit> _pits;
         private List<Invention> _inventions;
@@ -121,7 +121,7 @@ namespace SleepyScientist
 
             // Initialize test "Level" objects.
             _floors = new List<Floor>();
-            _ladders = new List<Ladder>();
+            _teleporters = new List<Teleporter>();
             _stairs = new List<Stairs>();
             _pits = new List<Pit>();
             _inventions = new List<Invention>();
@@ -157,43 +157,27 @@ namespace SleepyScientist
 
             // Load animation sets.
             AnimationLoader.Load("ScientistAnimationSet.xml", Content);
-
-            // Load content of other GameObjects.
-            _ladderTexture = this.Content.Load<Texture2D>("Image/ladder");
-            _floorTexture = this.Content.Load<Texture2D>("Image/floor");
-            _stairsTexture = this.Content.Load<Texture2D>("Image/stairs");
-            _rocketSkateboardTexture = this.Content.Load<Texture2D>("Image/skateboard");
-            _eggBeaterTexture = this.Content.Load<Texture2D>("Image/eggbeater");
-            _jackintheboxTexture = this.Content.Load<Texture2D>("Image/jack_inthe_box");
-            _bedTexture = this.Content.Load<Texture2D>("Image/bed");
-            _wallTexture = this.Content.Load<Texture2D>("Image/walltile");
-            _railingTexture = this.Content.Load<Texture2D>("Image/railing");
-            _doorOpenTexture = this.Content.Load<Texture2D>("Image/door_open");
-            _doorClosedTexture = this.Content.Load<Texture2D>("Image/door_closed");
-
-            // Load textures for the pits
-            _pitLaserLeft = this.Content.Load<Texture2D>("Image/laser_left_end");
-            _pitLaserRight = this.Content.Load<Texture2D>("Image/laser_right_end");
-            _pitLaserTile = this.Content.Load<Texture2D>("Image/laser_tile");
-            _pitTerminal = this.Content.Load<Texture2D>("Image/battery_holder");
             
             // Make these textures static
-            GameConstants.FLOOR_TEXTURE = _floorTexture;
-            GameConstants.STAIR_TEXTURE = _stairsTexture;
-            GameConstants.LADDER_TEXTURE = _ladderTexture;
-            GameConstants.ROCKETBOARD_TEXTURE = _rocketSkateboardTexture;
-            GameConstants.EGG_TEXTURE = _eggBeaterTexture;
-            GameConstants.JACK_TEXTURE = _jackintheboxTexture;
-            GameConstants.BED_TEXTURE = _bedTexture;
-            GameConstants.RAILING_TEXTURE = _railingTexture;
-            GameConstants.PIT_LEFT_END_TEXTURE = _pitLaserLeft;
-            GameConstants.PIT_RIGHT_END_TEXTURE = _pitLaserRight;
-            GameConstants.PIT_TERMINAL_TEXTURE = _pitTerminal;
-            GameConstants.PIT_TILE_TEXTURE = _pitLaserTile;
-            GameConstants.DOOR_OPEN_TEXTURE = _doorOpenTexture;
-            GameConstants.DOOR_CLOSED_TEXTURE = _doorClosedTexture;
-            
-            // Create the level.
+            GameConstants.FLOOR_TEXTURE = this.Content.Load<Texture2D>("Image/floor"); ;
+            GameConstants.STAIR_TEXTURE = this.Content.Load<Texture2D>("Image/stairs");
+            GameConstants.TELEPORTER_TILE_TEXTURE = this.Content.Load<Texture2D>("Image/teleporter_tile");
+            GameConstants.TELEPORTER_BOTTOM_TEXTURE = this.Content.Load<Texture2D>("Image/teleporter_bottom");
+            GameConstants.TELEPORTER_TOP_TEXTURE = this.Content.Load<Texture2D>("Image/teleporter_top");
+            GameConstants.ROCKETBOARD_TEXTURE = this.Content.Load<Texture2D>("Image/skateboard");
+            GameConstants.EGG_TEXTURE = this.Content.Load<Texture2D>("Image/eggbeater");
+            GameConstants.JACK_TEXTURE = this.Content.Load<Texture2D>("Image/jack_inthe_box");
+            GameConstants.BED_TEXTURE = this.Content.Load<Texture2D>("Image/bed");
+            GameConstants.RAILING_TEXTURE = this.Content.Load<Texture2D>("Image/railing");
+            GameConstants.PIT_LEFT_END_TEXTURE = this.Content.Load<Texture2D>("Image/laser_left_end");
+            GameConstants.PIT_RIGHT_END_TEXTURE = this.Content.Load<Texture2D>("Image/laser_right_end");
+            GameConstants.PIT_TERMINAL_TEXTURE = this.Content.Load<Texture2D>("Image/battery_holder");
+            GameConstants.PIT_TILE_TEXTURE = this.Content.Load<Texture2D>("Image/laser_tile");
+            GameConstants.DOOR_OPEN_TEXTURE = this.Content.Load<Texture2D>("Image/door_open");
+            GameConstants.DOOR_CLOSED_TEXTURE = this.Content.Load<Texture2D>("Image/door_closed");
+            GameConstants.BACKGROUND_TEXTURE = this.Content.Load<Texture2D>("Image/wall_tile");
+            GameConstants.WALL_TEXTURE = this.Content.Load<Texture2D>("Image/floor");
+
             Room level = LevelLoader.Load(_levelNumber);
 
             // This startx is a test to see if the loader broke
@@ -371,21 +355,16 @@ namespace SleepyScientist
 		            for (int y = 0; y < GameConstants.SCREEN_HEIGHT; y += 50)
 		            {
 		                wallTile = new GameObject(x, y, 50, 50, GameConstants.DEFAULT_DIRECTION);
-		                wallTile.Image = _wallTexture;
+		                wallTile.Image = GameConstants.BACKGROUND_TEXTURE;
 		                wallTile.Draw(spriteBatch);
 		            }
 		        }
 				
                 _camera.DrawGameObjects(spriteBatch, _sleepy.Room.GetGameObjects());
-                _camera.DrawGameObject(spriteBatch, _sleepy );
             }
 
             // Draw menus
             _menu.Draw(spriteBatch);
-
-            //MessageLayer.ClearMessages();
-            //MessageLayer.AddMessage(new Message("-The objective of the game is to get the scientist to his bed in each level.\n-You may pick up inventions by clicking on them, and move the inventions by clicking on the place you want to move them.", 0, 0));
-            //MessageLayer.Draw(spriteBatch);
 
             spriteBatch.End();
 

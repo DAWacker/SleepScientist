@@ -14,14 +14,14 @@
   <Floor>
     <X>0</X>
     <Y>600</Y>
-    <Ladder>
+    <Teleporter>
       <X>1100</X>
       <Y>350</Y>
-    </Ladder>
+    </Teleporter>
     <Invention>
       <Name>RocketSkateboard</Name>
       <X>75</X>
-      <Y>575</Y>
+      <Y>550</Y>
     </Invention>
   </Floor>
   <Floor>

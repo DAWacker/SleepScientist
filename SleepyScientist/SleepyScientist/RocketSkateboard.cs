@@ -26,17 +26,12 @@ namespace SleepyScientist
         /// <summary>
         /// Method that executes the functionality of a Rocket Skateboard
         /// </summary>
-        public override void Use(Scientist s)
+        public override void Use(Scientist scientist)
         {
             if (!this.Activated)
             {
-                base.Use(s);
-                this.Direction = s.Direction;
-                this.VeloX = s.VeloX;
-                VeloX *= GameConstants.SKATEBOARD_SPEEDUP;
-                s.VeloX *= GameConstants.SKATEBOARD_SPEEDUP;   // only lasts a certain amount of time, will have to address this
-                s.X = this.RectPosition.Center.X - s.Width / 2;
-                s.Y -= this.Height / 2;
+                this.VeloX = scientist.VeloX * GameConstants.SKATEBOARD_SPEEDUP * this.Direction;
+                base.Use(scientist);
             }
         }
 
@@ -49,11 +44,14 @@ namespace SleepyScientist
             }
         }
 
-        public void Move(float veloX)
+        public override void Update()
         {
-            this.VeloX = veloX;
-            this.StayOnScreen();
-            this.Move();
+            if (this.Activated || this.HasTarget)
+            {
+                this.StayOnScreen();
+                this.Move();
+                base.Update();
+            }
         }
     }
 }

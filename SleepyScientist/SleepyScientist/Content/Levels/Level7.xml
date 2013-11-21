@@ -33,13 +33,17 @@
       <X>500</X>
       <Y>350</Y>
     </Invention>
+    <Wall>
+      <X>450</X>
+      <Y>200</Y>
+    </Wall>
     <Stairs>
-      <X>300</X>
+      <X>850</X>
       <Y>350</Y>
       <Direction>1</Direction>
     </Stairs>
     <Stairs>
-      <X>850</X>
+      <X>300</X>
       <Y>350</Y>
       <Direction>1</Direction>
     </Stairs>

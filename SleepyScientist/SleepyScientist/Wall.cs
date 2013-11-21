@@ -26,45 +26,5 @@ namespace SleepyScientist
             : base(x, y, width, height, GameConstants.DEFAULT_DIRECTION) { }
 
         #endregion
-
-        #region Methods
-
-        public override void Draw(SpriteBatch batch, Rectangle? pos = null)
-        {
-            batch.Draw(this.Image, this.RectPosition, Color.Red);
-            // Only draw this much of the _image. Prevents overdraw.
-            RectangleVector drawClip = new RectangleVector(0, 0, Image.Width, Image.Height);
-            // Where to draw the current tile. Include offset.
-            RectangleVector drawDest = new RectangleVector(X, Y, Image.Width, Image.Height);
-
-            for (int xOff = 0; xOff < Width; xOff += Image.Width)
-            {
-                drawDest.X = X + xOff;
-                if (xOff + Image.Width > Width)
-                {
-                    // Prevent overdraw.
-                    drawClip.Width = (int)(Width - xOff);
-                    drawDest.Width = drawClip.Width;
-                }
-
-                for (int yOff = 0; yOff < Height; yOff += Image.Height)
-                {
-                    drawDest.Y = Y + yOff;
-                    if (yOff + Image.Height > Height)
-                    {
-                        // Prevent overdraw.
-                        drawClip.Height = (int)(Height - yOff);
-                        drawDest.Height = drawClip.Height;
-                    }
-                    if (pos != null)
-                        batch.Draw(this.Image, pos.Value, Color.White);
-                    else
-                        batch.Draw(Image, drawDest, drawClip, Color.White);
-                }
-                drawDest.Height = Image.Height;
-            }
-        }
-
-        #endregion
     }
 }

@@ -92,17 +92,19 @@ namespace SleepyScientist
                                             case XmlNodeType.Element:
                                                 switch (reader.Name)
                                                 {
-                                                    case "Ladder":
+                                                    case "Teleporter":
                                                         reader.Read();
                                                         reader.Read();
-                                                        int ladderXcoor = Int32.Parse(reader.Value);
+                                                        int teleporterXcoor = Int32.Parse(reader.Value);
                                                         reader.Read();
                                                         reader.Read();
                                                         reader.Read();
-                                                        int ladderYcoor = Int32.Parse(reader.Value);
-                                                        Ladder ladder = new Ladder(ladderXcoor, ladderYcoor, GameConstants.LADDER_WIDTH, GameConstants.LADDER_HEIGHT + GameConstants.TILE_HEIGHT);
-                                                        ladder.Image = GameConstants.LADDER_TEXTURE;
-                                                        floor.Ladders.Add(ladder);
+                                                        int teleporterYcoor = Int32.Parse(reader.Value);
+                                                        Teleporter teleporter = new Teleporter(teleporterXcoor, teleporterYcoor, GameConstants.TELEPORTER_WIDTH, GameConstants.TELEPORTER_HEIGHT + GameConstants.TILE_HEIGHT);
+                                                        teleporter.Tile = GameConstants.TELEPORTER_TILE_TEXTURE;
+                                                        teleporter.Top = GameConstants.TELEPORTER_TOP_TEXTURE;
+                                                        teleporter.Bottom = GameConstants.TELEPORTER_BOTTOM_TEXTURE;
+                                                        floor.Teleporters.Add(teleporter);
                                                         break;
 
                                                     case "Stairs":
@@ -158,6 +160,19 @@ namespace SleepyScientist
                                                         Door door = new Door(doorXcoor, doorYcoor, GameConstants.DOOR_WIDTH, GameConstants.DOOR_HEIGHT, doorTime);
                                                         door.Image = GameConstants.DOOR_OPEN_TEXTURE;
                                                         room.Door = door;
+                                                        break;
+
+                                                    case "Wall":
+                                                        reader.Read();
+                                                        reader.Read();
+                                                        int wallXcoor = Int32.Parse(reader.Value);
+                                                        reader.Read();
+                                                        reader.Read();
+                                                        reader.Read();
+                                                        int wallYcoor = Int32.Parse(reader.Value);
+                                                        Wall wall = new Wall(wallXcoor, wallYcoor, GameConstants.WALL_WIDTH, GameConstants.WALL_HEIGHT);
+                                                        wall.Image = GameConstants.WALL_TEXTURE;
+                                                        floor.Walls.Add(wall);
                                                         break;
 
                                                     case "Invention":
