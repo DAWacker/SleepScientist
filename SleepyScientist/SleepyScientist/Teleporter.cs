@@ -50,15 +50,29 @@ namespace SleepyScientist
 
         public override void Draw(SpriteBatch batch, Rectangle? pos = null)
         {
-            RectangleVector currentPosition = new RectangleVector(this.X, this.Y, GameConstants.TILE_WIDTH, GameConstants.TILE_HEIGHT);
+            float zoomFactor;           // Calculated zoomFactor based value of pos.
+            Rectangle prevRectPosition; // Contains the previous position of the game object.
+
+            prevRectPosition = this.RectPosition;
+            if (pos != null)
+            {
+                zoomFactor = (float)pos.Value.Width / this.RectPosition.Width;
+                this.RectPosition = pos.Value;    // Temporarily overwrite the position of the pit.
+            }
+            else
+                zoomFactor = 1.0F;
+
+            RectangleVector currentPosition = new RectangleVector(this.X, this.Y, GameConstants.TILE_WIDTH * zoomFactor, GameConstants.TILE_HEIGHT * zoomFactor);
             batch.Draw(this.Top, currentPosition, Color.White);
             for (int i = 0; i < 3; i++)
             {
-                currentPosition.Y += GameConstants.TILE_HEIGHT;
+                currentPosition.Y += GameConstants.TILE_HEIGHT * zoomFactor;
                 batch.Draw(this.Tile, currentPosition, Color.White);
             }
-            currentPosition.Y += GameConstants.TILE_HEIGHT;
+            currentPosition.Y += GameConstants.TILE_HEIGHT * zoomFactor;
             batch.Draw(this.Bottom, currentPosition, Color.White);
+
+            this.RectPosition = prevRectPosition;
         }
 
         #endregion
