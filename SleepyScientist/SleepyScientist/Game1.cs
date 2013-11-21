@@ -393,7 +393,7 @@ namespace SleepyScientist
 
             // Reset all of the drawable objects in the level
             _stairs.Clear();
-            _ladders.Clear();
+            _teleporters.Clear();
             _inventions.Clear();
             _floors.Clear();
             _pits.Clear();
@@ -412,7 +412,7 @@ namespace SleepyScientist
             foreach (Floor floor in this.level.Floors)
             {
                 _floors.Add(floor);
-                _ladders.AddRange(floor.Ladders);
+                _teleporters.AddRange(floor.Teleporters);
                 _stairs.AddRange(floor.Stairs);
                 _pits.AddRange(floor.Pits);
                 _inventions.AddRange(floor.Inventions);
