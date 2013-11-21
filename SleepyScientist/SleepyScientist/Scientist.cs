@@ -189,7 +189,6 @@ namespace SleepyScientist
                                                 this.Jump(true);
                                                 this.CurrentFloor = this.Room.Floors[this.FloorNumber + 1];
                                                 this.CurrentTile = this.Room.Floors[this.FloorNumber + 1];
-                                                this.FloorNumber++;
                                                 i = 10;
                                             }
 
@@ -207,7 +206,6 @@ namespace SleepyScientist
                                                 this.Jump(true);
                                                 this.CurrentFloor = this.Room.Floors[this.FloorNumber + 1];
                                                 this.CurrentTile = this.Room.Floors[this.FloorNumber + 1];
-                                                this.FloorNumber++;
                                                 i = 10;
                                             }
 
@@ -217,6 +215,8 @@ namespace SleepyScientist
                                             this.Skateboard = null;
                                             break;
                                     }
+
+                                    if (i == 10) { this.FloorNumber++; break; }
                                 }
                                 // If the floor above has no stairs, interact with the invention normally
                                 if (this.CurrentState != ScientistState.JackInTheBox) { if (this.Room.Floors[this.FloorNumber + 1].Stairs.Count == 0) { this.InteractWith(invention); } }
