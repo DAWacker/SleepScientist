@@ -36,8 +36,16 @@ namespace SleepyScientist
         private Texture2D _quitButtonTexture;
         private Texture2D _restartButtonTexture;
 
+        private Texture2D _jack_inthe_box_text_texture;
+        private Texture2D _eggbeater_text_texture;
+        private Texture2D _skateboard_text_texture;
+        private Texture2D _jack_inthe_box_menu_texture;
+        private Texture2D _eggbeater_menu_texture;
+        private Texture2D _skateboard_menu_texture;
+
         private Texture2D _pauseOverlayTexture;
         private Texture2D _pauseMenuTemplateTexture;
+        private Texture2D _instMenuTexture;
 
         private Game1 _game;
 
@@ -67,6 +75,14 @@ namespace SleepyScientist
             _effectsOnButtonTexture = Content.Load<Texture2D>("Image/Buttons/effects_on_button");
             _quitButtonTexture = Content.Load<Texture2D>("Image/Buttons/quit_button");
             _restartButtonTexture = Content.Load<Texture2D>("Image/Buttons/restart_button");
+
+            _instMenuTexture = Content.Load<Texture2D>("Image/instructions_background");
+            _jack_inthe_box_text_texture = Content.Load<Texture2D>("Image/jack_inthe_box_text");
+            _eggbeater_text_texture = Content.Load<Texture2D>("Image/eggbeater_text");
+            _skateboard_text_texture = Content.Load<Texture2D>("Image/skateboard_text");
+            _jack_inthe_box_menu_texture = Content.Load<Texture2D>("Image/jack_inthe_box_menu");
+            _eggbeater_menu_texture = Content.Load<Texture2D>("Image/eggbeater_menu");
+            _skateboard_menu_texture = Content.Load<Texture2D>("Image/skateboard_menu");
 
             _generalInstButtonTexture = Content.Load<Texture2D>("Image/Buttons/overview_button");
             _jackInstButtonTexture = Content.Load<Texture2D>("Image/Buttons/jack_inthe_box_button");
@@ -99,23 +115,24 @@ namespace SleepyScientist
 
             // Set up the Pause Menu
             _pauseMenuElements.Add("pauseOverlay", new Button(0, 0, _pauseOverlayTexture.Width, _pauseOverlayTexture.Height, _pauseOverlayTexture));
-            _pauseMenuElements.Add("pauseImage", new Button((_game.screenWidth / 2) - (_pauseMenuTemplateTexture.Width / 2), (_game.screenHeight / 2) - (_pauseMenuTemplateTexture.Height / 2), _pauseMenuTemplateTexture.Width, _pauseMenuTemplateTexture.Height, _pauseMenuTemplateTexture));
-            _pauseMenuElements.Add("quit", new Button((_game.screenWidth / 2) - _quitButtonTexture.Width / 2, (int)(_pauseMenuElements["pauseImage"].Y + _pauseMenuElements["pauseImage"].Height - _quitButtonTexture.Height - 51), _quitButtonTexture.Width, _quitButtonTexture.Height, _quitButtonTexture));
+            _pauseMenuElements.Add("background", new Button((_game.screenWidth / 2) - (_pauseMenuTemplateTexture.Width / 2), (_game.screenHeight / 2) - (_pauseMenuTemplateTexture.Height / 2), _pauseMenuTemplateTexture.Width, _pauseMenuTemplateTexture.Height, _pauseMenuTemplateTexture));
+            _pauseMenuElements.Add("quit", new Button((_game.screenWidth / 2) - _quitButtonTexture.Width / 2, (int)(_pauseMenuElements["background"].Y + _pauseMenuElements["background"].Height - _quitButtonTexture.Height - 51), _quitButtonTexture.Width, _quitButtonTexture.Height, _quitButtonTexture));
             _pauseMenuElements.Add("instructions", new Button((_game.screenWidth / 2) - _instructionsButtonTexture.Width / 2, (int)(_pauseMenuElements["quit"].Y - _instructionsButtonTexture.Height - 18), _instructionsButtonTexture.Width, _instructionsButtonTexture.Height, _instructionsButtonTexture));
             _pauseMenuElements.Add("restart", new Button((_game.screenWidth / 2) - _restartButtonTexture.Width / 2, (int)(_pauseMenuElements["instructions"].Y - _restartButtonTexture.Height - 18), _restartButtonTexture.Width, _restartButtonTexture.Height, _restartButtonTexture));
             _pauseMenuElements.Add("resume", new Button((_game.screenWidth / 2) - _instructionsButtonTexture.Width / 2, (int)(_pauseMenuElements["restart"].Y - _resumeButtonTexture.Height - 18), _resumeButtonTexture.Width, _resumeButtonTexture.Height, _resumeButtonTexture));
-            _pauseMenuElements.Add("music", new Button((int)(_pauseMenuElements["pauseImage"].X + _pauseMenuElements["pauseImage"].Width - _musicOnButtonTexture.Width - 99), (int)(_pauseMenuElements["pauseImage"].Y + _pauseMenuElements["pauseImage"].Height - _musicOnButtonTexture.Height - 187), _musicOnButtonTexture.Width, _musicOnButtonTexture.Height, _musicOnButtonTexture));
-            _pauseMenuElements.Add("effects", new Button((int)(_pauseMenuElements["pauseImage"].X + _pauseMenuElements["pauseImage"].Width - _effectsOnButtonTexture.Width - 99), (int)(_pauseMenuElements["music"].Y - _effectsOnButtonTexture.Height - 22), _effectsOnButtonTexture.Width, _effectsOnButtonTexture.Height, _effectsOnButtonTexture));
+            _pauseMenuElements.Add("music", new Button((int)(_pauseMenuElements["background"].X + _pauseMenuElements["background"].Width - _musicOnButtonTexture.Width - 99), (int)(_pauseMenuElements["background"].Y + _pauseMenuElements["background"].Height - _musicOnButtonTexture.Height - 187), _musicOnButtonTexture.Width, _musicOnButtonTexture.Height, _musicOnButtonTexture));
+            _pauseMenuElements.Add("effects", new Button((int)(_pauseMenuElements["background"].X + _pauseMenuElements["background"].Width - _effectsOnButtonTexture.Width - 99), (int)(_pauseMenuElements["music"].Y - _effectsOnButtonTexture.Height - 22), _effectsOnButtonTexture.Width, _effectsOnButtonTexture.Height, _effectsOnButtonTexture));
 
             // Instructions Full Screen
-            _instructionsButtons.Add("back", new Button((_game.screenWidth / 2), _game.screenHeight / 2, _backButtonTexture.Width, _backButtonTexture.Height, _backButtonTexture));
-            _instructionsButtons.Add("general", new Button(0, 0, _generalInstButtonTexture.Width, _generalInstButtonTexture.Height, _generalInstButtonTexture));
-            _instructionsButtons.Add("jack", new Button(_generalInstButtonTexture.Width, 0, _jackInstButtonTexture.Width, _jackInstButtonTexture.Height, _jackInstButtonTexture));
-            _instructionsButtons.Add("egg", new Button(2 * _generalInstButtonTexture.Width, 0, _eggInstButtonTexture.Width, _eggInstButtonTexture.Height, _eggInstButtonTexture));
-            _instructionsButtons.Add("skateboard", new Button(3 * _generalInstButtonTexture.Width, 0, _skateboardInstButtonTexture.Width, _skateboardInstButtonTexture.Height, _skateboardInstButtonTexture));
-            _instructionsButtons.Add("other", new Button(4 * _generalInstButtonTexture.Width, 0, _otherObjectsInstButtonTexture.Width, _otherObjectsInstButtonTexture.Height, _otherObjectsInstButtonTexture));
-
-            // Instructions Pause
+            _instructionsButtons.Add("background", new Button((_game.screenWidth / 2) - (_instMenuTexture.Width / 2), (_game.screenHeight / 2) - (_instMenuTexture.Height / 2), _instMenuTexture.Width, _instMenuTexture.Height, _instMenuTexture));
+            _instructionsButtons.Add("back", new Button(_game.screenWidth - _backButtonTexture.Width, _game.screenHeight - _backButtonTexture.Height, _backButtonTexture.Width, _backButtonTexture.Height, _backButtonTexture));
+            _instructionsButtons.Add("general", new Button((int)(_instructionsButtons["background"].X + 96), (int)(_instructionsButtons["background"].Y + 170), _generalInstButtonTexture.Width, _generalInstButtonTexture.Height, _generalInstButtonTexture));
+            _instructionsButtons.Add("jack", new Button((int)(_instructionsButtons["general"].X + _instructionsButtons["general"].Width + 18), (int)(_instructionsButtons["general"].Y), _jackInstButtonTexture.Width, _jackInstButtonTexture.Height, _jackInstButtonTexture));
+            _instructionsButtons.Add("egg", new Button((int)(_instructionsButtons["jack"].X + _instructionsButtons["jack"].Width + 18), (int)(_instructionsButtons["general"].Y), _eggInstButtonTexture.Width, _eggInstButtonTexture.Height, _eggInstButtonTexture));
+            _instructionsButtons.Add("skateboard", new Button((int)(_instructionsButtons["egg"].X + _instructionsButtons["egg"].Width + 18), (int)(_instructionsButtons["general"].Y), _skateboardInstButtonTexture.Width, _skateboardInstButtonTexture.Height, _skateboardInstButtonTexture));
+            _instructionsButtons.Add("other", new Button((int)(_instructionsButtons["skateboard"].X + _instructionsButtons["skateboard"].Width + 18), (int)(_instructionsButtons["general"].Y), _otherObjectsInstButtonTexture.Width, _otherObjectsInstButtonTexture.Height, _otherObjectsInstButtonTexture));
+            _instructionsButtons.Add("text", new Button((int)(_instructionsButtons["background"].X + 385), (int)(_instructionsButtons["background"].Y + 270), _jack_inthe_box_text_texture.Width, _jack_inthe_box_text_texture.Height, _jack_inthe_box_text_texture));
+            _instructionsButtons.Add("image", new Button((int)(_instructionsButtons["background"].X + 123), (int)(_instructionsButtons["background"].Y + 260), _jack_inthe_box_menu_texture.Width, _jack_inthe_box_menu_texture.Height, _jack_inthe_box_menu_texture));
         }
 
         public void Update()
@@ -211,7 +228,7 @@ namespace SleepyScientist
                     _game._curMouseState.X > _pauseMenuElements["restart"].X && _game._curMouseState.X < _pauseMenuElements["restart"].X + _pauseMenuElements["restart"].Width &&
                     _game._curMouseState.Y > _pauseMenuElements["restart"].Y && _game._curMouseState.Y < _pauseMenuElements["restart"].Y + _pauseMenuElements["restart"].Height)
                 {
-                    // Restart Level
+                    // Restart Level and close menu
                     _game.SetupLevel(_game._levelNumber);
                     _game.State = STATE.PLAY;
                 }
@@ -227,9 +244,30 @@ namespace SleepyScientist
                 {
                     _game.State = _game.PrevState;
                 }
-
-                MessageLayer.AddMessage(new Message(TextHelper.ConstrainWidth("Hello this is the instructions screen", 150), _game.screenWidth/2, _game.screenHeight/2));
-                //TextHelper.DrawString("Headsadadasdllo", new Microsoft.Xna.Framework.Vector2(0,0));
+                else if (_game._prevMouseState.LeftButton == ButtonState.Pressed &&
+                   _game._curMouseState.LeftButton == ButtonState.Released &&
+                   _game._curMouseState.X > _instructionsButtons["egg"].X && _game._curMouseState.X < _instructionsButtons["egg"].X + _instructionsButtons["egg"].Width &&
+                   _game._curMouseState.Y > _instructionsButtons["egg"].Y && _game._curMouseState.Y < _instructionsButtons["egg"].Y + _instructionsButtons["egg"].Height)
+                {
+                    _instructionsButtons["image"].Image = _eggbeater_menu_texture;
+                    _instructionsButtons["text"].Image = _eggbeater_text_texture;
+                }
+                else if (_game._prevMouseState.LeftButton == ButtonState.Pressed &&
+                   _game._curMouseState.LeftButton == ButtonState.Released &&
+                   _game._curMouseState.X > _instructionsButtons["skateboard"].X && _game._curMouseState.X < _instructionsButtons["skateboard"].X + _instructionsButtons["skateboard"].Width &&
+                   _game._curMouseState.Y > _instructionsButtons["skateboard"].Y && _game._curMouseState.Y < _instructionsButtons["skateboard"].Y + _instructionsButtons["skateboard"].Height)
+                {
+                    _instructionsButtons["image"].Image = _skateboard_menu_texture;
+                    _instructionsButtons["text"].Image = _skateboard_text_texture;
+                }
+                else if (_game._prevMouseState.LeftButton == ButtonState.Pressed &&
+                   _game._curMouseState.LeftButton == ButtonState.Released &&
+                   _game._curMouseState.X > _instructionsButtons["jack"].X && _game._curMouseState.X < _instructionsButtons["jack"].X + _instructionsButtons["jack"].Width &&
+                   _game._curMouseState.Y > _instructionsButtons["jack"].Y && _game._curMouseState.Y < _instructionsButtons["jack"].Y + _instructionsButtons["jack"].Height)
+                {
+                    _instructionsButtons["image"].Image = _jack_inthe_box_menu_texture;
+                    _instructionsButtons["text"].Image = _jack_inthe_box_text_texture;
+                }
             }
             #endregion
         }

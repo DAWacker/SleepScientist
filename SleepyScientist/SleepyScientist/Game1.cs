@@ -28,7 +28,7 @@ namespace SleepyScientist
         {
             get{ return _state; }
             // Save previous value and get new value
-            set{ PrevState = _state; _state = value; }
+            set { PrevState = _state; _state = value; }
         }
         private Menu _menu;
 
