@@ -317,32 +317,17 @@ namespace SleepyScientist
 		                _begin = false;
 		                if (_levelNumber == _totalLevels) { _levelNumber = 1; }
 		                else { _levelNumber++; }
-		                this.Reset();
 
-		                // Load the current level
-		                Room level = LevelLoader.Load(_levelNumber);
-		                this.level = level;
-		                // Create the scientist and set his image
-		                _sleepy = new Scientist("Sleepy", level.StartX, level.StartY, 50, 50, level);
-                        ResetCamera();
-		                this.Load();
+                        this.SetupLevel(this._levelNumber);
 		            }
 
 		            // Check if the user lost
 		            if (_sleepy.Loser)
 		            {
 		                _begin = false;
-		                this.Reset();
+		                //this.Reset();
 
-		                // Load the current level
-		                Room level = LevelLoader.Load(_levelNumber);
-		                this.level = level;
-
-		                //Create the scientist and set his image
-		                // Create the scientist and set his image
-                        _sleepy = new Scientist("Sleepy", level.StartX, level.StartY, 50, 50, level);
-                        ResetCamera();
-		                this.Load();
+		                this.SetupLevel(this._levelNumber);
 		            }
 				}
                 else if (_curMouseState.LeftButton == ButtonState.Released &&
@@ -407,18 +392,6 @@ namespace SleepyScientist
         }
 
         /// <summary>
-        /// Resets all of the drawable objects in the level
-        /// </summary>
-        public void Reset()
-        {
-            _stairs.Clear();
-            _ladders.Clear();
-            _inventions.Clear();
-            _floors.Clear();
-            _pits.Clear();
-        }
-
-        /// <summary>
         /// Resets the camera to view the entire room and target the new scientist.
         /// Should be called at the start of each level.
         /// </summary>
@@ -433,8 +406,27 @@ namespace SleepyScientist
         /// <summary>
         /// Loads all of the drawable objects in the level
         /// </summary>
-        public void Load()
+        public void SetupLevel(int levelNum)
         {
+            // Stop updating
+            _begin = false;
+
+            // Reset all of the drawable objects in the level
+            _stairs.Clear();
+            _ladders.Clear();
+            _inventions.Clear();
+            _floors.Clear();
+            _pits.Clear();
+
+            // Load the current level
+            Room level = LevelLoader.Load(_levelNumber);
+            this.level = level;
+
+            //Create the scientist and set his image
+            // Create the scientist and set his image
+            _sleepy = new Scientist("Sleepy", level.StartX, level.StartY, 50, 50, level);
+            ResetCamera();
+
             // Store all the GameObjects.
             // This should be inside of the Level Class when we get to it.
             foreach (Floor floor in this.level.Floors)

@@ -212,8 +212,7 @@ namespace SleepyScientist
                     _game._curMouseState.Y > _pauseMenuElements["restart"].Y && _game._curMouseState.Y < _pauseMenuElements["restart"].Y + _pauseMenuElements["restart"].Height)
                 {
                     // Restart Level
-                    //_game.Load();
-                    //_game._sleepy.Loser = true;
+                    _game.SetupLevel(_game._levelNumber);
                     _game.State = STATE.PLAY;
                 }
             }
