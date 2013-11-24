@@ -254,7 +254,13 @@ namespace SleepyScientist
                     // Update Game Time.
 		            if (GameConstants.MOVING_INVENTION) { Time.Update((float)gameTime.ElapsedGameTime.TotalSeconds / 2); }
 		            else { Time.Update((float)gameTime.ElapsedGameTime.TotalSeconds); }
-					
+
+
+                    if (_curKeyboardState.IsKeyDown(Keys.Right))
+                        Time.DeltaTime *= GameConstants.TIME_FAST_FORWARD;
+                    if ( GameConstants.DEBUG && _curKeyboardState.IsKeyDown(Keys.Left))
+                        Time.DeltaTime *= -1;
+
 		            foreach (Invention invention in _inventions)
 		            {
 		                invention.Update();

@@ -15,8 +15,14 @@ namespace SleepyScientist
     {
         #region Attributes
 
+        // Debugging
+        public static bool DEBUG = false;
+
         // Euler integration constants
         public static float EULER_SCALE = 50f;
+
+        // Time
+        public static float TIME_FAST_FORWARD = 3F;
 
         // Screen dimensions
         public static int SCREEN_WIDTH = 1280;
