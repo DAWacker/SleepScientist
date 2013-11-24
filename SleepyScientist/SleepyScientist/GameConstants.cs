@@ -119,8 +119,8 @@ namespace SleepyScientist
         public static float MINIMUM_ZOOM = 1F;
         public static float ZOOM_STEP = 0.1F;
         public static float ZOOM_ROOM_VIEW = 1F;
-        public static float ZOOM_INVENTION_VIEW = 1.5F;
-        public static float CAMERA_X_VELO = 5.0F;
+        public static float ZOOM_INVENTION_VIEW = 1.75F;
+        public static float CAMERA_X_VELO = 9.0F;
         public static float SCROLL_BOUND_LEFT = 0.1F;
         public static float SCROLL_BOUND_RIGHT = 1 - SCROLL_BOUND_LEFT;
 

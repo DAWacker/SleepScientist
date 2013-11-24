@@ -65,8 +65,8 @@ namespace SleepyScientist
             else
                 _zoomFactor = GameConstants.MINIMUM_ZOOM;
 
-            _cameraView.Width = GameConstants.SCREEN_WIDTH;
-            _cameraView.Height = GameConstants.SCREEN_HEIGHT;
+            _cameraView.Width = (int)(GameConstants.SCREEN_WIDTH / _zoomFactor);
+            _cameraView.Height = (int)(GameConstants.SCREEN_HEIGHT / _zoomFactor);
             _cameraView.X = 0;
             _cameraView.Y = 0;
             FixOffset();
@@ -81,6 +81,9 @@ namespace SleepyScientist
             _zoomFactor += zoomFactorMod;
             if (_zoomFactor < GameConstants.MINIMUM_ZOOM)
                 _zoomFactor = GameConstants.MINIMUM_ZOOM;
+
+            _cameraView.Width = (int)(GameConstants.SCREEN_WIDTH / _zoomFactor);
+            _cameraView.Height = (int)(GameConstants.SCREEN_HEIGHT / _zoomFactor);
             FixOffset();
         }
 
@@ -109,8 +112,8 @@ namespace SleepyScientist
             x = (int)(x * _zoomFactor);
             y = (int)(y * _zoomFactor);
             // Update camera coords.
-            _cameraView.X = (int)(x - _cameraView.Width / 2);
-            _cameraView.Y = (int)(y - _cameraView.Height / 2);
+            _cameraView.X = (int)(x - GameConstants.SCREEN_WIDTH / 2);
+            _cameraView.Y = (int)(y - GameConstants.SCREEN_HEIGHT / 2);
             FixOffset();
         }
 
@@ -141,14 +144,14 @@ namespace SleepyScientist
             // Fix x if needed.
             if (_cameraView.X < 0)
                 _cameraView.X = 0;
-            else if (_cameraView.X + _cameraView.Width > GameConstants.SCREEN_WIDTH * _zoomFactor)
-                _cameraView.X = (int)(GameConstants.SCREEN_WIDTH * _zoomFactor - _cameraView.Width);
+            else if (_cameraView.X + GameConstants.SCREEN_WIDTH > GameConstants.SCREEN_WIDTH * _zoomFactor)
+                _cameraView.X = (int)(GameConstants.SCREEN_WIDTH * _zoomFactor - GameConstants.SCREEN_WIDTH);
 
             // Fix y if needed.
             if (_cameraView.Y < 0)
                 _cameraView.Y = 0;
-            else if (_cameraView.Y + _cameraView.Height > GameConstants.SCREEN_HEIGHT * _zoomFactor)
-                _cameraView.Y = (int)(GameConstants.SCREEN_HEIGHT * _zoomFactor - _cameraView.Height);
+            else if (_cameraView.Y + GameConstants.SCREEN_HEIGHT > GameConstants.SCREEN_HEIGHT * _zoomFactor)
+                _cameraView.Y = (int)(GameConstants.SCREEN_HEIGHT * _zoomFactor - GameConstants.SCREEN_HEIGHT);
         }
 
         /// <summary>
@@ -184,8 +187,15 @@ namespace SleepyScientist
         {
             if (_followTarget != null && _shouldFollowTarget)
             {
-                ZoomToLocation( _followTarget.X, _followTarget.Y );
-                CenterCameraOn( _followTarget.X, _followTarget.Y );
+                Vector2 coord = new Vector2(_followTarget.X, _followTarget.Y);
+                // Zoom into target.
+                ZoomToLocation(coord.X, coord.Y);
+                // Center x of target.
+                coord.X = _followTarget.X + _followTarget.Width / 2;
+                // Center y to a point above target where the floor will be drawn along the bottom of the screen.
+                coord.Y += _followTarget.Height + GameConstants.FLOOR_HEIGHT - _cameraView.Height / 2;
+                // Center the camera on the newly offset point.
+                CenterCameraOn(coord.X, coord.Y);
             }
             else
             {
