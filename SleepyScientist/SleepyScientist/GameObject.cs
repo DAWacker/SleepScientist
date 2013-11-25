@@ -36,7 +36,7 @@ namespace SleepyScientist
         public RectangleVector RectPosition { get { return _rectPosition; } set { _rectPosition = value; } }
         
         // Get or set the image of the game object
-        public Texture2D Image {
+        public virtual Texture2D Image {
             get {
                 if (_animations != null)
                     return _animations.CurAnimation.CurrentImage();

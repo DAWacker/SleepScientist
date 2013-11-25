@@ -13,6 +13,24 @@ namespace SleepyScientist
 {
     class Button : GameObject
     {
+        #region Properties
+
+        /// <summary>
+        /// Overrided to prevent draw scaling.
+        /// </summary>
+        public override Texture2D Image
+        {
+            get { return base.Image; }
+            set
+            {
+                base.Image = value;
+                this.Width = value.Width;
+                this.Height = value.Height;
+            }
+        }
+
+        #endregion
+
         public Button(int x, int y, int width, int height, Texture2D image)
             : base(x, y, width, height, image)
         {
