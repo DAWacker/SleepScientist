@@ -219,14 +219,17 @@ namespace SleepyScientist
 
                 for (int i = 0; i < _levelNumButtons.Count; i++)
                 {
-                    if (_game._prevMouseState.LeftButton == ButtonState.Pressed &&
-                        _game._curMouseState.LeftButton == ButtonState.Released &&
-                        _game._curMouseState.X > _levelSelectMenuButtons["level" + (i + 1)].X && _game._curMouseState.X < _levelSelectMenuButtons["level" + (i + 1)].X + _levelSelectMenuButtons["level" + (i + 1)].Width &&
-                        _game._curMouseState.Y > _levelSelectMenuButtons["level" + (i + 1)].Y && _game._curMouseState.Y < _levelSelectMenuButtons["level" + (i + 1)].Y + _levelSelectMenuButtons["level" + (i + 1)].Height)
+                    if (i < _game._totalLevels)
                     {
-                        _game._levelNumber = i + 1;
-                        _game.SetupLevel(_game._levelNumber);
-                        _game.State = STATE.PLAY;
+                        if (_game._prevMouseState.LeftButton == ButtonState.Pressed &&
+                            _game._curMouseState.LeftButton == ButtonState.Released &&
+                            _game._curMouseState.X > _levelSelectMenuButtons["level" + (i + 1)].X && _game._curMouseState.X < _levelSelectMenuButtons["level" + (i + 1)].X + _levelSelectMenuButtons["level" + (i + 1)].Width &&
+                            _game._curMouseState.Y > _levelSelectMenuButtons["level" + (i + 1)].Y && _game._curMouseState.Y < _levelSelectMenuButtons["level" + (i + 1)].Y + _levelSelectMenuButtons["level" + (i + 1)].Height)
+                        {
+                            _game._levelNumber = i + 1;
+                            _game.SetupLevel(_game._levelNumber);
+                            _game.State = STATE.PLAY;
+                        }
                     }
                 }
             }

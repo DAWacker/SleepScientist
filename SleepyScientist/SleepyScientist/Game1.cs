@@ -68,7 +68,7 @@ namespace SleepyScientist
         // Test
         private bool _begin = false;
         public int _levelNumber = 1;
-        private int _totalLevels = 7;
+        public int _totalLevels = 7;
         private Room level = null;
 
         #endregion
