@@ -16,9 +16,10 @@ namespace SleepyScientist
         private Dictionary<string, Button> _gameOverButtons;
 
         // Menu textures
+        private List<Texture2D> _levelNumButtons;
+
         private Texture2D _mainMenuButtonTexture;
         private Texture2D _newGameButtonTexture;
-        private Texture2D _levelNumButtonTexture;
         private Texture2D _levelSelectButtonTexture;
 
         private Texture2D _instructionsButtonTexture;
@@ -49,6 +50,7 @@ namespace SleepyScientist
         private Texture2D _instMenuTexture;
         private Texture2D _gameOverTexture;
         private Texture2D _mainMenuTexture;
+        private Texture2D _levelSelectTexture;
 
         private Game1 _game;
 
@@ -62,13 +64,14 @@ namespace SleepyScientist
             _instructionsButtons = new Dictionary<string, Button>();
             _gameOverButtons = new Dictionary<string, Button>();
             _game = game;
+
+            _levelNumButtons = new List<Texture2D>();
         }
 
         public void LoadContent(ContentManager Content)
         {
             _mainMenuButtonTexture = Content.Load<Texture2D>("Image/Buttons/main_menu_button");
             _newGameButtonTexture = Content.Load<Texture2D>("Image/Buttons/new_game_button");
-            _levelNumButtonTexture = Content.Load<Texture2D>("Image/Buttons/level_num_button");
             _levelSelectButtonTexture = Content.Load<Texture2D>("Image/Buttons/level_select_button");
             _instructionsButtonTexture = Content.Load<Texture2D>("Image/Buttons/instructions_button");
             _resumeButtonTexture = Content.Load<Texture2D>("Image/Buttons/resume_button");
@@ -98,6 +101,12 @@ namespace SleepyScientist
             _instMenuTexture = Content.Load<Texture2D>("Image/instructions_background");
             _gameOverTexture = Content.Load<Texture2D>("Image/game_over_background");
             _mainMenuTexture = Content.Load<Texture2D>("Image/main_menu_background");
+            _levelSelectTexture = Content.Load<Texture2D>("Image/level_select_background");
+
+            for (int i = 0; i < 30; i++) // total levels
+            {
+                _levelNumButtons.Add(Content.Load<Texture2D>("Image/Buttons/LevelNums/" + (i + 1) ));
+            }
 
             // Set up Main Menu
             _mainMenuButtons.Add("background", new Button((_game.screenWidth / 2) - (_gameOverTexture.Width / 2), (_game.screenHeight / 2) - (_gameOverTexture.Height / 2), _mainMenuTexture.Width, _mainMenuTexture.Height, _mainMenuTexture));
@@ -108,17 +117,19 @@ namespace SleepyScientist
             // Add Image... 
 
             // Set up Level Select Menu
-            int lvlNum = 0;
-            for (int j = 0; j < 3; j++)
+            int lvlNum = 29;
+            int heightModifier = 1;
+            _levelSelectMenuButtons.Add("background", new Button((_game.screenWidth / 2) - (_gameOverTexture.Width / 2), (_game.screenHeight / 2) - (_levelSelectTexture.Height / 2), _levelSelectTexture.Width, _levelSelectTexture.Height, _levelSelectTexture));
+            for (int j = 3; j > 0; j--)
             {
-                for (int k = 0; k < 3; k++)
+                for (int k = 10; k > 0; k--)
                 {
-                    _levelSelectMenuButtons.Add("levelNum" + lvlNum, new Button(_levelSelectButtonTexture.Width * j, _levelNumButtonTexture.Height * k, _levelNumButtonTexture.Width, _levelNumButtonTexture.Height, _levelNumButtonTexture));
-                    lvlNum++;
+                    _levelSelectMenuButtons.Add("level" + (lvlNum + 1), new Button((int)(_levelSelectMenuButtons["background"].X + _levelNumButtons[lvlNum].Width*(k-1) + (27 * (k-1)) + 137), (int)(_levelSelectMenuButtons["background"].Y + _levelSelectMenuButtons["background"].Height - _levelNumButtons[lvlNum].Height * heightModifier - 75 - (50 * heightModifier)), _levelNumButtons[lvlNum].Width, _levelNumButtons[lvlNum].Height, _levelNumButtons[lvlNum]));
+                    lvlNum--;
                 }
-
+                heightModifier++;
             }
-            _levelSelectMenuButtons.Add("mainMenu", new Button((_game.screenWidth / 2), _game.screenHeight / 2 + _mainMenuButtonTexture.Height, _mainMenuButtonTexture.Width, _mainMenuButtonTexture.Height, _mainMenuButtonTexture));
+            _levelSelectMenuButtons.Add("mainMenu", new Button((int)(_levelSelectMenuButtons["background"].X + (_levelSelectMenuButtons["background"].Width / 2) - (_mainMenuButtonTexture.Width / 2)), (int)(_levelSelectMenuButtons["background"].Y + _levelSelectMenuButtons["background"].Height - _mainMenuButtonTexture.Height - 10), _mainMenuButtonTexture.Width, _mainMenuButtonTexture.Height, _mainMenuButtonTexture));
 
             // Set up the Pause Menu
             _pauseMenuElements.Add("pauseOverlay", new Button(0, 0, _pauseOverlayTexture.Width, _pauseOverlayTexture.Height, _pauseOverlayTexture));
@@ -165,6 +176,8 @@ namespace SleepyScientist
                     _game._curMouseState.X > _mainMenuButtons["newGame"].X && _game._curMouseState.X < _mainMenuButtons["newGame"].X + _mainMenuButtons["newGame"].Width &&
                     _game._curMouseState.Y > _mainMenuButtons["newGame"].Y && _game._curMouseState.Y < _mainMenuButtons["newGame"].Y + _mainMenuButtons["newGame"].Height)
                 {
+                    _game._levelNumber = 1;
+                    _game.SetupLevel(_game._levelNumber);
                     _game.State = STATE.PLAY;
                 }
                 else if (_game._prevMouseState.LeftButton == ButtonState.Pressed &&
@@ -202,6 +215,19 @@ namespace SleepyScientist
                     _game._curMouseState.Y > _levelSelectMenuButtons["mainMenu"].Y && _game._curMouseState.Y < _levelSelectMenuButtons["mainMenu"].Y + _levelSelectMenuButtons["mainMenu"].Height)
                 {
                     _game.State = STATE.MAIN_MENU;
+                }
+
+                for (int i = 0; i < _levelNumButtons.Count; i++)
+                {
+                    if (_game._prevMouseState.LeftButton == ButtonState.Pressed &&
+                        _game._curMouseState.LeftButton == ButtonState.Released &&
+                        _game._curMouseState.X > _levelSelectMenuButtons["level" + (i + 1)].X && _game._curMouseState.X < _levelSelectMenuButtons["level" + (i + 1)].X + _levelSelectMenuButtons["level" + (i + 1)].Width &&
+                        _game._curMouseState.Y > _levelSelectMenuButtons["level" + (i + 1)].Y && _game._curMouseState.Y < _levelSelectMenuButtons["level" + (i + 1)].Y + _levelSelectMenuButtons["level" + (i + 1)].Height)
+                    {
+                        _game._levelNumber = i + 1;
+                        _game.SetupLevel(_game._levelNumber);
+                        _game.State = STATE.PLAY;
+                    }
                 }
             }
             #endregion

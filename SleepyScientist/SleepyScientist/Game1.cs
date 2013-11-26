@@ -52,23 +52,6 @@ namespace SleepyScientist
         private List<Pit> _pits;
         private List<Invention> _inventions;
 
-        // Textures
-        private Texture2D _stairsTexture;
-        private Texture2D _ladderTexture;
-        private Texture2D _floorTexture;
-        private Texture2D _rocketSkateboardTexture;
-        private Texture2D _eggBeaterTexture;
-        private Texture2D _jackintheboxTexture;
-        private Texture2D _bedTexture;
-        private Texture2D _wallTexture;
-        private Texture2D _railingTexture;
-        private Texture2D _pitLaserLeft;
-        private Texture2D _pitLaserRight;
-        private Texture2D _pitLaserTile;
-        private Texture2D _pitTerminal;
-        private Texture2D _doorOpenTexture;
-        private Texture2D _doorClosedTexture;
-
         // Mouse Input
         public MouseState _prevMouseState;
         public MouseState _curMouseState;
