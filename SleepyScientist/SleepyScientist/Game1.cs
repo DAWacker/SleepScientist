@@ -67,11 +67,13 @@ namespace SleepyScientist
 
         // Test
         private bool _begin = false;
-        public int _levelNumber = 1;
+        public int _levelNumber = 4;
         public int _totalLevels = 7;
         private Room level = null;
 
         #endregion
+
+        public int StartLevel { get { return _levelNumber; } }
 
         public Game1()
             : base()
@@ -160,6 +162,7 @@ namespace SleepyScientist
             GameConstants.DOOR_CLOSED_TEXTURE = this.Content.Load<Texture2D>("Image/door_closed");
             GameConstants.BACKGROUND_TEXTURE = this.Content.Load<Texture2D>("Image/wall_tile");
             GameConstants.WALL_TEXTURE = this.Content.Load<Texture2D>("Image/floor");
+            GameConstants.BLANK = this.Content.Load<Texture2D>("Image/blank");
 
             Room level = LevelLoader.Load(_levelNumber);
 
@@ -204,6 +207,14 @@ namespace SleepyScientist
             _prevKeyboardState = _curKeyboardState;
             _curKeyboardState = Keyboard.GetState();
 
+            foreach (Invention invention in _inventions)
+            {
+                Rectangle convertedInventionPos = _camera.ToLocal(invention.SelectionBox);
+
+                if (convertedInventionPos.Contains(new Point(_curMouseState.X, _curMouseState.Y))) { invention.Hovered = true; }
+                else { invention.Hovered = false; }
+            }
+
             #region Play
             if (_state == STATE.PLAY)
             {
@@ -247,8 +258,11 @@ namespace SleepyScientist
 		            foreach (Invention invention in _inventions)
 		            {
 		                invention.Update();
-		                Rectangle convertedInventionPos = _camera.ToLocal(invention.RectPosition);
-					
+		                Rectangle convertedInventionPos = _camera.ToLocal(invention.SelectionBox);
+
+                        if (convertedInventionPos.Contains(new Point(_curMouseState.X, _curMouseState.Y))) { invention.Hovered = true; }
+                        else { invention.Hovered = false; }
+
 		                if (_prevMouseState.LeftButton == ButtonState.Pressed && 
 		                _curMouseState.LeftButton == ButtonState.Released &&
 		                convertedInventionPos.Contains(new Point(_curMouseState.X, _curMouseState.Y)))

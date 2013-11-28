@@ -176,7 +176,7 @@ namespace SleepyScientist
                     _game._curMouseState.X > _mainMenuButtons["newGame"].X && _game._curMouseState.X < _mainMenuButtons["newGame"].X + _mainMenuButtons["newGame"].Width &&
                     _game._curMouseState.Y > _mainMenuButtons["newGame"].Y && _game._curMouseState.Y < _mainMenuButtons["newGame"].Y + _mainMenuButtons["newGame"].Height)
                 {
-                    _game._levelNumber = 1;
+                    _game._levelNumber = _game.StartLevel;
                     _game.SetupLevel(_game._levelNumber);
                     _game.State = STATE.PLAY;
                 }

@@ -1,10 +1,14 @@
-﻿// Author: Thomas Bentley
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Storage;
+using Microsoft.Xna.Framework.GamerServices;
 
 namespace SleepyScientist
 {
@@ -37,6 +41,9 @@ namespace SleepyScientist
         private int _curFloorNum;
 
         private List<GameObject> _path;
+
+        private bool _hovered;
+        private RectangleVector _selectionBox;
 
         #endregion
 
@@ -92,6 +99,12 @@ namespace SleepyScientist
         // Get or set the current floor the invention is on
         public Floor CurrentFloor { get { return _curFloor; } set { _curFloor = value; } }
 
+        // Get or set the selection box of the invention
+        public RectangleVector SelectionBox { get { return _selectionBox; } set { _selectionBox = value; } }
+
+        // Get or set if the invention has the mouse hovering over it
+        public bool Hovered { get { return _hovered; } set { _hovered = value; } }
+
         // Get or set the path of the invention
         public List<GameObject> Path { get { return _path; } set { _path = value; } }
 
@@ -118,11 +131,18 @@ namespace SleepyScientist
             this.StairsHit = 0;
             this.StairsNeeded = 0;
             this.Activated = false;
+            this.Hovered = false;
             this.Room = room;
             this.CurrentFloor = room.Floors[startFloor-1];
             this.CurrentTile = room.Floors[startFloor-1];
             this.FloorNumber = startFloor - 1;
             this.Path = new List<GameObject>();
+
+            float selectionWidth = 50 * ((width / 50) + 1);
+            float offsetX = (selectionWidth - width) / 2;
+            float selectionHeight = 50 * ((height / 50) + 1);
+            float offsetY = (selectionHeight - height) / 2;
+            this.SelectionBox = new RectangleVector(x - offsetX, y - offsetY, selectionWidth, selectionHeight);
         }
 
         #endregion
@@ -551,6 +571,22 @@ namespace SleepyScientist
             this.LaddersNeeded = 0;
             this.StairsHit = 0;
             this.StairsNeeded = 0;
+        }
+
+        public override void Draw(SpriteBatch batch, Rectangle? pos = null)
+        {
+            if (pos != null)
+            {
+                RectangleVector selectionPos = pos.Value;
+                float selectionWidth = 75 * ((selectionPos.Width / 100) + 1);
+                float offsetX = (selectionWidth - selectionPos.Width) / 2;
+                float selectionHeight = 75 * ((selectionPos.Height / 100) + 1);
+                float offsetY = (selectionHeight - selectionPos.Height) / 2;
+                selectionPos = new RectangleVector(pos.Value.X - offsetX, pos.Value.Y - offsetY, selectionWidth, selectionHeight);
+                if (this.Hovered) { batch.Draw(GameConstants.BLANK, selectionPos, Color.Red); }
+            }
+            else if (this.Hovered) { batch.Draw(GameConstants.BLANK, this.SelectionBox, Color.Red); }
+            base.Draw(batch, pos);
         }
 
         /// <summary>
