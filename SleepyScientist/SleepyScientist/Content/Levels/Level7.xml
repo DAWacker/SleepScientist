@@ -30,11 +30,11 @@
     </Door>
     <Invention>
       <Name>JackInTheBox</Name>
-      <X>500</X>
+      <X>525</X>
       <Y>350</Y>
     </Invention>
     <Wall>
-      <X>450</X>
+      <X>500</X>
       <Y>200</Y>
     </Wall>
     <Stairs>
@@ -43,7 +43,7 @@
       <Direction>1</Direction>
     </Stairs>
     <Stairs>
-      <X>300</X>
+      <X>250</X>
       <Y>350</Y>
       <Direction>1</Direction>
     </Stairs>
