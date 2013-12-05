@@ -157,7 +157,7 @@ namespace SleepyScientist
                 {
                     // Check if the scientist is colliding with an invention
                     if (this.RectPosition.Intersects(invention.RectPosition)
-                        && !invention.Activated && !invention.HasTarget && !invention.Clicked)
+                        && !invention.Activated && !invention.HasTarget )
                     {
                         // Check if the scientist isn't on a skateboard yet
                         if (invention.GetType() == typeof(RocketSkateboard) && this.Skateboard == null)
