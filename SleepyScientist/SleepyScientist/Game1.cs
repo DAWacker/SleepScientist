@@ -380,6 +380,9 @@ namespace SleepyScientist
             // Stop updating
             _begin = false;
 
+            // Stop moving invention if we are.
+            GameConstants.MOVING_INVENTION = false;
+
             // Reset all of the drawable objects in the level
             _stairs.Clear();
             _teleporters.Clear();
