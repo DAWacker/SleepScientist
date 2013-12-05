@@ -475,6 +475,22 @@ namespace SleepyScientist
             int ladders = 0;
             int stairs = 0;
             List<GameObject> path = new List<GameObject>();
+            bool isPathPossible = true;
+
+            // Check if ladders are needed but don't exist.
+            if (this.LaddersNeeded > 0 && this.Room.Floors[this.FloorNumber].Teleporters.Count == 0)
+            {
+                isPathPossible = false;
+            }
+
+            // Check if stairs are needed but don't exist.
+            if (this.StairsNeeded > 0 && this.Room.Floors[this.FloorNumber + 1].Stairs.Count == 0)
+            {
+                isPathPossible = false;
+            }
+
+            // Exit the function if there isn't a path to target.
+            if (isPathPossible == false) { this.HasTarget = false; return; }
 
             // Loop until a path has been found
             while (!foundPath)
