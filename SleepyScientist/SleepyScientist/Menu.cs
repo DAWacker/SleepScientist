@@ -52,6 +52,19 @@ namespace SleepyScientist
         private Texture2D _mainMenuTexture;
         private Texture2D _levelSelectTexture;
 
+        /// <summary>
+        /// How much the button depressed when clicked
+        /// </summary>
+        private const int BUTTON_CLICK_FACTOR = 3;
+        /// <summary>
+        /// True if button is currently depressed
+        /// </summary>
+        private bool buttonDepressed = false;
+        /// <summary>
+        /// The button that is currently depressed
+        /// </summary>
+        private Button depressedButton;
+
         private Game1 _game;
 
         #endregion
@@ -171,6 +184,34 @@ namespace SleepyScientist
             #region Main Menu
             if (_game.State == STATE.MAIN_MENU)
             {
+                #region Button Click
+                if (_game._prevMouseState.LeftButton == ButtonState.Pressed &&
+                   _game._curMouseState.X > _mainMenuButtons["newGame"].X && _game._curMouseState.X < _mainMenuButtons["newGame"].X + _mainMenuButtons["newGame"].Width &&
+                   _game._curMouseState.Y > _mainMenuButtons["newGame"].Y && _game._curMouseState.Y < _mainMenuButtons["newGame"].Y + _mainMenuButtons["newGame"].Height)
+                {
+                    ButtonDepress(_mainMenuButtons["newGame"]);
+                }
+                else if (_game._prevMouseState.LeftButton == ButtonState.Pressed &&
+                    _game._curMouseState.X > _mainMenuButtons["levelSelect"].X && _game._curMouseState.X < _mainMenuButtons["levelSelect"].X + _mainMenuButtons["levelSelect"].Width &&
+                    _game._curMouseState.Y > _mainMenuButtons["levelSelect"].Y && _game._curMouseState.Y < _mainMenuButtons["levelSelect"].Y + _mainMenuButtons["levelSelect"].Height)
+                {
+                    ButtonDepress(_mainMenuButtons["levelSelect"]);
+                }
+                else if (_game._prevMouseState.LeftButton == ButtonState.Pressed &&
+                    _game._curMouseState.X > _mainMenuButtons["instructions"].X && _game._curMouseState.X < _mainMenuButtons["instructions"].X + _mainMenuButtons["instructions"].Width &&
+                    _game._curMouseState.Y > _mainMenuButtons["instructions"].Y && _game._curMouseState.Y < _mainMenuButtons["instructions"].Y + _mainMenuButtons["instructions"].Height)
+                {
+                    ButtonDepress(_mainMenuButtons["instructions"]);
+                }
+                else if (_game._prevMouseState.LeftButton == ButtonState.Pressed &&
+                    _game._curMouseState.X > _mainMenuButtons["quit"].X && _game._curMouseState.X < _mainMenuButtons["quit"].X + _mainMenuButtons["quit"].Width &&
+                    _game._curMouseState.Y > _mainMenuButtons["quit"].Y && _game._curMouseState.Y < _mainMenuButtons["quit"].Y + _mainMenuButtons["quit"].Height)
+                {
+                    ButtonDepress(_mainMenuButtons["quit"]);
+                }
+            #endregion
+
+                #region Button release
                 if (_game._prevMouseState.LeftButton == ButtonState.Pressed &&
                     _game._curMouseState.LeftButton == ButtonState.Released &&
                     _game._curMouseState.X > _mainMenuButtons["newGame"].X && _game._curMouseState.X < _mainMenuButtons["newGame"].X + _mainMenuButtons["newGame"].Width &&
@@ -197,18 +238,41 @@ namespace SleepyScientist
                     _game.State = STATE.INSTRUCTIONS;
                 }
                 else if (_game._prevMouseState.LeftButton == ButtonState.Pressed &&
-                  _game._curMouseState.LeftButton == ButtonState.Released &&
-                  _game._curMouseState.X > _mainMenuButtons["quit"].X && _game._curMouseState.X < _mainMenuButtons["quit"].X + _mainMenuButtons["quit"].Width &&
-                  _game._curMouseState.Y > _mainMenuButtons["quit"].Y && _game._curMouseState.Y < _mainMenuButtons["quit"].Y + _mainMenuButtons["quit"].Height)
+                    _game._curMouseState.LeftButton == ButtonState.Released &&
+                    _game._curMouseState.X > _mainMenuButtons["quit"].X && _game._curMouseState.X < _mainMenuButtons["quit"].X + _mainMenuButtons["quit"].Width &&
+                    _game._curMouseState.Y > _mainMenuButtons["quit"].Y && _game._curMouseState.Y < _mainMenuButtons["quit"].Y + _mainMenuButtons["quit"].Height)
                 {
                     // Quit
                     _game.Exit();
                 }
+                #endregion
             }
             #endregion
             #region Level Select
             else if (_game.State == STATE.LEVEL_SELECT)
             {
+                #region Button Click
+                if (_game._prevMouseState.LeftButton == ButtonState.Pressed &&
+                   _game._curMouseState.X > _levelSelectMenuButtons["mainMenu"].X && _game._curMouseState.X < _levelSelectMenuButtons["mainMenu"].X + _levelSelectMenuButtons["mainMenu"].Width &&
+                   _game._curMouseState.Y > _levelSelectMenuButtons["mainMenu"].Y && _game._curMouseState.Y < _levelSelectMenuButtons["mainMenu"].Y + _levelSelectMenuButtons["mainMenu"].Height)
+                {
+                    ButtonDepress(_levelSelectMenuButtons["mainMenu"]);
+                }
+                for (int i = 0; i < _levelNumButtons.Count; i++)
+                {
+                    if (i < _game._totalLevels)
+                    {
+                        if (_game._prevMouseState.LeftButton == ButtonState.Pressed &&
+                            _game._curMouseState.X > _levelSelectMenuButtons["level" + (i + 1)].X && _game._curMouseState.X < _levelSelectMenuButtons["level" + (i + 1)].X + _levelSelectMenuButtons["level" + (i + 1)].Width &&
+                            _game._curMouseState.Y > _levelSelectMenuButtons["level" + (i + 1)].Y && _game._curMouseState.Y < _levelSelectMenuButtons["level" + (i + 1)].Y + _levelSelectMenuButtons["level" + (i + 1)].Height)
+                        {
+                            ButtonDepress(_levelSelectMenuButtons["level" + (i + 1)]);
+                        }
+                    }
+                }
+                #endregion
+
+                #region Button Release
                 if (_game._prevMouseState.LeftButton == ButtonState.Pressed &&
                     _game._curMouseState.LeftButton == ButtonState.Released &&
                     _game._curMouseState.X > _levelSelectMenuButtons["mainMenu"].X && _game._curMouseState.X < _levelSelectMenuButtons["mainMenu"].X + _levelSelectMenuButtons["mainMenu"].Width &&
@@ -232,11 +296,52 @@ namespace SleepyScientist
                         }
                     }
                 }
+                #endregion
             }
             #endregion
             #region Pause
             else if (_game.State == STATE.PAUSE)
             {
+                #region Button Click
+                if (_game._prevMouseState.LeftButton == ButtonState.Pressed &&
+                   _game._curMouseState.X > _pauseMenuElements["instructions"].X && _game._curMouseState.X < _pauseMenuElements["instructions"].X + _pauseMenuElements["instructions"].Width &&
+                   _game._curMouseState.Y > _pauseMenuElements["instructions"].Y && _game._curMouseState.Y < _pauseMenuElements["instructions"].Y + _pauseMenuElements["instructions"].Height)
+                {
+                    ButtonDepress(_pauseMenuElements["instructions"]);
+                }
+                else if (_game._prevMouseState.LeftButton == ButtonState.Pressed &&
+                   _game._curMouseState.X > _pauseMenuElements["resume"].X && _game._curMouseState.X < _pauseMenuElements["resume"].X + _pauseMenuElements["resume"].Width &&
+                   _game._curMouseState.Y > _pauseMenuElements["resume"].Y && _game._curMouseState.Y < _pauseMenuElements["resume"].Y + _pauseMenuElements["resume"].Height)
+                {
+                    ButtonDepress(_pauseMenuElements["resume"]);
+                }
+                else if (_game._prevMouseState.LeftButton == ButtonState.Pressed &&
+                   _game._curMouseState.X > _pauseMenuElements["music"].X && _game._curMouseState.X < _pauseMenuElements["music"].X + _pauseMenuElements["music"].Width &&
+                   _game._curMouseState.Y > _pauseMenuElements["music"].Y && _game._curMouseState.Y < _pauseMenuElements["music"].Y + _pauseMenuElements["music"].Height)
+                {
+                    ButtonDepress(_pauseMenuElements["music"]);
+                }
+                else if (_game._prevMouseState.LeftButton == ButtonState.Pressed &&
+                   _game._curMouseState.X > _pauseMenuElements["effects"].X && _game._curMouseState.X < _pauseMenuElements["effects"].X + _pauseMenuElements["effects"].Width &&
+                   _game._curMouseState.Y > _pauseMenuElements["effects"].Y && _game._curMouseState.Y < _pauseMenuElements["effects"].Y + _pauseMenuElements["effects"].Height)
+                {
+                    ButtonDepress(_pauseMenuElements["effects"]);
+                }
+                else if (_game._prevMouseState.LeftButton == ButtonState.Pressed &&
+                   _game._curMouseState.X > _pauseMenuElements["quit"].X && _game._curMouseState.X < _pauseMenuElements["quit"].X + _pauseMenuElements["quit"].Width &&
+                   _game._curMouseState.Y > _pauseMenuElements["quit"].Y && _game._curMouseState.Y < _pauseMenuElements["quit"].Y + _pauseMenuElements["quit"].Height)
+                {
+                    ButtonDepress(_pauseMenuElements["quit"]);
+                }
+                else if (_game._prevMouseState.LeftButton == ButtonState.Pressed &&
+                   _game._curMouseState.X > _pauseMenuElements["restart"].X && _game._curMouseState.X < _pauseMenuElements["restart"].X + _pauseMenuElements["restart"].Width &&
+                   _game._curMouseState.Y > _pauseMenuElements["restart"].Y && _game._curMouseState.Y < _pauseMenuElements["restart"].Y + _pauseMenuElements["restart"].Height)
+                {
+                    ButtonDepress(_pauseMenuElements["restart"]);
+                }
+                #endregion
+
+                #region Button Release
                 if (_game._prevMouseState.LeftButton == ButtonState.Pressed &&
                     _game._curMouseState.LeftButton == ButtonState.Released &&
                     _game._curMouseState.X > _pauseMenuElements["instructions"].X && _game._curMouseState.X < _pauseMenuElements["instructions"].X + _pauseMenuElements["instructions"].Width &&
@@ -283,11 +388,40 @@ namespace SleepyScientist
                     _game.SetupLevel(_game._levelNumber);
                     _game.State = STATE.PLAY;
                 }
+                #endregion
             }
             #endregion
             #region Instructions
             else if (_game.State == STATE.INSTRUCTIONS)
             {
+                #region Button Click
+                if (_game._prevMouseState.LeftButton == ButtonState.Pressed &&
+                   _game._curMouseState.X > _instructionsButtons["back"].X && _game._curMouseState.X < _instructionsButtons["back"].X + _instructionsButtons["back"].Width &&
+                   _game._curMouseState.Y > _instructionsButtons["back"].Y && _game._curMouseState.Y < _instructionsButtons["back"].Y + _instructionsButtons["back"].Height)
+                {
+                    ButtonDepress(_instructionsButtons["back"]);
+                }
+                else if (_game._prevMouseState.LeftButton == ButtonState.Pressed &&
+                   _game._curMouseState.X > _instructionsButtons["egg"].X && _game._curMouseState.X < _instructionsButtons["egg"].X + _instructionsButtons["egg"].Width &&
+                   _game._curMouseState.Y > _instructionsButtons["egg"].Y && _game._curMouseState.Y < _instructionsButtons["egg"].Y + _instructionsButtons["egg"].Height)
+                {
+                    ButtonDepress(_instructionsButtons["egg"]);
+                }
+                else if (_game._prevMouseState.LeftButton == ButtonState.Pressed &&
+                   _game._curMouseState.X > _instructionsButtons["skateboard"].X && _game._curMouseState.X < _instructionsButtons["skateboard"].X + _instructionsButtons["skateboard"].Width &&
+                   _game._curMouseState.Y > _instructionsButtons["skateboard"].Y && _game._curMouseState.Y < _instructionsButtons["skateboard"].Y + _instructionsButtons["skateboard"].Height)
+                {
+                    ButtonDepress(_instructionsButtons["skateboard"]);
+                }
+                else if (_game._prevMouseState.LeftButton == ButtonState.Pressed &&
+                   _game._curMouseState.X > _instructionsButtons["jack"].X && _game._curMouseState.X < _instructionsButtons["jack"].X + _instructionsButtons["jack"].Width &&
+                   _game._curMouseState.Y > _instructionsButtons["jack"].Y && _game._curMouseState.Y < _instructionsButtons["jack"].Y + _instructionsButtons["jack"].Height)
+                {
+                    ButtonDepress(_instructionsButtons["jack"]);
+                }
+                #endregion
+
+                #region Button Release
                 if (_game._prevMouseState.LeftButton == ButtonState.Pressed &&
                    _game._curMouseState.LeftButton == ButtonState.Released &&
                    _game._curMouseState.X > _instructionsButtons["back"].X && _game._curMouseState.X < _instructionsButtons["back"].X + _instructionsButtons["back"].Width &&
@@ -319,11 +453,34 @@ namespace SleepyScientist
                     _instructionsButtons["image"].Image = _jack_inthe_box_menu_texture;
                     _instructionsButtons["text"].Image = _jack_inthe_box_text_texture;
                 }
+                #endregion
             }
             #endregion
             #region Game Over
             else if (_game.State == STATE.GAME_OVER)
             {
+                #region Button Click
+                if (_game._prevMouseState.LeftButton == ButtonState.Pressed &&
+                   _game._curMouseState.X > _gameOverButtons["restart"].X && _game._curMouseState.X < _gameOverButtons["restart"].X + _gameOverButtons["restart"].Width &&
+                   _game._curMouseState.Y > _gameOverButtons["restart"].Y && _game._curMouseState.Y < _gameOverButtons["restart"].Y + _gameOverButtons["restart"].Height)
+                {
+                    ButtonDepress(_gameOverButtons["restart"]);
+                }
+                else if (_game._prevMouseState.LeftButton == ButtonState.Pressed &&
+                   _game._curMouseState.X > _gameOverButtons["main"].X && _game._curMouseState.X < _gameOverButtons["main"].X + _gameOverButtons["main"].Width &&
+                   _game._curMouseState.Y > _gameOverButtons["main"].Y && _game._curMouseState.Y < _gameOverButtons["main"].Y + _gameOverButtons["main"].Height)
+                {
+                    ButtonDepress(_gameOverButtons["main"]);
+                }
+                else if (_game._prevMouseState.LeftButton == ButtonState.Pressed &&
+                   _game._curMouseState.X > _gameOverButtons["quit"].X && _game._curMouseState.X < _gameOverButtons["quit"].X + _gameOverButtons["quit"].Width &&
+                   _game._curMouseState.Y > _gameOverButtons["quit"].Y && _game._curMouseState.Y < _gameOverButtons["quit"].Y + _gameOverButtons["quit"].Height)
+                {
+                    ButtonDepress(_gameOverButtons["quit"]);
+                }
+                #endregion
+
+                #region Button Release
                 if (_game._prevMouseState.LeftButton == ButtonState.Pressed &&
                   _game._curMouseState.LeftButton == ButtonState.Released &&
                   _game._curMouseState.X > _gameOverButtons["restart"].X && _game._curMouseState.X < _gameOverButtons["restart"].X + _gameOverButtons["restart"].Width &&
@@ -349,8 +506,18 @@ namespace SleepyScientist
                     // Quit
                     _game.Exit();
                 }
+                #endregion
             }
             #endregion
+
+            // If a button is depressed and the mouse gets released, reset button
+            if (buttonDepressed == true && _game._prevMouseState.LeftButton == ButtonState.Released)
+            {
+                depressedButton.X -= BUTTON_CLICK_FACTOR;
+                depressedButton.Y -= BUTTON_CLICK_FACTOR;
+                buttonDepressed = false;
+                depressedButton = null;
+            }
         }
 
         public void Draw(SpriteBatch spriteBatch)
@@ -382,6 +549,21 @@ namespace SleepyScientist
             }
 
             MessageLayer.Draw(spriteBatch);
+        }
+
+        /// <summary>
+        /// Visually depress a button and set flags
+        /// </summary>
+        /// <param name="b"></param>
+        public void ButtonDepress(Button b)
+        {
+            if (buttonDepressed == false)
+            {
+                b.X += BUTTON_CLICK_FACTOR;
+                b.Y += BUTTON_CLICK_FACTOR;
+                buttonDepressed = true;
+                depressedButton = b;
+            }
         }
     }
 }
