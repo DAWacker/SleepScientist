@@ -466,6 +466,8 @@ namespace SleepyScientist
                         this.VeloY = 0;
                         break;
                 }
+                this.SelectionBox.X = this.X;
+                this.SelectionBox.Y = this.Y;
                 base.Update();
             }
         }
@@ -575,17 +577,7 @@ namespace SleepyScientist
 
         public override void Draw(SpriteBatch batch, Rectangle? pos = null)
         {
-            if (pos != null)
-            {
-                RectangleVector selectionPos = pos.Value;
-                float selectionWidth = 75 * ((selectionPos.Width / 100) + 1);
-                float offsetX = (selectionWidth - selectionPos.Width) / 2;
-                float selectionHeight = 75 * ((selectionPos.Height / 100) + 1);
-                float offsetY = (selectionHeight - selectionPos.Height) / 2;
-                selectionPos = new RectangleVector(pos.Value.X - offsetX, pos.Value.Y - offsetY, selectionWidth, selectionHeight);
-                if (this.Hovered) { batch.Draw(GameConstants.BLANK, selectionPos, Color.Red); }
-            }
-            else if (this.Hovered) { batch.Draw(GameConstants.BLANK, this.SelectionBox, Color.Red); }
+            if (pos != null) { if (this.Hovered) { batch.Draw(GameConstants.BLANK, pos.Value, Color.Red); } }
             base.Draw(batch, pos);
         }
 
