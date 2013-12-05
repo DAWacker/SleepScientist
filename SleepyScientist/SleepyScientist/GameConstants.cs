@@ -37,7 +37,7 @@ namespace SleepyScientist
         public static float DEFAULT_Y_VELOCITY = 0;
         public static int DEFAULT_DIRECTION = 1;
         public static float DEFAULT_JUMP_VELOCITY_Y = -12 * EULER_SCALE;
-        public static float DEFAULT_JUMP_VELOCITY_X = 10 * EULER_SCALE;
+        public static float DEFAULT_JUMP_VELOCITY_X = 11 * EULER_SCALE;
         public static float JUMP_UPSTAIRS_VELOCITY_Y = -23 * EULER_SCALE;
         public static float JUMP_UPSTAIRS_VELOCITY_X = 12 * EULER_SCALE;
         
@@ -134,6 +134,7 @@ namespace SleepyScientist
         public static Texture2D STAIR_TEXTURE;
         public static Texture2D RAILING_TEXTURE;
         public static Texture2D BACKGROUND_TEXTURE;
+        public static Texture2D BLANK;
 
         #endregion
     }

@@ -45,6 +45,9 @@ namespace SleepyScientist
         // Is the scientist on a skateboard
         private RocketSkateboard _skateboard;
 
+        // Is the scientist super jumping up a set of stairs
+        private bool _superJump;
+
         #endregion
 
         #region States
@@ -97,6 +100,9 @@ namespace SleepyScientist
 
         // Get or set the scientist's skateboard
         public RocketSkateboard Skateboard { get { return _skateboard; } set { _skateboard = value; } }
+        
+        // Get or set if the player is jumping up stairs
+        public bool SuperJump { get { return _superJump; } set { _superJump = value; } }
 
         #endregion
 
@@ -123,6 +129,7 @@ namespace SleepyScientist
             this.PrevY = this.Y;
             this.Winner = false;
             this.Loser = false;
+            this.SuperJump = false;
             this.Skateboard = null;
 
             // Get a copy of the Scientist Animation
@@ -146,6 +153,7 @@ namespace SleepyScientist
             {
                 // If the scientist is in the floor, slowly move him up to the top
                 while (this.RectPosition.Bottom > this.CurrentFloor.RectPosition.Top) { this.Y--; }
+                this.SuperJump = false;
                 this.CurrentTile = this.CurrentFloor;
                 this.CurrentState = ScientistState.Walking;
             }
@@ -157,7 +165,7 @@ namespace SleepyScientist
                 {
                     // Check if the scientist is colliding with an invention
                     if (this.RectPosition.Intersects(invention.RectPosition)
-                        && !invention.Activated && !invention.HasTarget )
+                        && !invention.Activated && !invention.HasTarget)
                     {
                         // Check if the scientist isn't on a skateboard yet
                         if (invention.GetType() == typeof(RocketSkateboard) && this.Skateboard == null)
@@ -187,6 +195,7 @@ namespace SleepyScientist
                                                 invention.X > stair.X + stair.Width && invention.X < stair.X + stair.Width + 25) && this.Direction == -stair.Direction)
                                             {
                                                 this.Jump(true);
+                                                this.SuperJump = true;
                                                 this.CurrentFloor = this.Room.Floors[this.FloorNumber + 1];
                                                 this.CurrentTile = this.Room.Floors[this.FloorNumber + 1];
                                                 i = 10;
@@ -204,6 +213,7 @@ namespace SleepyScientist
                                                 invention.X > stair.X - invention.Width - 25 && invention.X < stair.X - invention.Width) && this.Direction == -stair.Direction)
                                             {
                                                 this.Jump(true);
+                                                this.SuperJump = true;
                                                 this.CurrentFloor = this.Room.Floors[this.FloorNumber + 1];
                                                 this.CurrentTile = this.Room.Floors[this.FloorNumber + 1];
                                                 i = 10;
@@ -334,7 +344,7 @@ namespace SleepyScientist
             if (positionCheck.Intersects(this.Room.Bed.RectPosition)) { this.CurrentState = ScientistState.Bed; }
 
             // Check if the scientist hit a wall
-            if (this.CurrentState != ScientistState.JackInTheBox) { foreach (Wall wall in this.CurrentFloor.Walls) { if (this.RectPosition.Intersects(wall.RectPosition)) { this.Reverse(); } } }
+            if (!this.SuperJump) { foreach (Wall wall in this.CurrentFloor.Walls) { if (this.RectPosition.Intersects(wall.RectPosition)) { this.Reverse(); } } }
 
             // Update scientist based on current state.
             switch (this.CurrentState)
