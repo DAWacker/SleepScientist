@@ -426,19 +426,36 @@ namespace SleepyScientist
                         // Check if the invention is on the floor it needs to be
                         if (this.LaddersHit == this.LaddersNeeded && this.StairsHit == this.StairsNeeded)
                         {
+                            // Check if target would place invention on a pit.
+                            foreach (Pit curPit in CurrentFloor.Pits)
+                            {
+                                // If the target is on a pit then change the target so it isn't.
+                                if (this.TargetX > curPit.X && this.TargetX < curPit.X + curPit.Width)
+                                {
+                                    // If the target is over the left half of the pit
+                                    if ( this.TargetX < curPit.X + curPit.Width / 2 )
+                                        // then move invention to left of pit.
+                                        this.TargetX = (int)(curPit.X);
+                                    // Else the target is over the right half of the pit
+                                    else
+                                        // then move invention to right of pit. 
+                                        this.TargetX = (int)(curPit.X + curPit.Width);
+                                }
+                            }
+
                             // Check the direction of the invention
                             switch (this.Direction)
                             {
                                 // Moving right
                                 case 1:
                                     // Check if the invention has reached its target destination
-                                    if (this.X + this.Width >= this.TargetX) { this.ReachedTarget(); }
+                                    if (this.X + this.Width / 2 >= this.TargetX) { this.ReachedTarget(); }
                                     break;
 
                                 // Moving left
                                 case -1:
                                     // Check if the invention has reached its target destination
-                                    if (this.X <= this.TargetX) { this.ReachedTarget(); }
+                                    if (this.X + this.Width / 2 <= this.TargetX) { this.ReachedTarget(); }
                                     break;
                             }
                         }
@@ -490,7 +507,7 @@ namespace SleepyScientist
             }
 
             // Exit the function if there isn't a path to target.
-            if (isPathPossible == false) { this.HasTarget = false; return; }
+            if (isPathPossible == false) { ReachedTarget(); return; }
 
             // Loop until a path has been found
             while (!foundPath)
