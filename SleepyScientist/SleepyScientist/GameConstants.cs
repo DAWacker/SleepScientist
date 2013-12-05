@@ -33,7 +33,7 @@ namespace SleepyScientist
         public static int TILE_HEIGHT = TILE_WIDTH;
 
         // Default movement speeds for the scientist
-        public static float DEFAULT_X_VELOCITY = 4 * EULER_SCALE;
+        public static float DEFAULT_X_VELOCITY = 3 * EULER_SCALE;
         public static float DEFAULT_Y_VELOCITY = 0;
         public static int DEFAULT_DIRECTION = 1;
         public static float DEFAULT_JUMP_VELOCITY_Y = -12 * EULER_SCALE;
