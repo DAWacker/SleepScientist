@@ -477,7 +477,7 @@ namespace SleepyScientist
         /// </summary>
         public void RefreshInventions()
         {
-            if (this.PreviousInvention != null) this.PreviousInvention.UnUse();
+            if (this.PreviousInvention != null && !this.RectPosition.Intersects(this.PreviousInvention.RectPosition)) this.PreviousInvention.UnUse();
             this.PreviousInvention = null;
         }
 
