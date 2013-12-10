@@ -33,9 +33,6 @@ namespace SleepyScientist
         // The current tile the scientist is on
         private GameObject _currentTile;
 
-        // The previous invention the scientist used
-        private Invention _prevInvention;
-
         // Has the player won
         private bool _winner;
 
@@ -89,9 +86,6 @@ namespace SleepyScientist
         // Get or set the current tile the scientist is on
         public GameObject CurrentTile { get { return _currentTile; } set { _currentTile = value; } }
         
-        // Get or set the previous invention the scientist used
-        public Invention PreviousInvention { get { return _prevInvention; } set { _prevInvention = value; } }
-
         // Get or set if the player has won the level
         public bool Winner { get { return _winner; } set { _winner = value; } }
 
@@ -416,7 +410,6 @@ namespace SleepyScientist
                     break;
 
                 case ScientistState.Walking:
-                    this.RefreshInventions();
                     this.VeloX = GameConstants.DEFAULT_X_VELOCITY * this.Direction;
                     this.VeloY = 0;
                     base.Update();
@@ -466,20 +459,10 @@ namespace SleepyScientist
             if (newState != ScientistState.NULL)
             {
                 invention.Use(this);
-                this.PreviousInvention = invention;
                 this.CurrentState = newState;
             }
 
             return newState != ScientistState.NULL;
-        }
-
-        /// <summary>
-        /// Refreshes inventions that were previously used so they can be used again
-        /// </summary>
-        public void RefreshInventions()
-        {
-            if (this.PreviousInvention != null && !this.RectPosition.Intersects(this.PreviousInvention.RectPosition)) this.PreviousInvention.UnUse();
-            this.PreviousInvention = null;
         }
 
         #endregion
