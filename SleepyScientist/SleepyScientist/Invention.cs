@@ -186,7 +186,7 @@ namespace SleepyScientist
         /// </summary>
         public override void Update()
         {
-            // Check if the invention has a target destination
+            // Check if the invention has a target destination or activated
             if (this.HasTarget)
             {
                 // Check if there are still routes in the path
@@ -294,7 +294,7 @@ namespace SleepyScientist
                         // The route is a ladder
                         case "SleepyScientist.Teleporter":
                             Teleporter ladder = (Teleporter)route;
-                             // Check if the invention is moving left or right
+                            // Check if the invention is moving left or right
                             switch (this.Direction)
                             {
                                 // Moving right
@@ -453,7 +453,7 @@ namespace SleepyScientist
                                 if (this.TargetX > curPit.X && this.TargetX < curPit.X + curPit.Width)
                                 {
                                     // If the target is over the left half of the pit
-                                    if ( this.TargetX < curPit.X + curPit.Width / 2 )
+                                    if (this.TargetX < curPit.X + curPit.Width / 2)
                                         // then move invention to left of pit.
                                         this.TargetX = (int)(curPit.X);
                                     // Else the target is over the right half of the pit
@@ -483,7 +483,6 @@ namespace SleepyScientist
                         this.VeloY = 0;
                         break;
                 }
-
                 // Update the position of the selection box around the invention
                 if (GameConstants.MOVING_INVENTION)
                 {
@@ -496,7 +495,6 @@ namespace SleepyScientist
                     this.SelectionBox.X = (this.SelectionBox.X + this.VeloX * Time.DeltaTime);
                     this.SelectionBox.Y = (this.SelectionBox.Y + this.VeloY * Time.DeltaTime);
                 }
-
                 base.Update();
             }
         }
@@ -534,12 +532,16 @@ namespace SleepyScientist
                 isPathPossible = false;
             }
 
-            // Check if stairs are needed but don't exist.
-            if (this.StairsNeeded > 0 && this.Room.Floors[this.FloorNumber + 1].Stairs.Count == 0)
+            // Check if the invention is on the top floor
+            if (this.FloorNumber + 1 < this.Room.Floors.Count)
             {
-                isPathPossible = false;
+                // Check if stairs are needed but don't exist.
+                if (this.StairsNeeded > 0 && this.Room.Floors[this.FloorNumber + 1].Stairs.Count == 0)
+                {
+                    isPathPossible = false;
+                }
             }
-
+            
             // Exit the function if there isn't a path to target.
             if (isPathPossible == false) { ReachedTarget(); return; }
 
