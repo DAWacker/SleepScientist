@@ -203,7 +203,7 @@ namespace SleepyScientist
 
                                             // If the jack in the box isn't at the bottom of the stairs, do a normal jump
                                             else { this.InteractWith(invention); }
-                                            if (this.Skateboard != null) { this.Skateboard.VeloX = 0; }
+                                            if (this.Skateboard != null) { this.Skateboard.VeloX = 0; this.Skateboard.Activated = false; }
                                             this.Skateboard = null;
                                             break;
 
@@ -221,7 +221,7 @@ namespace SleepyScientist
 
                                             // If the jack in the box isn't at the bottom of the stairs, do a normal jump
                                             else { this.InteractWith(invention); }
-                                            if (this.Skateboard != null) { this.Skateboard.VeloX = 0; }
+                                            if (this.Skateboard != null) { this.Skateboard.VeloX = 0; this.Skateboard.Activated = false; }
                                             this.Skateboard = null;
                                             break;
                                     }
@@ -260,7 +260,7 @@ namespace SleepyScientist
                         {
                             this.CurrentTile = piece;
                             this.CurrentState = ScientistState.Teleporter;
-                            if (this.Skateboard != null) { this.Skateboard.VeloX = 0; }
+                            if (this.Skateboard != null) { this.Skateboard.VeloX = 0; this.Skateboard.Activated = false; }
                             this.Skateboard = null;
                         }
                         break;
@@ -273,7 +273,7 @@ namespace SleepyScientist
                         {
                             this.CurrentTile = piece;
                             this.CurrentState = ScientistState.Teleporter;
-                            if (this.Skateboard != null) { this.Skateboard.VeloX = 0; }
+                            if (this.Skateboard != null) { this.Skateboard.VeloX = 0; this.Skateboard.Activated = false; }
                             this.Skateboard = null;
                         }
                         break;
@@ -300,7 +300,7 @@ namespace SleepyScientist
                         {
                             this.CurrentTile = stair;
                             this.CurrentState = ScientistState.Stairs;
-                            if (this.Skateboard != null) { this.Skateboard.VeloX = 0; }
+                            if (this.Skateboard != null) { this.Skateboard.VeloX = 0; this.Skateboard.Activated = false; }
                             this.Skateboard = null;
                         }
                         break;
@@ -315,7 +315,7 @@ namespace SleepyScientist
                         {
                             this.CurrentTile = stair;
                             this.CurrentState = ScientistState.Stairs;
-                            if (this.Skateboard != null) { this.Skateboard.VeloX = 0; }
+                            if (this.Skateboard != null) { this.Skateboard.VeloX = 0; this.Skateboard.Activated = false; }
                             this.Skateboard = null;
                         }
                         break;
@@ -335,7 +335,7 @@ namespace SleepyScientist
                 {
                     this.CurrentTile = pit;
                     this.CurrentState = ScientistState.Pit;
-                    if (this.Skateboard != null) { this.Skateboard.VeloX = 0; }
+                    if (this.Skateboard != null) { this.Skateboard.VeloX = 0; this.Skateboard.Activated = false; }
                     this.Skateboard = null;
                 }
             }
@@ -385,6 +385,7 @@ namespace SleepyScientist
 
                 case ScientistState.RocketSkates:
                     this.Skateboard.Update();
+                    this.Skateboard.Activated = true;
                     this.Direction = this.Skateboard.Direction;
                     this.X = this.Skateboard.X + 25;
                     this.Y = this.Skateboard.Y - this.Height + 10;
@@ -477,7 +478,7 @@ namespace SleepyScientist
         /// </summary>
         public void RefreshInventions()
         {
-            if (this.PreviousInvention != null) this.PreviousInvention.UnUse();
+            if (this.PreviousInvention != null && !this.RectPosition.Intersects(this.PreviousInvention.RectPosition)) this.PreviousInvention.UnUse();
             this.PreviousInvention = null;
         }
 

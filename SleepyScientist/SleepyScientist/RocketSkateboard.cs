@@ -50,6 +50,18 @@ namespace SleepyScientist
             {
                 this.StayOnScreen();
                 this.Move();
+                // Update the position of the selection box around the invention
+                if (GameConstants.MOVING_INVENTION)
+                {
+                    this.SelectionBox.X = (this.SelectionBox.X + this.VeloX * Time.DeltaTime / GameConstants.SLOW_MOTION);
+                    this.SelectionBox.Y = (this.SelectionBox.Y + this.VeloY * Time.DeltaTime / GameConstants.SLOW_MOTION);
+                }
+                else
+                {
+                    float updateX = this.VeloX * Time.DeltaTime;
+                    this.SelectionBox.X = (this.SelectionBox.X + this.VeloX * Time.DeltaTime);
+                    this.SelectionBox.Y = (this.SelectionBox.Y + this.VeloY * Time.DeltaTime);
+                }
                 base.Update();
             }
         }
