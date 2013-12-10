@@ -244,6 +244,23 @@ namespace SleepyScientist
                     if ( GameConstants.DEBUG && _curKeyboardState.IsKeyDown(Keys.Left))
                         Time.DeltaTime *= -1;
 
+                    if (_curKeyboardState.IsKeyUp(Keys.Up) && _prevKeyboardState.IsKeyDown(Keys.Up))
+                    {
+                        // Speed up by a half step
+                        GameConstants.EULER_SCALE += 5;
+                        GameConstants.EULER_SCALE = Math.Abs(GameConstants.EULER_SCALE);
+                        GameConstants.DEFAULT_X_VELOCITY = 3.2f * GameConstants.EULER_SCALE;
+                    }
+                    else if (_curKeyboardState.IsKeyUp(Keys.Down) && _prevKeyboardState.IsKeyDown(Keys.Down))
+                    {
+                        // Slow down by a half step
+                        GameConstants.EULER_SCALE -= 5;
+                        GameConstants.EULER_SCALE = Math.Abs(GameConstants.EULER_SCALE);
+                        GameConstants.DEFAULT_X_VELOCITY = 3.2f * GameConstants.EULER_SCALE;
+                    }
+                    MessageLayer.ClearMessages();
+                    MessageLayer.AddMessage(new Message("Sleepy Velocity: " + _sleepy.VeloX, 0, 0));
+
 		            foreach (Invention invention in _inventions)
 		            {
 		                invention.Update();
@@ -354,6 +371,7 @@ namespace SleepyScientist
 
             // Draw menus
             _menu.Draw(spriteBatch);
+            MessageLayer.Draw(spriteBatch);
 
             spriteBatch.End();
 
