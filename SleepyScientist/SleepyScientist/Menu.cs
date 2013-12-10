@@ -69,6 +69,10 @@ namespace SleepyScientist
         /// The button that is currently depressed
         /// </summary>
         private Button depressedButton;
+        /// <summary>
+        /// If the overview button in the instructions screen is currently active
+        /// </summary>
+        bool overviewClicked = true;
 
         private Game1 _game;
 
@@ -460,6 +464,7 @@ namespace SleepyScientist
                 {
                     _instructionsButtons["image"].Image = _overview_menu_texture;
                     _instructionsButtons["text"].Image = _overview_text_texture;
+                    overviewClicked = true;
                 }
                 else if (_game._prevMouseState.LeftButton == ButtonState.Pressed &&
                    _game._curMouseState.LeftButton == ButtonState.Released &&
@@ -468,6 +473,7 @@ namespace SleepyScientist
                 {
                     _instructionsButtons["image"].Image = _eggbeater_menu_texture;
                     _instructionsButtons["text"].Image = _eggbeater_text_texture;
+                    overviewClicked = false;
                 }
                 else if (_game._prevMouseState.LeftButton == ButtonState.Pressed &&
                    _game._curMouseState.LeftButton == ButtonState.Released &&
@@ -476,6 +482,7 @@ namespace SleepyScientist
                 {
                     _instructionsButtons["image"].Image = _skateboard_menu_texture;
                     _instructionsButtons["text"].Image = _skateboard_text_texture;
+                    overviewClicked = false;
                 }
                 else if (_game._prevMouseState.LeftButton == ButtonState.Pressed &&
                    _game._curMouseState.LeftButton == ButtonState.Released &&
@@ -484,6 +491,7 @@ namespace SleepyScientist
                 {
                     _instructionsButtons["image"].Image = _jack_inthe_box_menu_texture;
                     _instructionsButtons["text"].Image = _jack_inthe_box_text_texture;
+                    overviewClicked = false;
                 }
                 else if (_game._prevMouseState.LeftButton == ButtonState.Pressed &&
                    _game._curMouseState.LeftButton == ButtonState.Released &&
@@ -492,8 +500,20 @@ namespace SleepyScientist
                 {
                     _instructionsButtons["image"].Image = _other_objects_menu_texture;
                     _instructionsButtons["text"].Image = _other_objects_text_texture;
+                    overviewClicked = false;
                 }
                 #endregion
+
+                if (overviewClicked == true)
+                {
+                    _instructionsButtons["text"].X = (int)(_instructionsButtons["background"].X + _instructionsButtons["background"].Width / 2 - _overview_text_texture.Width / 2);
+                    //= new Button((int)(_instructionsButtons["background"].X + _instructionsButtons["background"].Width / 2 - _overview_text_texture.Width / 2), (int)(_instructionsButtons["background"].Y + 270), _overview_text_texture.Width, _overview_text_texture.Height, _overview_text_texture);
+                }
+                else
+                {
+                    _instructionsButtons["text"].X = (int)(_instructionsButtons["background"].X + 385);
+                    //new Button((int)(_instructionsButtons["background"].X + 385), (int)(_instructionsButtons["background"].Y + 270), _overview_text_texture.Width, _overview_text_texture.Height, _overview_text_texture);
+                }
             }
             #endregion
             #region Game Over
