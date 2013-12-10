@@ -42,7 +42,7 @@ namespace SleepyScientist
 
         // Scroll wheel state
         private int _curScrollWheel;
-        private int _deltaScrollWheel;
+        //private int _deltaScrollWheel;
 
         // GameObjects
         private Scientist _sleepy;
@@ -218,6 +218,8 @@ namespace SleepyScientist
             #region Play
             if (_state == STATE.PLAY)
             {
+                #region Camera Code
+                /*
                 // Update mouse
                 _deltaScrollWheel = Mouse.GetState().ScrollWheelValue - _curScrollWheel;
 
@@ -241,6 +243,8 @@ namespace SleepyScientist
                             _camera.Zoom(GameConstants.ZOOM_ROOM_VIEW);
                     }
                 }
+                 */
+                #endregion
 
                 Point convertedMousePos = _camera.ToGlobal(new Point(_curMouseState.X, _curMouseState.Y));
 				if (_begin)
@@ -249,46 +253,43 @@ namespace SleepyScientist
 		            if (GameConstants.MOVING_INVENTION) { Time.Update((float)gameTime.ElapsedGameTime.TotalSeconds / 2); }
 		            else { Time.Update((float)gameTime.ElapsedGameTime.TotalSeconds); }
 
-
-                    if (_curKeyboardState.IsKeyDown(Keys.Right))
-                        Time.DeltaTime *= GameConstants.TIME_FAST_FORWARD;
-                    if ( GameConstants.DEBUG && _curKeyboardState.IsKeyDown(Keys.Left))
-                        Time.DeltaTime *= -1;
-
 		            foreach (Invention invention in _inventions)
 		            {
 		                invention.Update();
 		                Rectangle convertedInventionPos = _camera.ToLocal(invention.SelectionBox);
 
-                        if (convertedInventionPos.Contains(new Point(_curMouseState.X, _curMouseState.Y))) { invention.Hovered = true; }
-                        else { invention.Hovered = false; }
+                        if (!invention.Activated && !invention.HasTarget)
+                        {
+                            if (convertedInventionPos.Contains(new Point(_curMouseState.X, _curMouseState.Y))) { invention.Hovered = true; }
+                            else { invention.Hovered = false; }
 
-		                if (_prevMouseState.LeftButton == ButtonState.Pressed && 
-		                _curMouseState.LeftButton == ButtonState.Released &&
-		                convertedInventionPos.Contains(new Point(_curMouseState.X, _curMouseState.Y)))
-			            {
-		                    invention.Clicked = true;
-		                    GameConstants.MOVING_INVENTION = true;
-						
-		                    _camera.ShouldFollowTarget = false;
-		                    _camera.Zoom(GameConstants.ZOOM_ROOM_VIEW);
-		                    break;
-		                }
+                            if (_prevMouseState.LeftButton == ButtonState.Pressed &&
+                            _curMouseState.LeftButton == ButtonState.Released &&
+                            convertedInventionPos.Contains(new Point(_curMouseState.X, _curMouseState.Y)))
+                            {
+                                invention.Clicked = true;
+                                GameConstants.MOVING_INVENTION = true;
 
-		                if (invention.Clicked && _prevMouseState.LeftButton == ButtonState.Pressed &&
-		                    _curMouseState.LeftButton == ButtonState.Released)
-		                {
-		                    invention.HasTarget = true;
-		                    invention.Clicked = false;
-		                    invention.TargetX = convertedMousePos.X;
-		                    invention.TargetY = convertedMousePos.Y;
-		                    invention.VeloX = GameConstants.DEFAULT_INVENTION_X_VELOCITY;
-		                    invention.DeterminePath();
-		                    GameConstants.MOVING_INVENTION = false;
+                                //_camera.ShouldFollowTarget = false;
+                                //_camera.Zoom(GameConstants.ZOOM_ROOM_VIEW);
+                                break;
+                            }
 
-		                    _camera.ShouldFollowTarget = true;
-		                    _camera.Zoom(GameConstants.ZOOM_INVENTION_VIEW);
-		                }
+                            if (invention.Clicked && _prevMouseState.LeftButton == ButtonState.Pressed &&
+                                _curMouseState.LeftButton == ButtonState.Released)
+                            {
+                                invention.HasTarget = true;
+                                invention.Clicked = false;
+                                invention.TargetX = convertedMousePos.X;
+                                invention.TargetY = convertedMousePos.Y;
+                                invention.VeloX = GameConstants.DEFAULT_INVENTION_X_VELOCITY;
+                                invention.DeterminePath();
+                                GameConstants.MOVING_INVENTION = false;
+
+                                //_camera.ShouldFollowTarget = true;
+                                //_camera.Zoom(GameConstants.ZOOM_INVENTION_VIEW);
+                            }
+                        }
 		            }
 
 		            _sleepy.Update();
@@ -324,9 +325,9 @@ namespace SleepyScientist
                     _begin = true;
 
                     // Zoom into the scientist.
-                    _camera.Zoom(GameConstants.ZOOM_ROOM_VIEW);
-                    _camera.ShouldFollowTarget = true;
-                    _camera.Update();
+                    //_camera.Zoom(GameConstants.ZOOM_ROOM_VIEW);
+                    //_camera.ShouldFollowTarget = true;
+                    //_camera.Update();
                 }
 
                 MessageLayer.Update(gameTime.ElapsedGameTime.TotalSeconds);
