@@ -167,7 +167,7 @@ namespace SleepyScientist
                             this.X = invention.X + 25;
                             this.Y = invention.Y - (this.Height / 2) - 5;
                             this.Skateboard = (RocketSkateboard)invention;
-                            InteractWith(invention);
+                            this.InteractWith(invention);
                         }
 
                         // Check if the invention is a jack in the box

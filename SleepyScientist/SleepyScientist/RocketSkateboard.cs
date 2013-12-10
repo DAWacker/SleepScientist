@@ -30,7 +30,7 @@ namespace SleepyScientist
         {
             if (!this.Activated)
             {
-                this.VeloX = scientist.VeloX * GameConstants.SKATEBOARD_SPEEDUP * this.Direction;
+                this.VeloX = Math.Abs(scientist.VeloX) * GameConstants.SKATEBOARD_SPEEDUP * this.Direction;
                 base.Use(scientist);
             }
         }
