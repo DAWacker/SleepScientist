@@ -110,7 +110,8 @@ namespace SleepyScientist
             _eggbeater_menu_texture = Content.Load<Texture2D>("Image/eggbeater_menu");
             _skateboard_menu_texture = Content.Load<Texture2D>("Image/skateboard_menu");
             _overview_menu_texture = new Texture2D(_game.GraphicsDevice, _jack_inthe_box_menu_texture.Width, _jack_inthe_box_menu_texture.Height);
-            _other_objects_menu_texture = new Texture2D(_game.GraphicsDevice, _jack_inthe_box_menu_texture.Width, _jack_inthe_box_menu_texture.Height);
+            //_other_objects_menu_texture = new Texture2D(_game.GraphicsDevice, _jack_inthe_box_menu_texture.Width, _jack_inthe_box_menu_texture.Height);
+            _other_objects_menu_texture = Content.Load<Texture2D>("Image/other_objects_menu");
 
             _overviewInstButtonTexture = Content.Load<Texture2D>("Image/Buttons/overview_button");
             _jackInstButtonTexture = Content.Load<Texture2D>("Image/Buttons/jack_inthe_box_button");
@@ -167,7 +168,7 @@ namespace SleepyScientist
 
             // Instructions
             _instructionsButtons.Add("background", new Button((_game.screenWidth / 2) - (_instMenuTexture.Width / 2), (_game.screenHeight / 2) - (_instMenuTexture.Height / 2), _instMenuTexture.Width, _instMenuTexture.Height, _instMenuTexture));
-            _instructionsButtons.Add("back", new Button((int)(_instructionsButtons["background"].X + _instructionsButtons["background"].Width - _backButtonTexture.Width), (int)(_instructionsButtons["background"].Y + _instructionsButtons["background"].Height - _backButtonTexture.Height), _backButtonTexture.Width, _backButtonTexture.Height, _backButtonTexture));
+            _instructionsButtons.Add("back", new Button((int)(_instructionsButtons["background"].X + _instructionsButtons["background"].Width - _backButtonTexture.Width * 2 - 15), (int)(_instructionsButtons["background"].Y + _instructionsButtons["background"].Height - _backButtonTexture.Height - 10), _backButtonTexture.Width, _backButtonTexture.Height, _backButtonTexture));
             _instructionsButtons.Add("overview", new Button((int)(_instructionsButtons["background"].X + 96), (int)(_instructionsButtons["background"].Y + 170), _overviewInstButtonTexture.Width, _overviewInstButtonTexture.Height, _overviewInstButtonTexture));
             _instructionsButtons.Add("jack", new Button((int)(_instructionsButtons["overview"].X + _instructionsButtons["overview"].Width + 18), (int)(_instructionsButtons["overview"].Y), _jackInstButtonTexture.Width, _jackInstButtonTexture.Height, _jackInstButtonTexture));
             _instructionsButtons.Add("egg", new Button((int)(_instructionsButtons["jack"].X + _instructionsButtons["jack"].Width + 18), (int)(_instructionsButtons["overview"].Y), _eggInstButtonTexture.Width, _eggInstButtonTexture.Height, _eggInstButtonTexture));
