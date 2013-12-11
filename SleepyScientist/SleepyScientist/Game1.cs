@@ -258,6 +258,9 @@ namespace SleepyScientist
 		                invention.Update();
 		                Rectangle convertedInventionPos = _camera.ToLocal(invention.SelectionBox);
 
+                        // Reset inventions
+                        if (invention.Activated && !invention.HasTarget && !_sleepy.RectPosition.Intersects(invention.SelectionBox)) { invention.UnUse(); }
+
                         if (!invention.Activated && !invention.HasTarget)
                         {
                             if (convertedInventionPos.Contains(new Point(_curMouseState.X, _curMouseState.Y))) { invention.Hovered = true; }
