@@ -88,7 +88,6 @@ namespace SleepyScientist
             }
             else
             {
-                float updateX = this.VeloX * Time.DeltaTime;
                 this.X = (this.X + this.VeloX * Time.DeltaTime);
                 this.Y = (this.Y + this.VeloY * Time.DeltaTime);
             }
