@@ -229,8 +229,15 @@ namespace SleepyScientist
                             else { this.InteractWith(invention); }
                         }
 
-                        // Interact normally with other inventions
-                        else { this.InteractWith(invention); }
+                        // Interact with other inventions
+                        else {
+                            bool shouldInteract = true;
+
+                            // Don't interact with EggBeater if on a RocketSkateboard.
+                            if (invention.GetType() == typeof(EggBeater) && this.Skateboard != null) shouldInteract = false;
+
+                            if (shouldInteract) this.InteractWith(invention);
+                        }
                         break;
                     }
                 }
@@ -378,11 +385,11 @@ namespace SleepyScientist
                     break;
 
                 case ScientistState.RocketSkates:
-                    this.Skateboard.Update();
                     this.Skateboard.Activated = true;
                     this.Direction = this.Skateboard.Direction;
                     this.X = this.Skateboard.X + 25;
                     this.Y = this.Skateboard.Y - this.Height + 10;
+                    this.Skateboard.Update();
                     break;
 
                 case ScientistState.EggBeater:
@@ -441,6 +448,7 @@ namespace SleepyScientist
             this.CurrentState = ScientistState.JackInTheBox;
         }
 
+        /// <summary>
         /// Update the scientist's state based off of the interaction.
         /// </summary>
         /// <param name="gameObject">The GameObject being interacted with.</param>
