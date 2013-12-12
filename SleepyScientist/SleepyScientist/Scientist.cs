@@ -343,7 +343,19 @@ namespace SleepyScientist
             if (positionCheck.Intersects(this.Room.Bed.RectPosition)) { this.CurrentState = ScientistState.Bed; }
 
             // Check if the scientist hit a wall
-            if (!this.SuperJump) { foreach (Wall wall in this.CurrentFloor.Walls) { if (this.RectPosition.Intersects(wall.RectPosition)) { this.Reverse(); } } }
+            if (!this.SuperJump)
+            {
+                foreach (Wall wall in this.CurrentFloor.Walls)
+                {
+                    if (this.RectPosition.Intersects(wall.RectPosition))
+                    {
+                        // Ensure that he is moved out of the wall.
+                        while (this.RectPosition.Intersects(wall.RectPosition))
+                            this.X -= this.Direction;
+                        this.Reverse();
+                    }
+                }
+            }
 
             // Update scientist based on current state.
             switch (this.CurrentState)
