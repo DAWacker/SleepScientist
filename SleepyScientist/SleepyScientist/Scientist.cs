@@ -197,7 +197,6 @@ namespace SleepyScientist
 
                                             // If the jack in the box isn't at the bottom of the stairs, do a normal jump
                                             else { this.InteractWith(invention); }
-                                            if (this.Skateboard != null) { this.Skateboard.VeloX = 0; this.Skateboard.Activated = false; }
                                             this.Skateboard = null;
                                             break;
 
@@ -215,7 +214,6 @@ namespace SleepyScientist
 
                                             // If the jack in the box isn't at the bottom of the stairs, do a normal jump
                                             else { this.InteractWith(invention); }
-                                            if (this.Skateboard != null) { this.Skateboard.VeloX = 0; this.Skateboard.Activated = false; }
                                             this.Skateboard = null;
                                             break;
                                     }
