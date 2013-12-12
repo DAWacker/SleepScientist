@@ -211,7 +211,13 @@ namespace SleepyScientist
             {
                 Rectangle convertedInventionPos = _camera.ToLocal(invention.SelectionBox);
 
-                if (convertedInventionPos.Contains(new Point(_curMouseState.X, _curMouseState.Y))) { invention.Hovered = true; }
+                if (convertedInventionPos.Contains(new Point(_curMouseState.X, _curMouseState.Y)))
+                {
+                    if (invention.GetType() != typeof(RocketSkateboard))
+                    {
+                        invention.Hovered = true;
+                    }
+                }
                 else { invention.Hovered = false; }
             }
 
@@ -263,19 +269,27 @@ namespace SleepyScientist
 
                         if (!invention.Activated && !invention.HasTarget)
                         {
-                            if (convertedInventionPos.Contains(new Point(_curMouseState.X, _curMouseState.Y))) { invention.Hovered = true; }
+                            if (convertedInventionPos.Contains(new Point(_curMouseState.X, _curMouseState.Y))) {
+                                if (invention.GetType() != typeof(RocketSkateboard))
+                                {
+                                    invention.Hovered = true;
+                                }
+                            }
                             else { invention.Hovered = false; }
 
                             if (_prevMouseState.LeftButton == ButtonState.Pressed &&
                             _curMouseState.LeftButton == ButtonState.Released &&
                             convertedInventionPos.Contains(new Point(_curMouseState.X, _curMouseState.Y)))
                             {
-                                invention.Clicked = true;
-                                GameConstants.MOVING_INVENTION = true;
+                                if (invention.GetType() != typeof(RocketSkateboard))
+                                {
+                                    invention.Clicked = true;
+                                    GameConstants.MOVING_INVENTION = true;
 
-                                //_camera.ShouldFollowTarget = false;
-                                //_camera.Zoom(GameConstants.ZOOM_ROOM_VIEW);
-                                break;
+                                    //_camera.ShouldFollowTarget = false;
+                                    //_camera.Zoom(GameConstants.ZOOM_ROOM_VIEW);
+                                    break;
+                                }
                             }
 
                             if (invention.Clicked && _prevMouseState.LeftButton == ButtonState.Pressed &&
