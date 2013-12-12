@@ -229,14 +229,30 @@ namespace SleepyScientist
 
                         // Interact with other inventions
                         else {
-                            bool shouldInteract = true;
+                            // Get off of and reposition Skateboard.
+                            if (invention.GetType() == typeof(EggBeater) && this.Skateboard != null)
+                            {
+                                // Drop the scientist before the EggBeater and RePos the Skateboard after it.
+                                this.Y = this._curFloor.Y - this.Height;
+                                if (this.Direction == -1)
+                                {
+                                    this.Skateboard.X = invention.X - this.Skateboard.Width;
+                                    this.X = invention.X + invention.Width;
+                                }
+                                else
+                                {
+                                    this.Skateboard.X = invention.X + invention.Width;
+                                    this.X = invention.X - this.Width;
+                                }
 
-                            // Don't interact with EggBeater if on a RocketSkateboard.
-                            if (invention.GetType() == typeof(EggBeater) && this.Skateboard != null) shouldInteract = false;
+                                // Stop using the Skateboard.
+                                Skateboard.UnUse();
+                                this.Skateboard = null;
+                            }
 
-                            if (shouldInteract) this.InteractWith(invention);
+                            this.InteractWith(invention);
                         }
-                        break;
+                        //break;
                     }
                 }
             }
