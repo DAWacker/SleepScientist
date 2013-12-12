@@ -97,7 +97,18 @@ namespace SleepyScientist
         /// <summary>
         /// Prevents the AI from going off the left and right sides of the screen
         /// </summary>
-        public void StayOnScreen() { if ((this.X + this.Width) > GameConstants.SCREEN_WIDTH || (this.X < 0)) { this.Reverse(); } }
+        public void StayOnScreen() {
+            if (this.X + this.Width > GameConstants.SCREEN_WIDTH || this.X < 0)
+            {
+                while (this.X + this.Width > GameConstants.SCREEN_WIDTH)
+                    this.X--;
+
+                while (this.X < 0)
+                    this.X++;
+
+                this.Reverse();
+            }
+        }
 
         /// <summary>
         /// Draw the AI
