@@ -67,7 +67,6 @@ namespace SleepyScientist
         public override void Update()
         {
             _terminal.Update();
-            base.Update();
         }
 
         /// <summary>
