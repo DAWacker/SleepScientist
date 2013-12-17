@@ -15,6 +15,7 @@ namespace SleepyScientist
         private String _name;                               // Name of this set.
         private Dictionary<String, Animation> _animations;  // Animations contained in this set.
         private Animation _curAnimation;                    // Current Animation.
+        private Animation _queuedAnimation;                 // The next Animation.
         #endregion
 
         #region Properties
@@ -74,12 +75,35 @@ namespace SleepyScientist
         {
             if (_animations.ContainsKey(name))
             {
-                _curAnimation = _animations[name];
+                _curAnimation = new Animation(_animations[name]);
             }
             else
             {
                 throw new KeyNotFoundException("\""+name+"\" animation not found in the \""+_name+"\" animation set.");
             }
+        }
+
+        public void QueueAnimation(String name)
+        {
+            if (_animations.ContainsKey(name))
+            {
+                _queuedAnimation = _animations[name];
+            }
+            else
+            {
+                throw new KeyNotFoundException("\"" + name + "\" animation not found in the \"" + _name + "\" animation set.");
+            }
+        }
+
+        public void Update()
+        {
+            if (_curAnimation.IsPlaying == false && _queuedAnimation != null)
+            {
+                _curAnimation = _queuedAnimation;
+                _queuedAnimation = null;
+            }
+
+            _curAnimation.Update();
         }
         #endregion
     }

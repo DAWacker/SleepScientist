@@ -22,7 +22,12 @@ namespace SleepyScientist
         /// <param name="width">Width of invention</param>
         /// <param name="height">Height of invention</param>
         public JackInTheBox(string name, int x, int y, int width, int height, Room room, int startFloor)
-            : base(name, x, y, width, height, room, startFloor) { }
+            : base(name, x, y, width, height, room, startFloor)
+        {
+            // Get a copy of the Scientist Animation
+            Animations = AnimationLoader.GetSetCopy("Jack");
+            Animations.ChangeAnimation("Closed");
+        }
 
         #endregion
 
@@ -36,6 +41,9 @@ namespace SleepyScientist
             // Launch scientist
             // Need to call the animation and what else to launch?
 
+            this.Animations.ChangeAnimation("Open");
+            this.Animations.CurAnimation.Play(1);
+            //this.Animations.QueueAnimation("Closed");
             scientist.Jump();
             base.Use(scientist);
         }

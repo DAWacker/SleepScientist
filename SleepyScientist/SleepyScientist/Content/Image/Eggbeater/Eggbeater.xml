@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<AnimationSet Version="0.1">
+  <Name>Eggbeater</Name>
+  <Animations>
+    <Animation>
+      <Name>Idle</Name>
+      <Fps>3</Fps>
+      <Frames>
+        <Frame>Image/Eggbeater/egg_beater</Frame>
+        <Frame>Image/Eggbeater/egg_beater_2</Frame>
+      </Frames>
+    </Animation>
+  </Animations>
+</AnimationSet>

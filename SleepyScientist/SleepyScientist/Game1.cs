@@ -144,7 +144,11 @@ namespace SleepyScientist
             TextHelper.Alignment = TextHelper.TextAlignment.Center;
 
             // Load animation sets.
-            AnimationLoader.Load("ScientistAnimationSet.xml", Content);
+            AnimationLoader.Load("Image/Scientist/ScientistAnimationSet.xml", Content);
+            AnimationLoader.Load("Image/Jack/Jack.xml", Content);
+            AnimationLoader.Load("Image/Eggbeater/Eggbeater.xml", Content);
+            AnimationLoader.Load("Image/Skateboard/Skateboard.xml", Content);
+            AnimationLoader.Load("Image/BatteryHolder/BatteryHolder.xml", Content);
             
             // Make these textures static
             GameConstants.FLOOR_TEXTURE = this.Content.Load<Texture2D>("Image/floor"); ;
@@ -209,6 +213,7 @@ namespace SleepyScientist
             _curMouseState = Mouse.GetState();
             _prevKeyboardState = _curKeyboardState;
             _curKeyboardState = Keyboard.GetState();
+
 
             foreach (Invention invention in _inventions)
             {

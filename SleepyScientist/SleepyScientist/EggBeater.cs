@@ -22,7 +22,12 @@ namespace SleepyScientist
         /// <param name="width">Width of invention</param>
         /// <param name="height">Height of invention</param>
         public EggBeater(string name, int x, int y, int width, int height, Room room, int startFloor)
-            : base(name, x, y, width, height, room, startFloor) { }
+            : base(name, x, y, width, height, room, startFloor)
+        {
+            // Get a copy of the Eggbeater Animation
+            Animations = AnimationLoader.GetSetCopy("Eggbeater");
+            Animations.ChangeAnimation("Idle");
+        }
 
         #endregion
 

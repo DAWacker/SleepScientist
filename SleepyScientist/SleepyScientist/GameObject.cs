@@ -125,8 +125,8 @@ namespace SleepyScientist
         /// </summary>
         public virtual void Update()
         {
-            if ( _animations != null )
-                _animations.CurAnimation.Update();
+            if (_animations != null)
+                _animations.Update();
         }
 
         #endregion

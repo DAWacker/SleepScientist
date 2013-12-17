@@ -496,8 +496,15 @@ namespace SleepyScientist
                     this.SelectionBox.X = (this.SelectionBox.X + this.VeloX * Time.DeltaTime);
                     this.SelectionBox.Y = (this.SelectionBox.Y + this.VeloY * Time.DeltaTime);
                 }
-                base.Update();
             }
+            else {
+                if (this.GetType() != typeof(RocketSkateboard))
+                {
+                    this.VeloX = 0;
+                    this.VeloY = 0;
+                }
+            }
+            base.Update();
         }
 
         /// <summary>

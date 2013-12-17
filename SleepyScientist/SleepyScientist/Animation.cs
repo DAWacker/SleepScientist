@@ -38,6 +38,7 @@ namespace SleepyScientist
         public List<Texture2D> Images { get { return _images; } set { _images = value; } }
         public float TimePerFrame { get { return _timePerFrame; } set { _timePerFrame = value; } }
         public float FramesPerTime { get { return 1 / _timePerFrame; } set { _timePerFrame = 1 / value; } }
+        public bool IsPlaying { get { return _playAmount > 0; } }
         #endregion
 
         #region Constructor
@@ -84,19 +85,20 @@ namespace SleepyScientist
                 _curFrameTime += Time.DeltaTime;
                 if (_curFrameTime > _timePerFrame)
                 {
+                    _curFrame = ( _curFrame + 1 ) % _images.Count;
+                    _curFrameTime = 0;
+                    
                     // If not set to play continuously, then update and
                     // pause if neccessary.
-                    if (_playAmount > 0)
+                    if (_playAmount > 0 && _curFrame == 0)
                     {
-                        if (--_playAmount == 0)
+                        _playAmount--;
+                        if (_playAmount == 0)
                         {
                             Pause();
                             return;
                         }
                     }
-
-                    _curFrame = ( _curFrame + 1 ) % _images.Count;
-                    _curFrameTime = 0;
                 }
             }
             // Else if paused for only a certain amount of time.

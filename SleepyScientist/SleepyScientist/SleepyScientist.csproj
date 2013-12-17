@@ -95,6 +95,9 @@
     <Content Include="Content\Image\battery.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\Image\BatteryHolder\BatteryHolder.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Content\Image\BatteryHolder\battery_holder.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -299,6 +302,9 @@
     <Content Include="Content\Image\instructions_button.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\Image\Eggbeater\Eggbeater.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Content\Image\Jack\jack_inthe_box_closed.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -485,6 +491,9 @@
     <Content Include="Content\Image\wall_tile.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\Image\Jack\Jack.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Content\Levels\Level1.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -506,7 +515,10 @@
     <Content Include="Content\Levels\Level7.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\ScientistAnimationSet.xml">
+    <Content Include="Content\Image\Scientist\ScientistAnimationSet.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Image\Skateboard\Skateboard.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Icon.ico">

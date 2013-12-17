@@ -21,6 +21,9 @@ namespace SleepyScientist
         public RocketSkateboard(string name, int x, int y, int width, int height, Room room, int startFloor)
             : base(name, x, y, width, height, room, startFloor)
         {
+            // Get a copy of the Scientist Animation
+            Animations = AnimationLoader.GetSetCopy("Skateboard");
+            Animations.ChangeAnimation("Off");
         }
 
         /// <summary>
