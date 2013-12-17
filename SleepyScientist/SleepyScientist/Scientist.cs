@@ -147,13 +147,16 @@ namespace SleepyScientist
             {
                 // If the scientist is in the floor, slowly move him up to the top
                 while (this.RectPosition.Bottom > this.CurrentFloor.RectPosition.Top) { this.Y--; }
+                this.VeloY = 0;
                 this.SuperJump = false;
                 this.CurrentTile = this.CurrentFloor;
                 this.CurrentState = ScientistState.Walking;
             }
 
             // Check if the scientist is using an invention.
-            if (this.CurrentState != ScientistState.Teleporter && this.CurrentState != ScientistState.Stairs)
+            if (this.CurrentState != ScientistState.Teleporter && 
+                this.CurrentState != ScientistState.Stairs &&
+                this.CurrentState != ScientistState.JackInTheBox)
             {
                 foreach (Invention invention in this.CurrentFloor.Inventions)
                 {
