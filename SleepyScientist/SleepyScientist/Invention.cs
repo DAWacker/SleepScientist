@@ -317,7 +317,7 @@ namespace SleepyScientist
                                     else if (this.StairsNeeded > 0)
                                     {
                                         // Check if the invention is hitting the ladder
-                                        if (this.RectPosition.Top == ladder.RectPosition.Top &&
+                                        if (this.RectPosition.Top >= ladder.RectPosition.Top &&
                                             this.RectPosition.X > ladder.RectPosition.X - GameConstants.BUFFER &&
                                             this.RectPosition.X < ladder.RectPosition.X + ladder.RectPosition.Width &&
                                             this.StairsHit != this.StairsNeeded)
@@ -349,7 +349,7 @@ namespace SleepyScientist
                                     else if (this.StairsNeeded > 0)
                                     {
                                         // Check if the invention is hitting the ladder
-                                        if (this.RectPosition.Top == ladder.RectPosition.Top &&
+                                        if (this.RectPosition.Top >= ladder.RectPosition.Top &&
                                             this.RectPosition.X < ladder.RectPosition.X &&
                                             this.RectPosition.X > ladder.RectPosition.X - ladder.RectPosition.Width &&
                                             this.StairsHit != this.StairsNeeded)
@@ -633,6 +633,7 @@ namespace SleepyScientist
                 }
             }
             else if (this.X > this.Path[0].X) { this.Direction = -1; } else { this.Direction = 1; }
+            Console.WriteLine(this.Path[0].GetType());
             this.CurrentState = InventionState.Walking;
         }
         
