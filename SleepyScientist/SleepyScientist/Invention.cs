@@ -242,7 +242,7 @@ namespace SleepyScientist
                                                 }
                                             }
                                             // Check if the invention needs to go down the stairs and is past them
-                                            else if (this.StairsNeeded > 0 && this.X - this.Width < stairs.X) { this.Reverse(); }
+                                            else if (this.StairsNeeded > 0 && this.X < stairs.X) { this.Reverse(); }
                                             break;
                                     }
                                     break;
@@ -316,8 +316,8 @@ namespace SleepyScientist
                                     // Check if the invention needs to go down the ladder
                                     else if (this.StairsNeeded > 0)
                                     {
-                                        // Check if the ladder is hitting the ladder
-                                        if (this.RectPosition.Top == ladder.RectPosition.Top &&
+                                        // Check if the invention is hitting the ladder
+                                        if (this.RectPosition.Top >= ladder.RectPosition.Top &&
                                             this.RectPosition.X > ladder.RectPosition.X - GameConstants.BUFFER &&
                                             this.RectPosition.X < ladder.RectPosition.X + ladder.RectPosition.Width &&
                                             this.StairsHit != this.StairsNeeded)
@@ -349,7 +349,7 @@ namespace SleepyScientist
                                     else if (this.StairsNeeded > 0)
                                     {
                                         // Check if the invention is hitting the ladder
-                                        if (this.RectPosition.Top == ladder.RectPosition.Top &&
+                                        if (this.RectPosition.Top >= ladder.RectPosition.Top &&
                                             this.RectPosition.X < ladder.RectPosition.X &&
                                             this.RectPosition.X > ladder.RectPosition.X - ladder.RectPosition.Width &&
                                             this.StairsHit != this.StairsNeeded)
@@ -394,7 +394,7 @@ namespace SleepyScientist
                             this.CurrentTile = this.Room.Floors[this.FloorNumber - 1];
                             this.CurrentFloor = this.Room.Floors[this.FloorNumber - 1];
                             this.CurrentFloor.Inventions.Add(this);
-                            this.Y = this.CurrentTile.Y - this.Height;
+                            this.Y = this.CurrentFloor.Y - this.Height;
                             this.FloorNumber--;
 
                             // Remove this part from the invention's path and get the next piece of the path
@@ -421,7 +421,8 @@ namespace SleepyScientist
                                 break;
                         }
                         // Check if the invention has reached the top of the stairs
-                        if (this.RectPosition.Top <= this.CurrentTile.RectPosition.Top)
+                        if (this.RectPosition.Top <= this.CurrentTile.RectPosition.Top ||
+                            this.Y <= this.Room.Floors[this.FloorNumber + 1].Y - this.Height)
                         {
                             this.LaddersHit++;
                             this.VeloY = 0;
@@ -430,7 +431,7 @@ namespace SleepyScientist
                             this.CurrentTile = this.Room.Floors[this.FloorNumber + 1];
                             this.CurrentFloor = this.Room.Floors[this.FloorNumber + 1];
                             this.CurrentFloor.Inventions.Add(this);
-                            this.Y = this.CurrentTile.Y - this.Height;
+                            this.Y = this.CurrentFloor.Y - this.Height;
                             this.FloorNumber++;
 
                             // Remove this part from the invention's path and get the next piece of the path
@@ -526,28 +527,34 @@ namespace SleepyScientist
             List<GameObject> path = new List<GameObject>();
             bool isPathPossible = true;
 
-            // Check if ladders are needed but don't exist.
-            if (this.LaddersNeeded > 0 && this.Room.Floors[this.FloorNumber].Teleporters.Count == 0)
-            {
-                isPathPossible = false;
-            }
-
-            // Check if the invention is on the top floor
-            if (this.FloorNumber + 1 < this.Room.Floors.Count)
-            {
-                // Check if stairs are needed but don't exist.
-                if (this.StairsNeeded > 0 && this.Room.Floors[this.FloorNumber + 1].Stairs.Count == 0)
-                {
-                    isPathPossible = false;
-                }
-            }
-            
-            // Exit the function if there isn't a path to target.
-            if (isPathPossible == false) { ReachedTarget(); return; }
-
             // Loop until a path has been found
             while (!foundPath)
             {
+                // Check if ladders are needed but don't exist.
+                if (this.LaddersNeeded > 0 &&
+                    this.Room.Floors[currentFloor].Teleporters.Count == 0 &&
+                    this.Room.Floors[currentFloor + 1].Stairs.Count == 0)
+                {
+                    isPathPossible = false;
+                }
+
+                // Check if the stairs are needed but is under the first floor
+                else if (this.StairsNeeded > 0 && this.FloorNumber - 1 < 0) { isPathPossible = false; }
+
+                // Check if stairs are needed but don't exist.
+                else if (this.StairsNeeded > 0 &&
+                    this.Room.Floors[currentFloor].Stairs.Count == 0 &&
+                    this.Room.Floors[currentFloor - 1].Teleporters.Count == 0)
+                {
+                    Console.WriteLine(this.Room.Floors[currentFloor].Stairs.Count);
+                    isPathPossible = false;
+                }
+
+                Console.WriteLine(isPathPossible);
+
+                // Exit the function if there isn't a path to target.
+                if (isPathPossible == false) { ReachedTarget(); return; }
+
                 List<GameObject> potentialRoutes = new List<GameObject>();
                 // Need to go up
                 if (this.LaddersNeeded > 0)
@@ -601,7 +608,32 @@ namespace SleepyScientist
                 }
             }
             // Check which direction the invention should go towards the first route in the path
-            if (this.X > this.Path[0].X) { this.Direction = -1; } else { this.Direction = 1; }
+            if (this.Path[0].GetType() == typeof(Stairs))
+            {
+                Stairs stair = (Stairs)this.Path[0];
+                switch(stair.Direction)
+                {
+                    case 1:
+                        if (this.X > stair.X)
+                        {
+                            if (this.StairsNeeded > 0) { this.Direction = -1; }
+                            else { this.Direction = 1; }
+                        }
+                        else if (this.X < stair.X) { this.Direction = 1; }
+                        break;
+                        
+                    case -1:
+                        if (this.X > stair.X)
+                        {
+                            if (this.LaddersNeeded > 0) { this.Direction = -1; }
+                            else { this.Direction = 1; }
+                        }
+                        else if (this.X < stair.X) { this.Direction = 1; }
+                        break;
+                }
+            }
+            else if (this.X > this.Path[0].X) { this.Direction = -1; } else { this.Direction = 1; }
+            Console.WriteLine(this.Path[0].GetType());
             this.CurrentState = InventionState.Walking;
         }
         
