@@ -402,6 +402,9 @@
     <Content Include="Content\Image\railing.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\Image\Scientist\death.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Content\Image\Scientist\walk1.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

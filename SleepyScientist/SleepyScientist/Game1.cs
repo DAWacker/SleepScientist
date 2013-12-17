@@ -347,7 +347,6 @@ namespace SleepyScientist
                     if (_sleepy.Loser && _timeAtGameOver == 0)
                     {
                         _timeAtGameOver = (int)Time.CurTime;
-                        // TODO: Initialize death animation about here
                     }
                     else if (_sleepy.Loser)
                     {
@@ -355,7 +354,8 @@ namespace SleepyScientist
                     }
 
                     // Check if the user lost
-                    if ((_sleepy.Loser && _sleepy.Room.Door != null && Time.CurTime >= _sleepy.Room.Door.Time + _gameOverPause) || (_sleepy.Loser && _sleepy.Room.Door == null && _timeAfterGameOver >= _gameOverPause))
+                    if ((_sleepy.Loser && _sleepy.Room.Door != null && Time.CurTime >= _sleepy.Room.Door.Time + _gameOverPause) ||
+                        (_sleepy.Loser && _sleepy.Room.Door == null && _timeAfterGameOver >= _gameOverPause))
                     {
                         _begin = false;
 
@@ -463,6 +463,8 @@ namespace SleepyScientist
         /// </summary>
         public void SetupLevel(int levelNum)
         {
+            _timeAtGameOver = 0;
+
             // Stop updating
             _begin = false;
 

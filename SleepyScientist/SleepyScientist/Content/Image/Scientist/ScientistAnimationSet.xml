@@ -23,5 +23,12 @@
         <Frame>Image/Scientist/walk15</Frame>
       </Frames>
     </Animation>
+    <Animation>
+      <Name>Death</Name>
+      <Fps>1</Fps>
+      <Frames>
+        <Frame>Image/Scientist/death</Frame>
+      </Frames>
+    </Animation>
   </Animations>
 </AnimationSet>

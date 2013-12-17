@@ -143,7 +143,8 @@ namespace SleepyScientist
             // Check if the scientist is on the ground or just landing
             if (this.RectPosition.Bottom == this.CurrentFloor.RectPosition.Top ||
                 (this.RectPosition.Intersects(this.CurrentFloor.RectPosition) &&
-                    this.CurrentState == ScientistState.JackInTheBox && this.VeloY > 0))
+                    this.CurrentState == ScientistState.JackInTheBox && this.VeloY > 0) &&
+                _loser == false )
             {
                 // If the scientist is in the floor, slowly move him up to the top
                 while (this.RectPosition.Bottom > this.CurrentFloor.RectPosition.Top) { this.Y--; }
@@ -156,7 +157,8 @@ namespace SleepyScientist
             // Check if the scientist is using an invention.
             if (this.CurrentState != ScientistState.Teleporter && 
                 this.CurrentState != ScientistState.Stairs &&
-                this.CurrentState != ScientistState.JackInTheBox)
+                this.CurrentState != ScientistState.JackInTheBox &&
+                _loser == false)
             {
                 foreach (Invention invention in this.CurrentFloor.Inventions)
                 {
@@ -443,6 +445,18 @@ namespace SleepyScientist
 
                 case ScientistState.Pit:
                     this.Loser = true;
+                    this.Animations.ChangeAnimation("Death");
+                    this.Jump();
+                    this.VeloX = 0;
+                    if (GameConstants.MOVING_INVENTION)
+                    {
+                        this.VeloY += GameConstants.GRAVITY * Time.DeltaTime / GameConstants.SLOW_MOTION;
+                    }
+                    else
+                    {
+                        this.VeloY += GameConstants.GRAVITY * Time.DeltaTime;
+                    }
+                    base.Update();
                     break;
 
                 case ScientistState.Walking:
