@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<AnimationSet Version="0.1">
+  <Name>Skateboard</Name>
+  <Animations>
+    <Animation>
+      <Name>Off</Name>
+      <Fps>1</Fps>
+      <Frames>
+        <Frame>Image/Skateboard/skateboard_off</Frame>
+      </Frames>
+    </Animation>
+    <Animation>
+      <Name>On</Name>
+      <Fps>2</Fps>
+      <Frames>
+        <Frame>Image/Skateboard/skateboard_on_1</Frame>
+        <Frame>Image/Skateboard/skateboard_on_2</Frame>
+      </Frames>
+    </Animation>
+    <Animation>
+      <Name>Start</Name>
+      <Fps>4</Fps>
+      <Frames>
+        <Frame>Image/Skateboard/skateboard_start_1</Frame>
+        <Frame>Image/Skateboard/skateboard_start_2</Frame>
+        <Frame>Image/Skateboard/skateboard_start_3</Frame>
+        <Frame>Image/Skateboard/skateboard_start_4</Frame>
+      </Frames>
+    </Animation>
+  </Animations>
+</AnimationSet>

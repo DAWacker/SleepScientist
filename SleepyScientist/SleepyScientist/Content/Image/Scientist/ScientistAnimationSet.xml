@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<AnimationSet Version="0.1">
+  <Name>Scientist</Name>
+  <Animations>
+    <Animation>
+      <Name>Walk</Name>
+      <Fps>25</Fps>
+      <Frames>
+        <Frame>Image/Scientist/walk1</Frame>
+        <Frame>Image/Scientist/walk2</Frame>
+        <Frame>Image/Scientist/walk3</Frame>
+        <Frame>Image/Scientist/walk4</Frame>
+        <Frame>Image/Scientist/walk5</Frame>
+        <Frame>Image/Scientist/walk6</Frame>
+        <Frame>Image/Scientist/walk7</Frame>
+        <Frame>Image/Scientist/walk8</Frame>
+        <Frame>Image/Scientist/walk9</Frame>
+        <Frame>Image/Scientist/walk10</Frame>
+        <Frame>Image/Scientist/walk11</Frame>
+        <Frame>Image/Scientist/walk12</Frame>
+        <Frame>Image/Scientist/walk13</Frame>
+        <Frame>Image/Scientist/walk14</Frame>
+        <Frame>Image/Scientist/walk15</Frame>
+      </Frames>
+    </Animation>
+    <Animation>
+      <Name>Death</Name>
+      <Fps>1</Fps>
+      <Frames>
+        <Frame>Image/Scientist/death</Frame>
+      </Frames>
+    </Animation>
+  </Animations>
+</AnimationSet>

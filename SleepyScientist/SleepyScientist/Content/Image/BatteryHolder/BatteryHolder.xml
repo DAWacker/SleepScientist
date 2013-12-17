@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<AnimationSet Version="0.1">
+  <Name>BatteryHolder</Name>
+  <Animations>
+    <Animation>
+      <Name>Sparking</Name>
+      <Fps>12</Fps>
+      <Frames>
+        <Frame>Image/BatteryHolder/battery_holder</Frame>
+        <Frame>Image/BatteryHolder/battery_sparking1</Frame>
+        <Frame>Image/BatteryHolder/battery_sparking2</Frame>
+        <Frame>Image/BatteryHolder/battery_sparking3</Frame>
+        <Frame>Image/BatteryHolder/battery_sparking4</Frame>
+        <Frame>Image/BatteryHolder/battery_sparking5</Frame>
+      </Frames>
+    </Animation>
+    <Animation>
+      <Name>Idle</Name>
+      <Fps>1</Fps>
+      <Frames>
+        <Frame>Image/BatteryHolder/battery_holder</Frame>
+      </Frames>
+    </Animation>
+  </Animations>
+</AnimationSet>
