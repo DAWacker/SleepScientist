@@ -70,6 +70,9 @@ namespace SleepyScientist
         public int _levelNumber = 7;
         public int _totalLevels = 7;
         private Room level = null;
+        public int _timeAtGameOver = 0;
+        public int _timeAfterGameOver = 0;
+        public int _gameOverPause = 3;
 
         #endregion
 
@@ -252,6 +255,9 @@ namespace SleepyScientist
                  */
                 #endregion
 
+                if(!_begin)
+                    Time.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
+
                 Point convertedMousePos = _camera.ToGlobal(new Point(_curMouseState.X, _curMouseState.Y));
 				if (_begin)
             	{
@@ -323,23 +329,44 @@ namespace SleepyScientist
 		                if (_levelNumber == _totalLevels) { _levelNumber = 1; }
 		                else { _levelNumber++; }
 
+                        Time.CurTime = 0;
+
                         this.SetupLevel(this._levelNumber);
 		            }
 
+                    if (_sleepy.Loser && _timeAtGameOver == 0)
+                    {
+                        _timeAtGameOver = (int)Time.CurTime;
+                        // TODO: Initialize death animation about here
+                    }
+                    else if (_sleepy.Loser)
+                    {
+                        _timeAfterGameOver = (int)(Time.CurTime - _timeAtGameOver);
+                    }
+
 		            // Check if the user lost
-		            if (_sleepy.Loser)
+                    if ((_sleepy.Loser && _sleepy.Room.Door != null && Time.CurTime >= _sleepy.Room.Door.Time + _gameOverPause) || (_sleepy.Loser && _sleepy.Room.Door == null && _timeAfterGameOver >= _gameOverPause))
 		            {
 		                _begin = false;
 
                         this.State = STATE.GAME_OVER;
 
+                        Time.CurTime = 0;
+                        _timeAfterGameOver = 0;
+
 		                this.SetupLevel(this._levelNumber);
 		            }
 				}
+                else if (Time.CurTime >= 5)
+                {
+                    _begin = true;
+                    Time.CurTime = 0;
+                }
                 else if (_curMouseState.LeftButton == ButtonState.Released &&
                     _prevMouseState.LeftButton == ButtonState.Pressed)
                 {
                     _begin = true;
+                    Time.CurTime = 0;
 
                     // Zoom into the scientist.
                     //_camera.Zoom(GameConstants.ZOOM_ROOM_VIEW);
@@ -380,6 +407,22 @@ namespace SleepyScientist
 		                wallTile.Draw(spriteBatch);
 		            }
 		        }
+
+                MessageLayer.ClearMessages();
+                if (!_begin)
+                {
+                    MessageLayer.AddMessage(new Message("Level Start In: " + (5 - (int)Time.CurTime).ToString(), 0, 0));
+                }
+                else if (_sleepy.Room.Door != null)
+                {
+                    MessageLayer.AddMessage(new Message("Time Left: " + (_sleepy.Room.Door.Time - (int)Time.CurTime).ToString(), 0, 0));
+
+                    if (Time.CurTime >= _sleepy.Room.Door.Time)
+                    {
+                        _sleepy.Room.Door.Image = GameConstants.DOOR_CLOSED_TEXTURE;
+                        _sleepy.Loser = true;
+                    }
+                }
 				
                 _camera.DrawGameObjects(spriteBatch, _sleepy.Room.GetGameObjects());
             }

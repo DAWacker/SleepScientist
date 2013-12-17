@@ -505,15 +505,9 @@ namespace SleepyScientist
                 #endregion
 
                 if (overviewClicked == true)
-                {
                     _instructionsButtons["text"].X = (int)(_instructionsButtons["background"].X + _instructionsButtons["background"].Width / 2 - _overview_text_texture.Width / 2);
-                    //= new Button((int)(_instructionsButtons["background"].X + _instructionsButtons["background"].Width / 2 - _overview_text_texture.Width / 2), (int)(_instructionsButtons["background"].Y + 270), _overview_text_texture.Width, _overview_text_texture.Height, _overview_text_texture);
-                }
                 else
-                {
                     _instructionsButtons["text"].X = (int)(_instructionsButtons["background"].X + 385);
-                    //new Button((int)(_instructionsButtons["background"].X + 385), (int)(_instructionsButtons["background"].Y + 270), _overview_text_texture.Width, _overview_text_texture.Height, _overview_text_texture);
-                }
             }
             #endregion
             #region Game Over
