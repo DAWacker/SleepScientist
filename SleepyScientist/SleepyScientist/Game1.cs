@@ -255,27 +255,28 @@ namespace SleepyScientist
                  */
                 #endregion
 
-                if(!_begin)
+                if (!_begin)
                     Time.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
 
                 Point convertedMousePos = _camera.ToGlobal(new Point(_curMouseState.X, _curMouseState.Y));
-				if (_begin)
-            	{
+                if (_begin)
+                {
                     // Update Game Time.
-		            if (GameConstants.MOVING_INVENTION) { Time.Update((float)gameTime.ElapsedGameTime.TotalSeconds / 2); }
-		            else { Time.Update((float)gameTime.ElapsedGameTime.TotalSeconds); }
+                    if (GameConstants.MOVING_INVENTION) { Time.Update((float)gameTime.ElapsedGameTime.TotalSeconds / 2); }
+                    else { Time.Update((float)gameTime.ElapsedGameTime.TotalSeconds); }
 
-		            foreach (Invention invention in _inventions)
-		            {
-		                invention.Update();
-		                Rectangle convertedInventionPos = _camera.ToLocal(invention.SelectionBox);
+                    foreach (Invention invention in _inventions)
+                    {
+                        invention.Update();
+                        Rectangle convertedInventionPos = _camera.ToLocal(invention.SelectionBox);
 
                         // Reset inventions
                         if (invention.Activated && !invention.HasTarget && !_sleepy.RectPosition.Intersects(invention.SelectionBox)) { invention.UnUse(); }
 
                         if (!invention.Activated && !invention.HasTarget)
                         {
-                            if (convertedInventionPos.Contains(new Point(_curMouseState.X, _curMouseState.Y))) {
+                            if (convertedInventionPos.Contains(new Point(_curMouseState.X, _curMouseState.Y)))
+                            {
                                 if (invention.GetType() != typeof(RocketSkateboard))
                                 {
                                     invention.Hovered = true;
@@ -313,26 +314,26 @@ namespace SleepyScientist
                                 //_camera.Zoom(GameConstants.ZOOM_INVENTION_VIEW);
                             }
                         }
-		            }
+                    }
 
-		            _sleepy.Update();
-		            MessageLayer.Update(gameTime.ElapsedGameTime.TotalSeconds);
-		            if (_camera.ShouldFollowTarget == false)
-		                _camera.UpdateCameraScroll(_curMouseState.X, _curMouseState.Y);
+                    _sleepy.Update();
+                    MessageLayer.Update(gameTime.ElapsedGameTime.TotalSeconds);
+                    if (_camera.ShouldFollowTarget == false)
+                        _camera.UpdateCameraScroll(_curMouseState.X, _curMouseState.Y);
 
-		            _camera.Update();
+                    _camera.Update();
 
-					// Check if the user won
-		            if (_sleepy.Winner)
-		            {
-		                _begin = false;
-		                if (_levelNumber == _totalLevels) { _levelNumber = 1; }
-		                else { _levelNumber++; }
+                    // Check if the user won
+                    if (_sleepy.Winner)
+                    {
+                        _begin = false;
+                        if (_levelNumber == _totalLevels) { _levelNumber = 1; }
+                        else { _levelNumber++; }
 
                         Time.CurTime = 0;
 
                         this.SetupLevel(this._levelNumber);
-		            }
+                    }
 
                     if (_sleepy.Loser && _timeAtGameOver == 0)
                     {
@@ -344,19 +345,19 @@ namespace SleepyScientist
                         _timeAfterGameOver = (int)(Time.CurTime - _timeAtGameOver);
                     }
 
-		            // Check if the user lost
+                    // Check if the user lost
                     if ((_sleepy.Loser && _sleepy.Room.Door != null && Time.CurTime >= _sleepy.Room.Door.Time + _gameOverPause) || (_sleepy.Loser && _sleepy.Room.Door == null && _timeAfterGameOver >= _gameOverPause))
-		            {
-		                _begin = false;
+                    {
+                        _begin = false;
 
                         this.State = STATE.GAME_OVER;
 
                         Time.CurTime = 0;
                         _timeAfterGameOver = 0;
 
-		                this.SetupLevel(this._levelNumber);
-		            }
-				}
+                        this.SetupLevel(this._levelNumber);
+                    }
+                }
                 else if (Time.CurTime >= 5)
                 {
                     _begin = true;

@@ -401,6 +401,7 @@ namespace SleepyScientist
                     _game._curMouseState.Y > _pauseMenuElements["restart"].Y && _game._curMouseState.Y < _pauseMenuElements["restart"].Y + _pauseMenuElements["restart"].Height)
                 {
                     // Restart Level and close menu
+                    Time.CurTime = 0;
                     _game.SetupLevel(_game._levelNumber);
                     _game.State = STATE.PLAY;
                 }
