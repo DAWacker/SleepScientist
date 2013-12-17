@@ -450,6 +450,7 @@
     <Content Include="Content\Image\skateboard.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\Image\Skateboard\skateboard.png" />
     <Content Include="Content\Image\Skateboard\skateboard_off.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

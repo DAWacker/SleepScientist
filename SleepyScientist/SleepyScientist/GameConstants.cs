@@ -134,7 +134,9 @@ namespace SleepyScientist
         public static Texture2D STAIR_TEXTURE;
         public static Texture2D RAILING_TEXTURE;
         public static Texture2D BACKGROUND_TEXTURE;
-        public static Texture2D BLANK;
+        public static Texture2D EGG_BEATER_OUTLINE;
+        public static Texture2D JACK_OUTLINE;
+        public static Texture2D SKATEBOARD_OUTLINE;
 
         #endregion
     }

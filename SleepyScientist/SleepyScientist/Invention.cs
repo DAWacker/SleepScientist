@@ -553,11 +553,8 @@ namespace SleepyScientist
                     this.Room.Floors[currentFloor].Stairs.Count == 0 &&
                     this.Room.Floors[currentFloor - 1].Teleporters.Count == 0)
                 {
-                    Console.WriteLine(this.Room.Floors[currentFloor].Stairs.Count);
                     isPathPossible = false;
                 }
-
-                Console.WriteLine(isPathPossible);
 
                 // Exit the function if there isn't a path to target.
                 if (isPathPossible == false) { ReachedTarget(); return; }
@@ -663,7 +660,15 @@ namespace SleepyScientist
 
         public override void Draw(SpriteBatch batch, Rectangle? pos = null)
         {
-            if (pos != null) { if (this.Hovered) { batch.Draw(GameConstants.BLANK, pos.Value, Color.Red); } }
+            if (pos != null) 
+            { 
+                if (this.Hovered) 
+                {
+                    if (this.GetType() == typeof(EggBeater)) { batch.Draw(GameConstants.EGG_BEATER_OUTLINE, pos.Value, Color.White); }
+                    else if (this.GetType() == typeof(RocketSkateboard)) { batch.Draw(GameConstants.SKATEBOARD_OUTLINE, pos.Value, Color.White); }
+                    else if (this.GetType() == typeof(JackInTheBox)) { batch.Draw(GameConstants.JACK_OUTLINE, pos.Value, Color.White); }
+                } 
+            }
             base.Draw(batch, pos);
         }
 

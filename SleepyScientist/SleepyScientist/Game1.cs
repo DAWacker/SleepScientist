@@ -169,7 +169,9 @@ namespace SleepyScientist
             GameConstants.DOOR_CLOSED_TEXTURE = this.Content.Load<Texture2D>("Image/door_closed");
             GameConstants.BACKGROUND_TEXTURE = this.Content.Load<Texture2D>("Image/wall_tile");
             GameConstants.WALL_TEXTURE = this.Content.Load<Texture2D>("Image/floor");
-            GameConstants.BLANK = this.Content.Load<Texture2D>("Image/blank");
+            GameConstants.EGG_BEATER_OUTLINE = this.Content.Load<Texture2D>("Image/Outlines/egg_beater_outline");
+            GameConstants.JACK_OUTLINE = this.Content.Load<Texture2D>("Image/Outlines/jack_inthe_box_outline");
+            GameConstants.SKATEBOARD_OUTLINE = this.Content.Load<Texture2D>("Image/Outlines/skateboard_outline");
 
             Room level = LevelLoader.Load(_levelNumber);
 
