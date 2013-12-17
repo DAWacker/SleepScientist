@@ -260,6 +260,8 @@ namespace SleepyScientist
                  */
                 #endregion
 
+                foreach (GameObject pit in _sleepy.Room.GetPits()) pit.Update();
+
                 if (!_begin)
                     Time.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
 

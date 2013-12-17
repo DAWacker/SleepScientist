@@ -141,7 +141,7 @@ namespace SleepyScientist
                                                         pit.LeftEnd = GameConstants.PIT_LEFT_END_TEXTURE;
                                                         pit.RightEnd = GameConstants.PIT_RIGHT_END_TEXTURE;
                                                         pit.Tile = GameConstants.PIT_TILE_TEXTURE;
-                                                        pit.Terminal = GameConstants.PIT_TERMINAL_TEXTURE;
+                                                        pit.Terminal.Image = GameConstants.PIT_TERMINAL_TEXTURE;
                                                         floor.Pits.Add(pit);
                                                         break;
 

@@ -40,10 +40,9 @@ namespace SleepyScientist
         {
             // Launch scientist
             // Need to call the animation and what else to launch?
-
             this.Animations.ChangeAnimation("Open");
             this.Animations.CurAnimation.Play(1);
-            //this.Animations.QueueAnimation("Closed");
+            this.Animations.QueueAnimation("Closed");
             scientist.Jump();
             base.Use(scientist);
         }

@@ -25,7 +25,7 @@ namespace SleepyScientist
         private Texture2D _rightEnd;
 
         // Battery terminal of the pit
-        private Texture2D _terminal;
+        private BatteryHolder _terminal;
 
         #endregion
 
@@ -41,7 +41,7 @@ namespace SleepyScientist
         public Texture2D RightEnd { get { return _rightEnd; } set { _rightEnd = value; } }
 
         // Get or set the left battery terminal for the pit
-        public Texture2D Terminal { get { return _terminal; } set { _terminal = value; } }
+        public BatteryHolder Terminal { get { return _terminal; } set { _terminal = value; } }
 
         #endregion
 
@@ -55,11 +55,20 @@ namespace SleepyScientist
         /// <param name="width">The width of the pit</param>
         /// <param name="height">the height of the pit</param>
         public Pit(int x, int y, int width, int height)
-            : base(x, y, width, height, GameConstants.DEFAULT_DIRECTION) { }
+            : base(x, y, width, height, GameConstants.DEFAULT_DIRECTION)
+        {
+            _terminal = new BatteryHolder(x, y, GameConstants.TILE_WIDTH, GameConstants.TILE_HEIGHT);
+        }
 
         #endregion
 
         #region Methods
+
+        public override void Update()
+        {
+            _terminal.Update();
+            base.Update();
+        }
 
         /// <summary>
         /// Overrides the GameObject draw method
@@ -87,7 +96,7 @@ namespace SleepyScientist
             // Draw the left battery terminal
             terminal = new RectangleVector(this.X - this.Terminal.Width * zoomFactor, this.Y - this.Terminal.Height * zoomFactor, this.Terminal.Width * zoomFactor, this.Terminal.Height * zoomFactor);
 
-            batch.Draw(this.Terminal, terminal, Color.White);
+            batch.Draw(this.Terminal.Image, terminal, Color.White);
             currentPosition.X += GameConstants.TILE_WIDTH * zoomFactor;
             currentPosition.Y += GameConstants.TILE_HEIGHT * zoomFactor;
 
@@ -125,7 +134,7 @@ namespace SleepyScientist
             currentPosition.Y -= GameConstants.TILE_HEIGHT * zoomFactor;
             terminal.X = currentPosition.X;
             terminal.Y = currentPosition.Y;
-            batch.Draw(this.Terminal, terminal, null, Color.White, 0, Vector2.Zero, SpriteEffects.FlipHorizontally, 0);
+            batch.Draw(this.Terminal.Image, terminal, null, Color.White, 0, Vector2.Zero, SpriteEffects.FlipHorizontally, 0);
 
             this.RectPosition = prevRectPosition;
         }

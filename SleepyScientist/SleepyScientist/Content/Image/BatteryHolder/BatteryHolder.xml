@@ -4,7 +4,7 @@
   <Animations>
     <Animation>
       <Name>Sparking</Name>
-      <Fps>6</Fps>
+      <Fps>12</Fps>
       <Frames>
         <Frame>Image/BatteryHolder/battery_holder</Frame>
         <Frame>Image/BatteryHolder/battery_sparking1</Frame>

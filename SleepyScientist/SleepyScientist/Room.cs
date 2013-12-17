@@ -124,6 +124,21 @@ namespace SleepyScientist
             return roomObjects;
         }
 
+        /// <summary>
+        /// Gets pits from room.
+        /// </summary>
+        /// <returns>The room's pits</returns>
+        public List<GameObject> GetPits()
+        {
+            List<GameObject> pits = new List<GameObject>();
+            foreach (Floor floor in this.Floors)
+            {
+                pits.AddRange(floor.Pits);
+            }
+
+            return pits;
+        }
+
         #endregion
     }
 }

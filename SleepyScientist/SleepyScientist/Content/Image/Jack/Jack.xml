@@ -11,7 +11,7 @@
     </Animation>
     <Animation>
       <Name>Open</Name>
-      <Fps>24</Fps>
+      <Fps>40</Fps>
       <Frames>
         <Frame>Image/Jack/jack_inthe_box_opening_1</Frame>
         <Frame>Image/Jack/jack_inthe_box_opening_2</Frame>
@@ -22,8 +22,17 @@
         <Frame>Image/Jack/jack_inthe_box_opening_7</Frame>
         <Frame>Image/Jack/jack_inthe_box_opening_8</Frame>
         <Frame>Image/Jack/jack_inthe_box_opening_9</Frame>
-        <Frame>Image/Jack/jack_inthe_box_opening_10</Frame>
         <Frame>Image/Jack/jack_inthe_box_open</Frame>
+        <Frame>Image/Jack/jack_inthe_box_opening_10</Frame>
+        <Frame>Image/Jack/jack_inthe_box_opening_9</Frame>
+        <Frame>Image/Jack/jack_inthe_box_opening_8</Frame>
+        <Frame>Image/Jack/jack_inthe_box_opening_7</Frame>
+        <Frame>Image/Jack/jack_inthe_box_opening_6</Frame>
+        <Frame>Image/Jack/jack_inthe_box_opening_5</Frame>
+        <Frame>Image/Jack/jack_inthe_box_opening_4</Frame>
+        <Frame>Image/Jack/jack_inthe_box_opening_3</Frame>
+        <Frame>Image/Jack/jack_inthe_box_opening_2</Frame>
+        <Frame>Image/Jack/jack_inthe_box_opening_1</Frame>
       </Frames>
     </Animation>
   </Animations>

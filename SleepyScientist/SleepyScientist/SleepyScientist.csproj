@@ -39,6 +39,7 @@
     <Compile Include="Animation.cs" />
     <Compile Include="AnimationLoader.cs" />
     <Compile Include="AnimationSet.cs" />
+    <Compile Include="BatteryHolder.cs" />
     <Compile Include="Button.cs" />
     <Compile Include="Bed.cs" />
     <Compile Include="Camera.cs" />
@@ -521,6 +522,9 @@
     <Content Include="Content\Image\Skateboard\Skateboard.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\Outlines\egg_beater_outline.png" />
+    <Content Include="Content\Outlines\jack_inthe_box_outline.png" />
+    <Content Include="Content\Outlines\skateboard_outline.png" />
     <Content Include="Icon.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

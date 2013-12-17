@@ -87,7 +87,7 @@ namespace SleepyScientist
         {
             if (_animations.ContainsKey(name))
             {
-                _queuedAnimation = _animations[name];
+                _queuedAnimation = new Animation(_animations[name]);
             }
             else
             {
